@@ -44,8 +44,8 @@ files.forEach(file => {
 // 更新index.html中的引用路径
 const indexHtmlPath = path.resolve(__dirname, '../index.html');
 let indexContent = fs.readFileSync(indexHtmlPath, 'utf8');
-const newScriptSrc = `dist/ts-web-module-${version}.js`;
+const newScriptSrc = `./ts-web-module-${version}.js`;
 const minScriptSrc = `dist/ts-web-module-${version}.min.js`;
-indexContent = indexContent.replace(/src="dist\/ts-web-module-[\d.]+.js"/, `src="${newScriptSrc}"`);
+indexContent = indexContent.replace(/src=".\/ts-web-module-[\d.]+.js"/, `src="${newScriptSrc}"`);
 fs.writeFileSync(indexHtmlPath, indexContent, 'utf8');
 console.log(`更新了index.html脚本引用：${newScriptSrc}`);
