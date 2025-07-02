@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web组件示例</title>
+    <script src="dist/ts-web-module-1.0.1.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .component-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Web组件示例</h1>
+
+    <div class="component-section">
+        <h2>Bilibili视频嵌入组件</h2>
+        <p>自动播放静音模式</p>
+        <bilibili-video bvid="BV1Ut411v74a" autoplay muted></bilibili-video>
+        <p>普通模式</p>
+        <bilibili-video bvid="BV1b44y1q7Cb"></bilibili-video>
+    </div>
+
+    <div class="component-section">
+        <h2>双色链接组件</h2>
+        <resource-link left-text="文档" right-text="PDF" href="/file.pdf" target="_blank"></resource-link>
+        <resource-link left-text="视频" right-text="MP4" href="/video.mp4"></resource-link>
+        <resource-link left-text="联系我们" href="mailto:contact@example.com"></resource-link>
+    </div>
+
+    <div class="component-section">
+        <h2>文本框组件</h2>
+        <text-box type="normal">这是一条普通信息</text-box>
+        <text-box type="warning">这是一条警告信息</text-box>
+        <text-box type="error">这是一条错误信息</text-box>
+        <text-box type="success">这是一条成功信息</text-box>
+    </div>
+</body>
+</html>
