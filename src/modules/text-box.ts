@@ -60,6 +60,7 @@ class TextBoxElement extends HTMLElement {
         background-color: var(--tb-normal-bg);
         color: var(--tb-normal-text);
         border-color: var(--tb-normal-border);
+        margin: 6px 0;
       }
       
       .text-box[type="warning"] {
