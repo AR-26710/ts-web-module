@@ -2,8 +2,8 @@ name: Create Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [ main ]
+    paths: [ '.env' ]
 
 jobs:
   build-and-release:
@@ -12,13 +12,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Read VERSION from .env
+        run: |
+          source .env
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          if git rev-parse "${{ env.VERSION }}" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create tag
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git tag "${{ env.VERSION }}"
+          git push origin "${{ env.VERSION }}"
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Create .env file
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" > .env
 
       - name: Install dependencies
         run: npm ci
@@ -30,5 +49,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: dist/*.js
+          tag_name: "${{ env.VERSION }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
