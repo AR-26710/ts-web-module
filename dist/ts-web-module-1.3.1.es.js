@@ -234,6 +234,7 @@ class g extends HTMLElement {
         background-color: var(--tb-normal-bg);
         color: var(--tb-normal-text);
         border-color: var(--tb-normal-border);
+        margin: 6px 0;
       }
       
       .text-box[type="warning"] {
@@ -318,7 +319,7 @@ class m extends HTMLElement {
     const t = document.createElement("style");
     t.textContent = `
       :host { display: inline-block; }
-      .drive-container {
+      .cd-drive-container {
         display: flex;
         align-items: center;
         padding: 12px 16px;
@@ -332,15 +333,15 @@ class m extends HTMLElement {
         transform: translateY(-1px);
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       }
-      .drive-icon {
+      .cd-drive-icon {
         flex: 0 0 24px;
         margin-right: 12px;
         color: #3498db;
       }
-      .drive-info {
+      .cd-drive-info {
         flex: 1;
       }
-      .drive-title {
+      .cd-drive-title {
         font-weight: 500;
         margin-bottom: 4px;
         color: #2c3e50;
@@ -349,11 +350,11 @@ class m extends HTMLElement {
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      .drive-meta {
+      .cd-drive-meta {
         font-size: 0.85rem;
         color: #7f8c8d;
       }
-      .drive-password {
+      .cd-drive-password {
         margin-left: 8px;
         padding: 2px 6px;
         background-color: #ecf0f1;
@@ -361,7 +362,7 @@ class m extends HTMLElement {
         font-size: 0.8rem;
         cursor: pointer;
       }
-      .download-btn {
+      .cd-download-btn {
         background-color: #e74c3c;
         color: white;
         border: none;
@@ -378,10 +379,10 @@ class m extends HTMLElement {
       }
     `;
     const e = document.createElement("div");
-    e.className = "drive-container", this.shadow.append(t, e);
+    e.className = "cd-drive-container", this.shadow.append(t, e);
   }
   updateContent() {
-    const t = this.shadow.querySelector(".drive-container"), e = this.getAttribute("type") || "默认网盘", r = this.getAttribute("url") || "#", o = this.getAttribute("password") || "", s = this.getAttribute("title") || "默认标题";
+    const t = this.shadow.querySelector(".cd-drive-container"), e = this.getAttribute("type") || "默认网盘", r = this.getAttribute("url") || "#", o = this.getAttribute("password") || "", s = this.getAttribute("title") || "默认标题";
     t.innerHTML = `
       <div class="drive-icon">${this.getDriveIcon(e)}</div>
       <div class="drive-info">
@@ -393,7 +394,7 @@ class m extends HTMLElement {
       </div>
       <a href="${r}" class="download-btn" target="_blank">下载</a>
     `;
-    const a = t.querySelector(".drive-password");
+    const a = t.querySelector(".cd-drive-password");
     a && a.addEventListener("click", () => {
       const c = a.dataset.password;
       c && navigator.clipboard.writeText(c).then(() => {

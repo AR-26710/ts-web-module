@@ -1,4 +1,4 @@
-(function(n){typeof define=="function"&&define.amd?define(n):n()})(function(){"use strict";var m=Object.defineProperty;var g=(n,i,l)=>i in n?m(n,i,{enumerable:!0,configurable:!0,writable:!0,value:l}):n[i]=l;var p=(n,i,l)=>(g(n,typeof i!="symbol"?i+"":i,l),l);const h=class h extends HTMLElement{static get observedAttributes(){return["bvid","autoplay","muted"]}constructor(){super(),this.attachShadow({mode:"open"})}connectedCallback(){this.render()}attributeChangedCallback(){this.render()}disconnectedCallback(){var t;const s=(t=this.shadowRoot)==null?void 0:t.querySelector("iframe");s&&(s.src="")}render(){if(!this.shadowRoot)return;const s=this.getAttribute("bvid");if(!s){this.shadowRoot.innerHTML=`
+(function(n){typeof define=="function"&&define.amd?define(n):n()})(function(){"use strict";var m=Object.defineProperty;var g=(n,i,l)=>i in n?m(n,i,{enumerable:!0,configurable:!0,writable:!0,value:l}):n[i]=l;var b=(n,i,l)=>(g(n,typeof i!="symbol"?i+"":i,l),l);const h=class h extends HTMLElement{static get observedAttributes(){return["bvid","autoplay","muted"]}constructor(){super(),this.attachShadow({mode:"open"})}connectedCallback(){this.render()}attributeChangedCallback(){this.render()}disconnectedCallback(){var t;const s=(t=this.shadowRoot)==null?void 0:t.querySelector("iframe");s&&(s.src="")}render(){if(!this.shadowRoot)return;const s=this.getAttribute("bvid");if(!s){this.shadowRoot.innerHTML=`
         <style>${h.STYLES}</style>
         <div class="error-message">错误：缺少 bvid 属性</div>
       `;return}const t=this.hasAttribute("autoplay")?"1":"0",e=this.hasAttribute("muted")?"1":"0",o=new URLSearchParams({bvid:s,autoplay:t});e==="1"&&o.append("muted","1");const r=`https://player.bilibili.com/player.html?${o.toString()}`;this.shadowRoot.innerHTML=`
@@ -6,7 +6,7 @@
       <div class="bilibili-video-wrapper">
         <iframe src="${r}" frameborder="0" allow="autoplay; fullscreen; encrypted-media"></iframe>
       </div>
-    `}};p(h,"STYLES",`
+    `}};b(h,"STYLES",`
     .bilibili-video-wrapper {
       position: relative;
       width: 100%;
@@ -25,7 +25,7 @@
       padding: 10px;
       font-family: Arial, sans-serif;
     }
-  `);let n=h;customElements.define("bilibili-video",n);class i extends HTMLElement{constructor(){super();p(this,"shadow");this.shadow=this.attachShadow({mode:"open"}),this.render()}static get observedAttributes(){return["left-text","right-text","href","target"]}connectedCallback(){this.updateContent(),this.bindEvents()}disconnectedCallback(){const t=this.shadow.querySelector("a");t&&(t.removeEventListener("click",this.handleClick),t.removeEventListener("keydown",this.handleKeyPress))}attributeChangedCallback(){this.updateContent()}render(){const t=document.createElement("style");t.textContent=`
+  `);let n=h;customElements.define("bilibili-video",n);class i extends HTMLElement{constructor(){super();b(this,"shadow");this.shadow=this.attachShadow({mode:"open"}),this.render()}static get observedAttributes(){return["left-text","right-text","href","target"]}connectedCallback(){this.updateContent(),this.bindEvents()}disconnectedCallback(){const t=this.shadow.querySelector("a");t&&(t.removeEventListener("click",this.handleClick),t.removeEventListener("keydown",this.handleKeyPress))}attributeChangedCallback(){this.updateContent()}render(){const t=document.createElement("style");t.textContent=`
       :host {
         --rl-left-color: #2c3e50;
         --rl-right-color: #3498db;
@@ -75,7 +75,7 @@
       .rl-container:hover .rl-right {
         background: var(--rl-right-hover);
       }
-    `;const e=document.createElement("a");e.className="rl-container",e.setAttribute("role","link"),e.tabIndex=0;const o=document.createElement("div");o.className="rl-left";const r=document.createElement("div");r.className="rl-right",e.append(o,r),this.shadow.append(t,e)}updateContent(){var d;const t=this.shadow.querySelector("a"),e=((d=this.getAttribute("href"))==null?void 0:d.trim())??"#",o=this.getAttribute("target")??"_self";t.setAttribute("href",e),t.setAttribute("target",o);const r=this.getAttribute("left-text")??"",c=this.getAttribute("right-text")??"",a=this.shadow.querySelector(".rl-left"),b=this.shadow.querySelector(".rl-right");a.style.display=r.trim()?"flex":"none",a.textContent=r,b.style.display=c.trim()?"flex":"none",b.textContent=c}bindEvents(){const t=this.shadow.querySelector("a");t.addEventListener("click",this.handleClick.bind(this)),t.addEventListener("keydown",this.handleKeyPress.bind(this))}handleClick(t){const e=this.getAttribute("href");(!e||e==="#")&&t.preventDefault()}handleKeyPress(t){(t.key==="Enter"||t.key===" ")&&(t.preventDefault(),this.dispatchEvent(new MouseEvent("click")))}}customElements.define("resource-link",i);class l extends HTMLElement{constructor(){super();p(this,"shadow");this.shadow=this.attachShadow({mode:"open"}),this.render()}static get observedAttributes(){return["type"]}connectedCallback(){this.updateContent()}attributeChangedCallback(){this.updateContent()}render(){const t=document.createElement("style");t.textContent=`
+    `;const e=document.createElement("a");e.className="rl-container",e.setAttribute("role","link"),e.tabIndex=0;const o=document.createElement("div");o.className="rl-left";const r=document.createElement("div");r.className="rl-right",e.append(o,r),this.shadow.append(t,e)}updateContent(){var d;const t=this.shadow.querySelector("a"),e=((d=this.getAttribute("href"))==null?void 0:d.trim())??"#",o=this.getAttribute("target")??"_self";t.setAttribute("href",e),t.setAttribute("target",o);const r=this.getAttribute("left-text")??"",c=this.getAttribute("right-text")??"",a=this.shadow.querySelector(".rl-left"),p=this.shadow.querySelector(".rl-right");a.style.display=r.trim()?"flex":"none",a.textContent=r,p.style.display=c.trim()?"flex":"none",p.textContent=c}bindEvents(){const t=this.shadow.querySelector("a");t.addEventListener("click",this.handleClick.bind(this)),t.addEventListener("keydown",this.handleKeyPress.bind(this))}handleClick(t){const e=this.getAttribute("href");(!e||e==="#")&&t.preventDefault()}handleKeyPress(t){(t.key==="Enter"||t.key===" ")&&(t.preventDefault(),this.dispatchEvent(new MouseEvent("click")))}}customElements.define("resource-link",i);class l extends HTMLElement{constructor(){super();b(this,"shadow");this.shadow=this.attachShadow({mode:"open"}),this.render()}static get observedAttributes(){return["type"]}connectedCallback(){this.updateContent()}attributeChangedCallback(){this.updateContent()}render(){const t=document.createElement("style");t.textContent=`
       :host {
         --tb-normal-bg: #e7f5ff;
         --tb-normal-text: #1864ab;
@@ -106,6 +106,7 @@
         background-color: var(--tb-normal-bg);
         color: var(--tb-normal-text);
         border-color: var(--tb-normal-border);
+        margin: 6px 0;
       }
       
       .text-box[type="warning"] {
@@ -134,9 +135,9 @@
       .text-box ::slotted(*) {
         display: inline;
       }
-    `;const e=document.createElement("div");e.className="text-box",e.setAttribute("role","alert");const o=document.createElement("span");o.className="icon";const r=document.createElement("slot");e.append(o,r),this.shadow.append(t,e)}updateContent(){const t=this.shadow.querySelector(".text-box"),e=this.shadow.querySelector(".icon");this.shadow.querySelector(".content");const o=this.getAttribute("type")??"normal";t.setAttribute("type",o);let r="";switch(o){case"warning":r="⚠️";break;case"error":r="❌";break;case"success":r="✅";break;default:r="ℹ️"}e.textContent=r}}customElements.define("text-box",l);class f extends HTMLElement{constructor(){super();p(this,"shadow");this.shadow=this.attachShadow({mode:"open"}),this.render()}static get observedAttributes(){return["type","url","password","title"]}connectedCallback(){this.updateContent()}attributeChangedCallback(){this.updateContent()}getDriveIcon(t){const e={默认图标:'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>'};return e[t]||e.默认图标}render(){const t=document.createElement("style");t.textContent=`
+    `;const e=document.createElement("div");e.className="text-box",e.setAttribute("role","alert");const o=document.createElement("span");o.className="icon";const r=document.createElement("slot");e.append(o,r),this.shadow.append(t,e)}updateContent(){const t=this.shadow.querySelector(".text-box"),e=this.shadow.querySelector(".icon");this.shadow.querySelector(".content");const o=this.getAttribute("type")??"normal";t.setAttribute("type",o);let r="";switch(o){case"warning":r="⚠️";break;case"error":r="❌";break;case"success":r="✅";break;default:r="ℹ️"}e.textContent=r}}customElements.define("text-box",l);class f extends HTMLElement{constructor(){super();b(this,"shadow");this.shadow=this.attachShadow({mode:"open"}),this.render()}static get observedAttributes(){return["type","url","password","title"]}connectedCallback(){this.updateContent()}attributeChangedCallback(){this.updateContent()}getDriveIcon(t){const e={默认图标:'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>'};return e[t]||e.默认图标}render(){const t=document.createElement("style");t.textContent=`
       :host { display: inline-block; }
-      .drive-container {
+      .cd-drive-container {
         display: flex;
         align-items: center;
         padding: 12px 16px;
@@ -150,15 +151,15 @@
         transform: translateY(-1px);
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       }
-      .drive-icon {
+      .cd-drive-icon {
         flex: 0 0 24px;
         margin-right: 12px;
         color: #3498db;
       }
-      .drive-info {
+      .cd-drive-info {
         flex: 1;
       }
-      .drive-title {
+      .cd-drive-title {
         font-weight: 500;
         margin-bottom: 4px;
         color: #2c3e50;
@@ -167,11 +168,11 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      .drive-meta {
+      .cd-drive-meta {
         font-size: 0.85rem;
         color: #7f8c8d;
       }
-      .drive-password {
+      .cd-drive-password {
         margin-left: 8px;
         padding: 2px 6px;
         background-color: #ecf0f1;
@@ -179,7 +180,7 @@
         font-size: 0.8rem;
         cursor: pointer;
       }
-      .download-btn {
+      .cd-download-btn {
         background-color: #e74c3c;
         color: white;
         border: none;
@@ -194,7 +195,7 @@
       .download-btn:hover {
         background-color: #c0392b;
       }
-    `;const e=document.createElement("div");e.className="drive-container",this.shadow.append(t,e)}updateContent(){const t=this.shadow.querySelector(".drive-container"),e=this.getAttribute("type")||"默认网盘",o=this.getAttribute("url")||"#",r=this.getAttribute("password")||"",c=this.getAttribute("title")||"默认标题";t.innerHTML=`
+    `;const e=document.createElement("div");e.className="cd-drive-container",this.shadow.append(t,e)}updateContent(){const t=this.shadow.querySelector(".cd-drive-container"),e=this.getAttribute("type")||"默认网盘",o=this.getAttribute("url")||"#",r=this.getAttribute("password")||"",c=this.getAttribute("title")||"默认标题";t.innerHTML=`
       <div class="drive-icon">${this.getDriveIcon(e)}</div>
       <div class="drive-info">
         <div class="drive-title" title="${c}">${c}</div>
@@ -204,4 +205,4 @@
         </div>
       </div>
       <a href="${o}" class="download-btn" target="_blank">下载</a>
-    `;const a=t.querySelector(".drive-password");a&&a.addEventListener("click",()=>{const b=a.dataset.password;b&&navigator.clipboard.writeText(b).then(()=>{const d=a.textContent;a.textContent="提取码已复制",setTimeout(()=>{a.textContent=d},2e3)}).catch(d=>{console.error("复制提取码失败:",d)})})}}customElements.define("cloud-drive",f)});
+    `;const a=t.querySelector(".cd-drive-password");a&&a.addEventListener("click",()=>{const p=a.dataset.password;p&&navigator.clipboard.writeText(p).then(()=>{const d=a.textContent;a.textContent="提取码已复制",setTimeout(()=>{a.textContent=d},2e3)}).catch(d=>{console.error("复制提取码失败:",d)})})}}customElements.define("cloud-drive",f)});
