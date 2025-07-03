@@ -61,6 +61,12 @@ class TextBoxElement extends HTMLElement {
         color: var(--tb-normal-text);
         border-color: var(--tb-normal-border);
         margin: 6px 0;
+        transition: all 0.3s ease;
+      }
+
+      .text-box:hover {
+        transform: scale(1.01);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       }
       
       .text-box[type="warning"] {
