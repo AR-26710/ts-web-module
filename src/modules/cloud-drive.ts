@@ -44,7 +44,7 @@ class CloudDriveElement extends HTMLElement {
         transition: all 0.2s ease;
         margin: 6px 0;
       }
-      .drive-container:hover {
+      .cd-drive-container:hover {
         background-color: #f5f5f5;
         transform: translateY(-1px);
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -90,7 +90,7 @@ class CloudDriveElement extends HTMLElement {
         white-space: nowrap;
         text-decoration: none;
       }
-      .download-btn:hover {
+      .cd-download-btn:hover {
         background-color: #c0392b;
       }
     `;
@@ -109,15 +109,15 @@ class CloudDriveElement extends HTMLElement {
     const title = this.getAttribute('title') || '默认标题';
 
     container.innerHTML = `
-      <div class="drive-icon">${this.getDriveIcon(type)}</div>
-      <div class="drive-info">
-        <div class="drive-title" title="${title}">${title}</div>
-        <div class="drive-meta">
+      <div class="cd-drive-icon">${this.getDriveIcon(type)}</div>
+      <div class="cd-drive-info">
+        <div class="cd-drive-title" title="${title}">${title}</div>
+        <div class="cd-drive-meta">
           来源: ${type}
-          ${password ? `<span class="drive-password" data-password="${password}" title="点击复制提取码">提取码: ${password}</span>` : ''}
+          ${password ? `<span class="cd-drive-password" data-password="${password}" title="点击复制提取码">提取码: ${password}</span>` : ''}
         </div>
       </div>
-      <a href="${url}" class="download-btn" target="_blank">下载</a>
+      <a href="${url}" class="cd-download-btn" target="_blank">下载</a>
     `;
 
     const passwordElement = container.querySelector('.cd-drive-password');
