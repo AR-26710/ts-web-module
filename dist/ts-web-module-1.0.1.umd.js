@@ -1,12 +1,12 @@
-(function(n){typeof define=="function"&&define.amd?define(n):n()})(function(){"use strict";var p=Object.defineProperty;var m=(n,i,s)=>i in n?p(n,i,{enumerable:!0,configurable:!0,writable:!0,value:s}):n[i]=s;var c=(n,i,s)=>(m(n,typeof i!="symbol"?i+"":i,s),s);const l=class l extends HTMLElement{static get observedAttributes(){return["bvid","autoplay","muted"]}constructor(){super(),this.attachShadow({mode:"open"})}connectedCallback(){this.render()}attributeChangedCallback(){this.render()}disconnectedCallback(){var t;const a=(t=this.shadowRoot)==null?void 0:t.querySelector("iframe");a&&(a.src="")}render(){if(!this.shadowRoot)return;const a=this.getAttribute("bvid");if(!a){this.shadowRoot.innerHTML=`
-        <style>${l.STYLES}</style>
+(function(n){typeof define=="function"&&define.amd?define(n):n()})(function(){"use strict";var p=Object.defineProperty;var m=(n,i,l)=>i in n?p(n,i,{enumerable:!0,configurable:!0,writable:!0,value:l}):n[i]=l;var c=(n,i,l)=>(m(n,typeof i!="symbol"?i+"":i,l),l);const a=class a extends HTMLElement{static get observedAttributes(){return["bvid","autoplay","muted"]}constructor(){super(),this.attachShadow({mode:"open"})}connectedCallback(){this.render()}attributeChangedCallback(){this.render()}disconnectedCallback(){var t;const s=(t=this.shadowRoot)==null?void 0:t.querySelector("iframe");s&&(s.src="")}render(){if(!this.shadowRoot)return;const s=this.getAttribute("bvid");if(!s){this.shadowRoot.innerHTML=`
+        <style>${a.STYLES}</style>
         <div class="error-message">错误：缺少 bvid 属性</div>
-      `;return}const t=this.hasAttribute("autoplay")?"1":"0",e=this.hasAttribute("muted")?"1":"0",o=new URLSearchParams({bvid:a,autoplay:t});e==="1"&&o.append("muted","1");const r=`https://player.bilibili.com/player.html?${o.toString()}`;this.shadowRoot.innerHTML=`
-      <style>${l.STYLES}</style>
+      `;return}const t=this.hasAttribute("autoplay")?"1":"0",e=this.hasAttribute("muted")?"1":"0",o=new URLSearchParams({bvid:s,autoplay:t});e==="1"&&o.append("muted","1");const r=`https://player.bilibili.com/player.html?${o.toString()}`;this.shadowRoot.innerHTML=`
+      <style>${a.STYLES}</style>
       <div class="bilibili-video-wrapper">
         <iframe src="${r}" frameborder="0" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
       </div>
-    `}};c(l,"STYLES",`
+    `}};c(a,"STYLES",`
     .bilibili-video-wrapper {
       position: relative;
       width: 100%;
@@ -25,7 +25,7 @@
       padding: 10px;
       font-family: Arial, sans-serif;
     }
-  `);let n=l;customElements.define("bilibili-video",n);class i extends HTMLElement{constructor(){super();c(this,"shadow");this.shadow=this.attachShadow({mode:"open"}),this.render()}static get observedAttributes(){return["left-text","right-text","href","target"]}connectedCallback(){this.updateContent(),this.bindEvents()}disconnectedCallback(){const t=this.shadow.querySelector("a");t&&(t.removeEventListener("click",this.handleClick),t.removeEventListener("keydown",this.handleKeyPress))}attributeChangedCallback(){this.updateContent()}render(){const t=document.createElement("style");t.textContent=`
+  `);let n=a;customElements.define("bilibili-video",n);class i extends HTMLElement{constructor(){super();c(this,"shadow");this.shadow=this.attachShadow({mode:"open"}),this.render()}static get observedAttributes(){return["left-text","right-text","href","target"]}connectedCallback(){this.updateContent(),this.bindEvents()}disconnectedCallback(){const t=this.shadow.querySelector("a");t&&(t.removeEventListener("click",this.handleClick),t.removeEventListener("keydown",this.handleKeyPress))}attributeChangedCallback(){this.updateContent()}render(){const t=document.createElement("style");t.textContent=`
       :host {
         --rl-left-color: #2c3e50;
         --rl-right-color: #3498db;
@@ -75,7 +75,7 @@
       .rl-container:hover .rl-right {
         background: var(--rl-right-hover);
       }
-    `;const e=document.createElement("a");e.className="rl-container",e.setAttribute("role","link"),e.tabIndex=0;const o=document.createElement("div");o.className="rl-left";const r=document.createElement("div");r.className="rl-right",e.append(o,r),this.shadow.append(t,e)}updateContent(){var u;const t=this.shadow.querySelector("a"),e=((u=this.getAttribute("href"))==null?void 0:u.trim())??"#",o=this.getAttribute("target")??"_self";t.setAttribute("href",e),t.setAttribute("target",o);const r=this.getAttribute("left-text")??"",d=this.getAttribute("right-text")??"",b=this.shadow.querySelector(".rl-left"),h=this.shadow.querySelector(".rl-right");b.style.display=r.trim()?"flex":"none",b.textContent=r,h.style.display=d.trim()?"flex":"none",h.textContent=d}bindEvents(){const t=this.shadow.querySelector("a");t.addEventListener("click",this.handleClick.bind(this)),t.addEventListener("keydown",this.handleKeyPress.bind(this))}handleClick(t){const e=this.getAttribute("href");(!e||e==="#")&&t.preventDefault()}handleKeyPress(t){(t.key==="Enter"||t.key===" ")&&(t.preventDefault(),this.dispatchEvent(new MouseEvent("click")))}}customElements.define("resource-link",i);class s extends HTMLElement{constructor(){super();c(this,"shadow");this.shadow=this.attachShadow({mode:"open"}),this.render()}static get observedAttributes(){return["type"]}connectedCallback(){this.updateContent()}attributeChangedCallback(){this.updateContent()}render(){const t=document.createElement("style");t.textContent=`
+    `;const e=document.createElement("a");e.className="rl-container",e.setAttribute("role","link"),e.tabIndex=0;const o=document.createElement("div");o.className="rl-left";const r=document.createElement("div");r.className="rl-right",e.append(o,r),this.shadow.append(t,e)}updateContent(){var f;const t=this.shadow.querySelector("a"),e=((f=this.getAttribute("href"))==null?void 0:f.trim())??"#",o=this.getAttribute("target")??"_self";t.setAttribute("href",e),t.setAttribute("target",o);const r=this.getAttribute("left-text")??"",d=this.getAttribute("right-text")??"",b=this.shadow.querySelector(".rl-left"),u=this.shadow.querySelector(".rl-right");b.style.display=r.trim()?"flex":"none",b.textContent=r,u.style.display=d.trim()?"flex":"none",u.textContent=d}bindEvents(){const t=this.shadow.querySelector("a");t.addEventListener("click",this.handleClick.bind(this)),t.addEventListener("keydown",this.handleKeyPress.bind(this))}handleClick(t){const e=this.getAttribute("href");(!e||e==="#")&&t.preventDefault()}handleKeyPress(t){(t.key==="Enter"||t.key===" ")&&(t.preventDefault(),this.dispatchEvent(new MouseEvent("click")))}}customElements.define("resource-link",i);class l extends HTMLElement{constructor(){super();c(this,"shadow");this.shadow=this.attachShadow({mode:"open"}),this.render()}static get observedAttributes(){return["type"]}connectedCallback(){this.updateContent()}attributeChangedCallback(){this.updateContent()}render(){const t=document.createElement("style");t.textContent=`
       :host {
         --tb-normal-bg: #e7f5ff;
         --tb-normal-text: #1864ab;
@@ -134,4 +134,4 @@
       .text-box ::slotted(*) {
         display: inline;
       }
-    `;const e=document.createElement("div");e.className="text-box",e.setAttribute("role","alert");const o=document.createElement("span");o.className="icon";const r=document.createElement("slot");e.append(o,r),this.shadow.append(t,e)}updateContent(){const t=this.shadow.querySelector(".text-box"),e=this.shadow.querySelector(".icon");this.shadow.querySelector(".content");const o=this.getAttribute("type")??"normal";t.setAttribute("type",o);let r="";switch(o){case"warning":r="⚠️";break;case"error":r="❌";break;case"success":r="✅";break;default:r="ℹ️"}e.textContent=r}}customElements.define("text-box",s)});
+    `;const e=document.createElement("div");e.className="text-box",e.setAttribute("role","alert");const o=document.createElement("span");o.className="icon";const r=document.createElement("slot");e.append(o,r),this.shadow.append(t,e)}updateContent(){const t=this.shadow.querySelector(".text-box"),e=this.shadow.querySelector(".icon");this.shadow.querySelector(".content");const o=this.getAttribute("type")??"normal";t.setAttribute("type",o);let r="";switch(o){case"warning":r="⚠️";break;case"error":r="❌";break;case"success":r="✅";break;default:r="ℹ️"}e.textContent=r}}customElements.define("text-box",l)});

@@ -1,7 +1,31 @@
 var u = Object.defineProperty;
-var f = (i, r, t) => r in i ? u(i, r, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[r] = t;
-var a = (i, r, t) => (f(i, typeof r != "symbol" ? r + "" : r, t), t);
-const s = class s extends HTMLElement {
+var f = (i, n, e) => n in i ? u(i, n, { enumerable: !0, configurable: !0, writable: !0, value: e }) : i[n] = e;
+var l = (i, n, e) => (f(i, typeof n != "symbol" ? n + "" : n, e), e);
+(function() {
+  const n = document.createElement("link").relList;
+  if (n && n.supports && n.supports("modulepreload"))
+    return;
+  for (const t of document.querySelectorAll('link[rel="modulepreload"]'))
+    o(t);
+  new MutationObserver((t) => {
+    for (const r of t)
+      if (r.type === "childList")
+        for (const s of r.addedNodes)
+          s.tagName === "LINK" && s.rel === "modulepreload" && o(s);
+  }).observe(document, { childList: !0, subtree: !0 });
+  function e(t) {
+    const r = {};
+    return t.integrity && (r.integrity = t.integrity), t.referrerPolicy && (r.referrerPolicy = t.referrerPolicy), t.crossOrigin === "use-credentials" ? r.credentials = "include" : t.crossOrigin === "anonymous" ? r.credentials = "omit" : r.credentials = "same-origin", r;
+  }
+  function o(t) {
+    if (t.ep)
+      return;
+    t.ep = !0;
+    const r = e(t);
+    fetch(t.href, r);
+  }
+})();
+const a = class a extends HTMLElement {
   static get observedAttributes() {
     return ["bvid", "autoplay", "muted"];
   }
@@ -15,33 +39,33 @@ const s = class s extends HTMLElement {
     this.render();
   }
   disconnectedCallback() {
-    var t;
-    const r = (t = this.shadowRoot) == null ? void 0 : t.querySelector("iframe");
-    r && (r.src = "");
+    var e;
+    const n = (e = this.shadowRoot) == null ? void 0 : e.querySelector("iframe");
+    n && (n.src = "");
   }
   render() {
     if (!this.shadowRoot)
       return;
-    const r = this.getAttribute("bvid");
-    if (!r) {
+    const n = this.getAttribute("bvid");
+    if (!n) {
       this.shadowRoot.innerHTML = `
-        <style>${s.STYLES}</style>
+        <style>${a.STYLES}</style>
         <div class="error-message">错误：缺少 bvid 属性</div>
       `;
       return;
     }
-    const t = this.hasAttribute("autoplay") ? "1" : "0", e = this.hasAttribute("muted") ? "1" : "0", n = new URLSearchParams({ bvid: r, autoplay: t });
-    e === "1" && n.append("muted", "1");
-    const o = `https://player.bilibili.com/player.html?${n.toString()}`;
+    const e = this.hasAttribute("autoplay") ? "1" : "0", o = this.hasAttribute("muted") ? "1" : "0", t = new URLSearchParams({ bvid: n, autoplay: e });
+    o === "1" && t.append("muted", "1");
+    const r = `https://player.bilibili.com/player.html?${t.toString()}`;
     this.shadowRoot.innerHTML = `
-      <style>${s.STYLES}</style>
+      <style>${a.STYLES}</style>
       <div class="bilibili-video-wrapper">
-        <iframe src="${o}" frameborder="0" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
+        <iframe src="${r}" frameborder="0" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
       </div>
     `;
   }
 };
-a(s, "STYLES", `
+l(a, "STYLES", `
     .bilibili-video-wrapper {
       position: relative;
       width: 100%;
@@ -61,12 +85,12 @@ a(s, "STYLES", `
       font-family: Arial, sans-serif;
     }
   `);
-let l = s;
-customElements.define("bilibili-video", l);
+let c = a;
+customElements.define("bilibili-video", c);
 class p extends HTMLElement {
   constructor() {
     super();
-    a(this, "shadow");
+    l(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -76,15 +100,15 @@ class p extends HTMLElement {
     this.updateContent(), this.bindEvents();
   }
   disconnectedCallback() {
-    const t = this.shadow.querySelector("a");
-    t && (t.removeEventListener("click", this.handleClick), t.removeEventListener("keydown", this.handleKeyPress));
+    const e = this.shadow.querySelector("a");
+    e && (e.removeEventListener("click", this.handleClick), e.removeEventListener("keydown", this.handleKeyPress));
   }
   attributeChangedCallback() {
     this.updateContent();
   }
   render() {
-    const t = document.createElement("style");
-    t.textContent = `
+    const e = document.createElement("style");
+    e.textContent = `
       :host {
         --rl-left-color: #2c3e50;
         --rl-right-color: #3498db;
@@ -135,37 +159,37 @@ class p extends HTMLElement {
         background: var(--rl-right-hover);
       }
     `;
-    const e = document.createElement("a");
-    e.className = "rl-container", e.setAttribute("role", "link"), e.tabIndex = 0;
-    const n = document.createElement("div");
-    n.className = "rl-left";
-    const o = document.createElement("div");
-    o.className = "rl-right", e.append(n, o), this.shadow.append(t, e);
+    const o = document.createElement("a");
+    o.className = "rl-container", o.setAttribute("role", "link"), o.tabIndex = 0;
+    const t = document.createElement("div");
+    t.className = "rl-left";
+    const r = document.createElement("div");
+    r.className = "rl-right", o.append(t, r), this.shadow.append(e, o);
   }
   updateContent() {
-    var h;
-    const t = this.shadow.querySelector("a"), e = ((h = this.getAttribute("href")) == null ? void 0 : h.trim()) ?? "#", n = this.getAttribute("target") ?? "_self";
-    t.setAttribute("href", e), t.setAttribute("target", n);
-    const o = this.getAttribute("left-text") ?? "", c = this.getAttribute("right-text") ?? "", d = this.shadow.querySelector(".rl-left"), b = this.shadow.querySelector(".rl-right");
-    d.style.display = o.trim() ? "flex" : "none", d.textContent = o, b.style.display = c.trim() ? "flex" : "none", b.textContent = c;
+    var b;
+    const e = this.shadow.querySelector("a"), o = ((b = this.getAttribute("href")) == null ? void 0 : b.trim()) ?? "#", t = this.getAttribute("target") ?? "_self";
+    e.setAttribute("href", o), e.setAttribute("target", t);
+    const r = this.getAttribute("left-text") ?? "", s = this.getAttribute("right-text") ?? "", d = this.shadow.querySelector(".rl-left"), h = this.shadow.querySelector(".rl-right");
+    d.style.display = r.trim() ? "flex" : "none", d.textContent = r, h.style.display = s.trim() ? "flex" : "none", h.textContent = s;
   }
   bindEvents() {
-    const t = this.shadow.querySelector("a");
-    t.addEventListener("click", this.handleClick.bind(this)), t.addEventListener("keydown", this.handleKeyPress.bind(this));
+    const e = this.shadow.querySelector("a");
+    e.addEventListener("click", this.handleClick.bind(this)), e.addEventListener("keydown", this.handleKeyPress.bind(this));
   }
-  handleClick(t) {
-    const e = this.getAttribute("href");
-    (!e || e === "#") && t.preventDefault();
+  handleClick(e) {
+    const o = this.getAttribute("href");
+    (!o || o === "#") && e.preventDefault();
   }
-  handleKeyPress(t) {
-    (t.key === "Enter" || t.key === " ") && (t.preventDefault(), this.dispatchEvent(new MouseEvent("click")));
+  handleKeyPress(e) {
+    (e.key === "Enter" || e.key === " ") && (e.preventDefault(), this.dispatchEvent(new MouseEvent("click")));
   }
 }
 customElements.define("resource-link", p);
 class m extends HTMLElement {
   constructor() {
     super();
-    a(this, "shadow");
+    l(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -178,8 +202,8 @@ class m extends HTMLElement {
     this.updateContent();
   }
   render() {
-    const t = document.createElement("style");
-    t.textContent = `
+    const e = document.createElement("style");
+    e.textContent = `
       :host {
         --tb-normal-bg: #e7f5ff;
         --tb-normal-text: #1864ab;
@@ -239,33 +263,33 @@ class m extends HTMLElement {
         display: inline;
       }
     `;
-    const e = document.createElement("div");
-    e.className = "text-box", e.setAttribute("role", "alert");
-    const n = document.createElement("span");
-    n.className = "icon";
-    const o = document.createElement("slot");
-    e.append(n, o), this.shadow.append(t, e);
+    const o = document.createElement("div");
+    o.className = "text-box", o.setAttribute("role", "alert");
+    const t = document.createElement("span");
+    t.className = "icon";
+    const r = document.createElement("slot");
+    o.append(t, r), this.shadow.append(e, o);
   }
   updateContent() {
-    const t = this.shadow.querySelector(".text-box"), e = this.shadow.querySelector(".icon");
+    const e = this.shadow.querySelector(".text-box"), o = this.shadow.querySelector(".icon");
     this.shadow.querySelector(".content");
-    const n = this.getAttribute("type") ?? "normal";
-    t.setAttribute("type", n);
-    let o = "";
-    switch (n) {
+    const t = this.getAttribute("type") ?? "normal";
+    e.setAttribute("type", t);
+    let r = "";
+    switch (t) {
       case "warning":
-        o = "⚠️";
+        r = "⚠️";
         break;
       case "error":
-        o = "❌";
+        r = "❌";
         break;
       case "success":
-        o = "✅";
+        r = "✅";
         break;
       default:
-        o = "ℹ️";
+        r = "ℹ️";
     }
-    e.textContent = o;
+    o.textContent = r;
   }
 }
 customElements.define("text-box", m);
