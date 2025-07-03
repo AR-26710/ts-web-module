@@ -91,10 +91,6 @@ class TextBoxElement extends HTMLElement {
         margin-right: 8px;
         font-weight: bold;
       }
-      
-      .text-box ::slotted(*) {
-        display: inline;
-      }
     `;
 
     const container = document.createElement('div');
