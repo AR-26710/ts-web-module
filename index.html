@@ -6,11 +6,18 @@
     <title>Web组件示例</title>
     <script type="module" src="/src/ts-web-module.ts"></script>
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
         body {
             font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         .component-section {
             margin-bottom: 40px;
@@ -25,6 +32,9 @@
             color: #333;
             border-bottom: 2px solid #eee;
             padding-bottom: 10px;
+        }
+        .tab-container {
+            flex-grow: 1;
         }
         .tab-nav {
             display: flex;
@@ -58,6 +68,14 @@
         .tab-panel.active {
             display: block;
         }
+        .footer {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 0.9em;
+            margin-top: auto;
+        }
     </style>
 </head>
 <body>
@@ -81,6 +99,10 @@
         </div>
     </div>
 
+    <div class="footer">
+        © 2025 Web组件示例. 保留所有权利.
+    </div>
+    
     <script>
 
         let ignoreNextClick = false;
