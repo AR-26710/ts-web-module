@@ -1,6 +1,6 @@
-var u = Object.defineProperty;
-var p = (i, n, t) => n in i ? u(i, n, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[n] = t;
-var d = (i, n, t) => (p(i, typeof n != "symbol" ? n + "" : n, t), t);
+var p = Object.defineProperty;
+var u = (i, n, t) => n in i ? p(i, n, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[n] = t;
+var d = (i, n, t) => (u(i, typeof n != "symbol" ? n + "" : n, t), t);
 (function() {
   const n = document.createElement("link").relList;
   if (n && n.supports && n.supports("modulepreload"))
@@ -227,7 +227,7 @@ class g extends HTMLElement {
         font-family: inherit;
       }
       
-      .text-box {
+      .tb-text-box {
         padding: 12px 16px;
         border-radius: 6px;
         border-left: 4px solid;
@@ -235,46 +235,46 @@ class g extends HTMLElement {
         color: var(--tb-normal-text);
         border-color: var(--tb-normal-border);
         margin: 6px 0;
+        transition: all 0.3s ease;
+      }
+
+      .tb-text-box:hover {
+        transform: scale(1.01);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       }
       
-      .text-box[type="warning"] {
+      .tb-text-box[type="warning"] {
         background-color: var(--tb-warning-bg);
         color: var(--tb-warning-text);
         border-color: var(--tb-warning-border);
       }
       
-      .text-box[type="error"] {
+      .tb-text-box[type="error"] {
         background-color: var(--tb-error-bg);
         color: var(--tb-error-text);
         border-color: var(--tb-error-border);
       }
       
-      .text-box[type="success"] {
+      .tb-text-box[type="success"] {
         background-color: var(--tb-success-bg);
         color: var(--tb-success-text);
         border-color: var(--tb-success-border);
       }
       
-      .text-box .icon {
+      .tb-text-box .tb-icon {
         margin-right: 8px;
         font-weight: bold;
       }
-      
-      .text-box ::slotted(*) {
-        display: inline;
-      }
     `;
     const e = document.createElement("div");
-    e.className = "text-box", e.setAttribute("role", "alert");
+    e.className = "tb-text-box", e.setAttribute("role", "alert");
     const r = document.createElement("span");
-    r.className = "icon";
+    r.className = "tb-icon";
     const o = document.createElement("slot");
     e.append(r, o), this.shadow.append(t, e);
   }
   updateContent() {
-    const t = this.shadow.querySelector(".text-box"), e = this.shadow.querySelector(".icon");
-    this.shadow.querySelector(".content");
-    const r = this.getAttribute("type") ?? "normal";
+    const t = this.shadow.querySelector(".tb-text-box"), e = this.shadow.querySelector(".tb-icon"), r = this.getAttribute("type") ?? "normal";
     t.setAttribute("type", r);
     let o = "";
     switch (r) {
