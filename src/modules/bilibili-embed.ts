@@ -73,7 +73,7 @@ class BilibiliEmbed extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>${BilibiliEmbed.STYLES}</style>
       <div class="bilibili-video-wrapper">
-        <iframe src="${iframeSrc}" frameborder="0" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
+        <iframe src="${iframeSrc}" frameborder="0" allow="autoplay; fullscreen; encrypted-media"></iframe>
       </div>
     `;
   }
