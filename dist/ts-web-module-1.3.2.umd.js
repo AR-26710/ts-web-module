@@ -146,7 +146,7 @@
         transition: all 0.2s ease;
         margin: 6px 0;
       }
-      .drive-container:hover {
+      .cd-drive-container:hover {
         background-color: #f5f5f5;
         transform: translateY(-1px);
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -192,17 +192,17 @@
         white-space: nowrap;
         text-decoration: none;
       }
-      .download-btn:hover {
+      .cd-download-btn:hover {
         background-color: #c0392b;
       }
     `;const e=document.createElement("div");e.className="cd-drive-container",this.shadow.append(t,e)}updateContent(){const t=this.shadow.querySelector(".cd-drive-container"),e=this.getAttribute("type")||"默认网盘",o=this.getAttribute("url")||"#",r=this.getAttribute("password")||"",c=this.getAttribute("title")||"默认标题";t.innerHTML=`
-      <div class="drive-icon">${this.getDriveIcon(e)}</div>
-      <div class="drive-info">
-        <div class="drive-title" title="${c}">${c}</div>
-        <div class="drive-meta">
+      <div class="cd-drive-icon">${this.getDriveIcon(e)}</div>
+      <div class="cd-drive-info">
+        <div class="cd-drive-title" title="${c}">${c}</div>
+        <div class="cd-drive-meta">
           来源: ${e}
-          ${r?`<span class="drive-password" data-password="${r}" title="点击复制提取码">提取码: ${r}</span>`:""}
+          ${r?`<span class="cd-drive-password" data-password="${r}" title="点击复制提取码">提取码: ${r}</span>`:""}
         </div>
       </div>
-      <a href="${o}" class="download-btn" target="_blank">下载</a>
+      <a href="${o}" class="cd-download-btn" target="_blank">下载</a>
     `;const a=t.querySelector(".cd-drive-password");a&&a.addEventListener("click",()=>{const p=a.dataset.password;p&&navigator.clipboard.writeText(p).then(()=>{const d=a.textContent;a.textContent="提取码已复制",setTimeout(()=>{a.textContent=d},2e3)}).catch(d=>{console.error("复制提取码失败:",d)})})}}customElements.define("cloud-drive",f)});

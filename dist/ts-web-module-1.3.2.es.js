@@ -167,11 +167,11 @@ class f extends HTMLElement {
     o.className = "rl-right", e.append(r, o), this.shadow.append(t, e);
   }
   updateContent() {
-    var l;
-    const t = this.shadow.querySelector("a"), e = ((l = this.getAttribute("href")) == null ? void 0 : l.trim()) ?? "#", r = this.getAttribute("target") ?? "_self";
+    var c;
+    const t = this.shadow.querySelector("a"), e = ((c = this.getAttribute("href")) == null ? void 0 : c.trim()) ?? "#", r = this.getAttribute("target") ?? "_self";
     t.setAttribute("href", e), t.setAttribute("target", r);
-    const o = this.getAttribute("left-text") ?? "", s = this.getAttribute("right-text") ?? "", a = this.shadow.querySelector(".rl-left"), c = this.shadow.querySelector(".rl-right");
-    a.style.display = o.trim() ? "flex" : "none", a.textContent = o, c.style.display = s.trim() ? "flex" : "none", c.textContent = s;
+    const o = this.getAttribute("left-text") ?? "", s = this.getAttribute("right-text") ?? "", a = this.shadow.querySelector(".rl-left"), l = this.shadow.querySelector(".rl-right");
+    a.style.display = o.trim() ? "flex" : "none", a.textContent = o, l.style.display = s.trim() ? "flex" : "none", l.textContent = s;
   }
   bindEvents() {
     const t = this.shadow.querySelector("a");
@@ -328,7 +328,7 @@ class m extends HTMLElement {
         transition: all 0.2s ease;
         margin: 6px 0;
       }
-      .drive-container:hover {
+      .cd-drive-container:hover {
         background-color: #f5f5f5;
         transform: translateY(-1px);
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -374,7 +374,7 @@ class m extends HTMLElement {
         white-space: nowrap;
         text-decoration: none;
       }
-      .download-btn:hover {
+      .cd-download-btn:hover {
         background-color: #c0392b;
       }
     `;
@@ -384,26 +384,26 @@ class m extends HTMLElement {
   updateContent() {
     const t = this.shadow.querySelector(".cd-drive-container"), e = this.getAttribute("type") || "默认网盘", r = this.getAttribute("url") || "#", o = this.getAttribute("password") || "", s = this.getAttribute("title") || "默认标题";
     t.innerHTML = `
-      <div class="drive-icon">${this.getDriveIcon(e)}</div>
-      <div class="drive-info">
-        <div class="drive-title" title="${s}">${s}</div>
-        <div class="drive-meta">
+      <div class="cd-drive-icon">${this.getDriveIcon(e)}</div>
+      <div class="cd-drive-info">
+        <div class="cd-drive-title" title="${s}">${s}</div>
+        <div class="cd-drive-meta">
           来源: ${e}
-          ${o ? `<span class="drive-password" data-password="${o}" title="点击复制提取码">提取码: ${o}</span>` : ""}
+          ${o ? `<span class="cd-drive-password" data-password="${o}" title="点击复制提取码">提取码: ${o}</span>` : ""}
         </div>
       </div>
-      <a href="${r}" class="download-btn" target="_blank">下载</a>
+      <a href="${r}" class="cd-download-btn" target="_blank">下载</a>
     `;
     const a = t.querySelector(".cd-drive-password");
     a && a.addEventListener("click", () => {
-      const c = a.dataset.password;
-      c && navigator.clipboard.writeText(c).then(() => {
-        const l = a.textContent;
+      const l = a.dataset.password;
+      l && navigator.clipboard.writeText(l).then(() => {
+        const c = a.textContent;
         a.textContent = "提取码已复制", setTimeout(() => {
-          a.textContent = l;
+          a.textContent = c;
         }, 2e3);
-      }).catch((l) => {
-        console.error("复制提取码失败:", l);
+      }).catch((c) => {
+        console.error("复制提取码失败:", c);
       });
     });
   }
