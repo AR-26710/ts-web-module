@@ -9,6 +9,8 @@
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
+    "@types/dotenv": "^8.2.3",
+    "dotenv": "^17.0.1",
     "rollup-plugin-copy": "^3.5.0",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",

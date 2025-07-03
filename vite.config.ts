@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default defineConfig(({ command }) => ({
   base: './',
@@ -14,7 +16,7 @@ export default defineConfig(({ command }) => ({
       entry: 'src/ts-web-module.ts',
       name: 'TsWebModule',
       formats: ['es', 'umd'],
-      fileName: (format) => `ts-web-module-1.0.1.${format}.js`
+      fileName: (format) => `ts-web-module-${process.env.VERSION}.${format}.js`
     }
   } : undefined
 }));
