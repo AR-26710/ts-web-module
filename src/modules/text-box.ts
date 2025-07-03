@@ -53,7 +53,7 @@ class TextBoxElement extends HTMLElement {
         font-family: inherit;
       }
       
-      .text-box {
+      .tb-text-box {
         padding: 12px 16px;
         border-radius: 6px;
         border-left: 4px solid;
@@ -64,30 +64,30 @@ class TextBoxElement extends HTMLElement {
         transition: all 0.3s ease;
       }
 
-      .text-box:hover {
+      .tb-text-box:hover {
         transform: scale(1.01);
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       }
       
-      .text-box[type="warning"] {
+      .tb-text-box[type="warning"] {
         background-color: var(--tb-warning-bg);
         color: var(--tb-warning-text);
         border-color: var(--tb-warning-border);
       }
       
-      .text-box[type="error"] {
+      .tb-text-box[type="error"] {
         background-color: var(--tb-error-bg);
         color: var(--tb-error-text);
         border-color: var(--tb-error-border);
       }
       
-      .text-box[type="success"] {
+      .tb-text-box[type="success"] {
         background-color: var(--tb-success-bg);
         color: var(--tb-success-text);
         border-color: var(--tb-success-border);
       }
       
-      .text-box .icon {
+      .tb-text-box .tb-icon {
         margin-right: 8px;
         font-weight: bold;
       }
@@ -98,11 +98,11 @@ class TextBoxElement extends HTMLElement {
     `;
 
     const container = document.createElement('div');
-    container.className = 'text-box';
+    container.className = 'tb-text-box';
     container.setAttribute('role', 'alert');
 
     const icon = document.createElement('span');
-    icon.className = 'icon';
+    icon.className = 'tb-icon';
 
     const slot = document.createElement('slot');
 
@@ -111,9 +111,8 @@ class TextBoxElement extends HTMLElement {
   }
 
   private updateContent() {
-    const container = this.shadow.querySelector('.text-box') as HTMLElement;
-    const icon = this.shadow.querySelector('.icon') as HTMLElement;
-    const content = this.shadow.querySelector('.content') as HTMLElement;
+    const container = this.shadow.querySelector('.tb-text-box') as HTMLElement;
+    const icon = this.shadow.querySelector('.tb-icon') as HTMLElement;
 
     const type = this.getAttribute('type') ?? 'normal';
     container.setAttribute('type', type);
