@@ -35,7 +35,7 @@ class CloudDriveElement extends HTMLElement {
     const style = document.createElement('style');
     style.textContent = `
       :host { display: inline-block; }
-      .drive-container {
+      .cd-drive-container {
         display: flex;
         align-items: center;
         padding: 12px 16px;
@@ -49,15 +49,15 @@ class CloudDriveElement extends HTMLElement {
         transform: translateY(-1px);
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       }
-      .drive-icon {
+      .cd-drive-icon {
         flex: 0 0 24px;
         margin-right: 12px;
         color: #3498db;
       }
-      .drive-info {
+      .cd-drive-info {
         flex: 1;
       }
-      .drive-title {
+      .cd-drive-title {
         font-weight: 500;
         margin-bottom: 4px;
         color: #2c3e50;
@@ -66,11 +66,11 @@ class CloudDriveElement extends HTMLElement {
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      .drive-meta {
+      .cd-drive-meta {
         font-size: 0.85rem;
         color: #7f8c8d;
       }
-      .drive-password {
+      .cd-drive-password {
         margin-left: 8px;
         padding: 2px 6px;
         background-color: #ecf0f1;
@@ -78,7 +78,7 @@ class CloudDriveElement extends HTMLElement {
         font-size: 0.8rem;
         cursor: pointer;
       }
-      .download-btn {
+      .cd-download-btn {
         background-color: #e74c3c;
         color: white;
         border: none;
@@ -96,13 +96,13 @@ class CloudDriveElement extends HTMLElement {
     `;
 
     const container = document.createElement('div');
-    container.className = 'drive-container';
+    container.className = 'cd-drive-container';
 
     this.shadow.append(style, container);
   }
 
   private updateContent() {
-    const container = this.shadow.querySelector('.drive-container')!;
+    const container = this.shadow.querySelector('.cd-drive-container')!;
     const type = this.getAttribute('type') || '默认网盘';
     const url = this.getAttribute('url') || '#';
     const password = this.getAttribute('password') || '';
@@ -120,7 +120,7 @@ class CloudDriveElement extends HTMLElement {
       <a href="${url}" class="download-btn" target="_blank">下载</a>
     `;
 
-    const passwordElement = container.querySelector('.drive-password');
+    const passwordElement = container.querySelector('.cd-drive-password');
     if (passwordElement) {
       passwordElement.addEventListener('click', () => {
         const password = (passwordElement as HTMLElement).dataset.password;
