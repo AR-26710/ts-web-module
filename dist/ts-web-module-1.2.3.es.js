@@ -1,28 +1,28 @@
 var u = Object.defineProperty;
-var f = (i, n, e) => n in i ? u(i, n, { enumerable: !0, configurable: !0, writable: !0, value: e }) : i[n] = e;
-var l = (i, n, e) => (f(i, typeof n != "symbol" ? n + "" : n, e), e);
+var f = (i, n, t) => n in i ? u(i, n, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[n] = t;
+var l = (i, n, t) => (f(i, typeof n != "symbol" ? n + "" : n, t), t);
 (function() {
   const n = document.createElement("link").relList;
   if (n && n.supports && n.supports("modulepreload"))
     return;
-  for (const t of document.querySelectorAll('link[rel="modulepreload"]'))
-    o(t);
-  new MutationObserver((t) => {
-    for (const r of t)
+  for (const e of document.querySelectorAll('link[rel="modulepreload"]'))
+    o(e);
+  new MutationObserver((e) => {
+    for (const r of e)
       if (r.type === "childList")
         for (const s of r.addedNodes)
           s.tagName === "LINK" && s.rel === "modulepreload" && o(s);
   }).observe(document, { childList: !0, subtree: !0 });
-  function e(t) {
+  function t(e) {
     const r = {};
-    return t.integrity && (r.integrity = t.integrity), t.referrerPolicy && (r.referrerPolicy = t.referrerPolicy), t.crossOrigin === "use-credentials" ? r.credentials = "include" : t.crossOrigin === "anonymous" ? r.credentials = "omit" : r.credentials = "same-origin", r;
+    return e.integrity && (r.integrity = e.integrity), e.referrerPolicy && (r.referrerPolicy = e.referrerPolicy), e.crossOrigin === "use-credentials" ? r.credentials = "include" : e.crossOrigin === "anonymous" ? r.credentials = "omit" : r.credentials = "same-origin", r;
   }
-  function o(t) {
-    if (t.ep)
+  function o(e) {
+    if (e.ep)
       return;
-    t.ep = !0;
-    const r = e(t);
-    fetch(t.href, r);
+    e.ep = !0;
+    const r = t(e);
+    fetch(e.href, r);
   }
 })();
 const a = class a extends HTMLElement {
@@ -39,8 +39,8 @@ const a = class a extends HTMLElement {
     this.render();
   }
   disconnectedCallback() {
-    var e;
-    const n = (e = this.shadowRoot) == null ? void 0 : e.querySelector("iframe");
+    var t;
+    const n = (t = this.shadowRoot) == null ? void 0 : t.querySelector("iframe");
     n && (n.src = "");
   }
   render() {
@@ -54,13 +54,13 @@ const a = class a extends HTMLElement {
       `;
       return;
     }
-    const e = this.hasAttribute("autoplay") ? "1" : "0", o = this.hasAttribute("muted") ? "1" : "0", t = new URLSearchParams({ bvid: n, autoplay: e });
-    o === "1" && t.append("muted", "1");
-    const r = `https://player.bilibili.com/player.html?${t.toString()}`;
+    const t = this.hasAttribute("autoplay") ? "1" : "0", o = this.hasAttribute("muted") ? "1" : "0", e = new URLSearchParams({ bvid: n, autoplay: t });
+    o === "1" && e.append("muted", "1");
+    const r = `https://player.bilibili.com/player.html?${e.toString()}`;
     this.shadowRoot.innerHTML = `
       <style>${a.STYLES}</style>
       <div class="bilibili-video-wrapper">
-        <iframe src="${r}" frameborder="0" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
+        <iframe src="${r}" frameborder="0" allow="autoplay; fullscreen; encrypted-media"></iframe>
       </div>
     `;
   }
@@ -100,15 +100,15 @@ class p extends HTMLElement {
     this.updateContent(), this.bindEvents();
   }
   disconnectedCallback() {
-    const e = this.shadow.querySelector("a");
-    e && (e.removeEventListener("click", this.handleClick), e.removeEventListener("keydown", this.handleKeyPress));
+    const t = this.shadow.querySelector("a");
+    t && (t.removeEventListener("click", this.handleClick), t.removeEventListener("keydown", this.handleKeyPress));
   }
   attributeChangedCallback() {
     this.updateContent();
   }
   render() {
-    const e = document.createElement("style");
-    e.textContent = `
+    const t = document.createElement("style");
+    t.textContent = `
       :host {
         --rl-left-color: #2c3e50;
         --rl-right-color: #3498db;
@@ -161,28 +161,28 @@ class p extends HTMLElement {
     `;
     const o = document.createElement("a");
     o.className = "rl-container", o.setAttribute("role", "link"), o.tabIndex = 0;
-    const t = document.createElement("div");
-    t.className = "rl-left";
+    const e = document.createElement("div");
+    e.className = "rl-left";
     const r = document.createElement("div");
-    r.className = "rl-right", o.append(t, r), this.shadow.append(e, o);
+    r.className = "rl-right", o.append(e, r), this.shadow.append(t, o);
   }
   updateContent() {
     var b;
-    const e = this.shadow.querySelector("a"), o = ((b = this.getAttribute("href")) == null ? void 0 : b.trim()) ?? "#", t = this.getAttribute("target") ?? "_self";
-    e.setAttribute("href", o), e.setAttribute("target", t);
+    const t = this.shadow.querySelector("a"), o = ((b = this.getAttribute("href")) == null ? void 0 : b.trim()) ?? "#", e = this.getAttribute("target") ?? "_self";
+    t.setAttribute("href", o), t.setAttribute("target", e);
     const r = this.getAttribute("left-text") ?? "", s = this.getAttribute("right-text") ?? "", d = this.shadow.querySelector(".rl-left"), h = this.shadow.querySelector(".rl-right");
     d.style.display = r.trim() ? "flex" : "none", d.textContent = r, h.style.display = s.trim() ? "flex" : "none", h.textContent = s;
   }
   bindEvents() {
-    const e = this.shadow.querySelector("a");
-    e.addEventListener("click", this.handleClick.bind(this)), e.addEventListener("keydown", this.handleKeyPress.bind(this));
+    const t = this.shadow.querySelector("a");
+    t.addEventListener("click", this.handleClick.bind(this)), t.addEventListener("keydown", this.handleKeyPress.bind(this));
   }
-  handleClick(e) {
+  handleClick(t) {
     const o = this.getAttribute("href");
-    (!o || o === "#") && e.preventDefault();
+    (!o || o === "#") && t.preventDefault();
   }
-  handleKeyPress(e) {
-    (e.key === "Enter" || e.key === " ") && (e.preventDefault(), this.dispatchEvent(new MouseEvent("click")));
+  handleKeyPress(t) {
+    (t.key === "Enter" || t.key === " ") && (t.preventDefault(), this.dispatchEvent(new MouseEvent("click")));
   }
 }
 customElements.define("resource-link", p);
@@ -202,8 +202,8 @@ class m extends HTMLElement {
     this.updateContent();
   }
   render() {
-    const e = document.createElement("style");
-    e.textContent = `
+    const t = document.createElement("style");
+    t.textContent = `
       :host {
         --tb-normal-bg: #e7f5ff;
         --tb-normal-text: #1864ab;
@@ -265,18 +265,18 @@ class m extends HTMLElement {
     `;
     const o = document.createElement("div");
     o.className = "text-box", o.setAttribute("role", "alert");
-    const t = document.createElement("span");
-    t.className = "icon";
+    const e = document.createElement("span");
+    e.className = "icon";
     const r = document.createElement("slot");
-    o.append(t, r), this.shadow.append(e, o);
+    o.append(e, r), this.shadow.append(t, o);
   }
   updateContent() {
-    const e = this.shadow.querySelector(".text-box"), o = this.shadow.querySelector(".icon");
+    const t = this.shadow.querySelector(".text-box"), o = this.shadow.querySelector(".icon");
     this.shadow.querySelector(".content");
-    const t = this.getAttribute("type") ?? "normal";
-    e.setAttribute("type", t);
+    const e = this.getAttribute("type") ?? "normal";
+    t.setAttribute("type", e);
     let r = "";
-    switch (t) {
+    switch (e) {
       case "warning":
         r = "⚠️";
         break;

@@ -4,7 +4,7 @@
       `;return}const t=this.hasAttribute("autoplay")?"1":"0",e=this.hasAttribute("muted")?"1":"0",o=new URLSearchParams({bvid:s,autoplay:t});e==="1"&&o.append("muted","1");const r=`https://player.bilibili.com/player.html?${o.toString()}`;this.shadowRoot.innerHTML=`
       <style>${a.STYLES}</style>
       <div class="bilibili-video-wrapper">
-        <iframe src="${r}" frameborder="0" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
+        <iframe src="${r}" frameborder="0" allow="autoplay; fullscreen; encrypted-media"></iframe>
       </div>
     `}};c(a,"STYLES",`
     .bilibili-video-wrapper {
