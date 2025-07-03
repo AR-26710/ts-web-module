@@ -125,7 +125,7 @@
                 panel.classList.add('active');
 
                 const dataTab = button.dataset.tab;
-                const externalTabs = ['bilibili', 'resource', 'textbox', 'clouddrive'];
+                const externalTabs = Array.from(document.querySelectorAll('.tab-btn')).map(btn => btn.dataset.tab);
                 if (externalTabs.includes(dataTab)) {
                     const url = `examples/${dataTab}.html`;
                     if (panel.innerHTML.trim() === '') {
