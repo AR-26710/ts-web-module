@@ -1,27 +1,27 @@
-var p = Object.defineProperty;
-var u = (i, s, e) => s in i ? p(i, s, { enumerable: !0, configurable: !0, writable: !0, value: e }) : i[s] = e;
-var d = (i, s, e) => (u(i, typeof s != "symbol" ? s + "" : s, e), e);
+var u = Object.defineProperty;
+var g = (i, n, t) => n in i ? u(i, n, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[n] = t;
+var l = (i, n, t) => (g(i, typeof n != "symbol" ? n + "" : n, t), t);
 (function() {
-  const s = document.createElement("link").relList;
-  if (s && s.supports && s.supports("modulepreload"))
+  const n = document.createElement("link").relList;
+  if (n && n.supports && n.supports("modulepreload"))
     return;
   for (const r of document.querySelectorAll('link[rel="modulepreload"]'))
-    t(r);
+    e(r);
   new MutationObserver((r) => {
     for (const o of r)
       if (o.type === "childList")
-        for (const n of o.addedNodes)
-          n.tagName === "LINK" && n.rel === "modulepreload" && t(n);
+        for (const a of o.addedNodes)
+          a.tagName === "LINK" && a.rel === "modulepreload" && e(a);
   }).observe(document, { childList: !0, subtree: !0 });
-  function e(r) {
+  function t(r) {
     const o = {};
     return r.integrity && (o.integrity = r.integrity), r.referrerPolicy && (o.referrerPolicy = r.referrerPolicy), r.crossOrigin === "use-credentials" ? o.credentials = "include" : r.crossOrigin === "anonymous" ? o.credentials = "omit" : o.credentials = "same-origin", o;
   }
-  function t(r) {
+  function e(r) {
     if (r.ep)
       return;
     r.ep = !0;
-    const o = e(r);
+    const o = t(r);
     fetch(r.href, o);
   }
 })();
@@ -39,23 +39,23 @@ const h = class h extends HTMLElement {
     this.render();
   }
   disconnectedCallback() {
-    var e;
-    const s = (e = this.shadowRoot) == null ? void 0 : e.querySelector("iframe");
-    s && (s.src = "");
+    var t;
+    const n = (t = this.shadowRoot) == null ? void 0 : t.querySelector("iframe");
+    n && (n.src = "");
   }
   render() {
     if (!this.shadowRoot)
       return;
-    const s = this.getAttribute("bvid");
-    if (!s) {
+    const n = this.getAttribute("bvid");
+    if (!n) {
       this.shadowRoot.innerHTML = `
         <style>${h.STYLES}</style>
         <div class="error-message">错误：缺少 bvid 属性</div>
       `;
       return;
     }
-    const e = this.hasAttribute("autoplay") ? "1" : "0", t = this.hasAttribute("muted") ? "1" : "0", r = new URLSearchParams({ bvid: s, autoplay: e });
-    t === "1" && r.append("muted", "1");
+    const t = this.hasAttribute("autoplay") ? "1" : "0", e = this.hasAttribute("muted") ? "1" : "0", r = new URLSearchParams({ bvid: n, autoplay: t });
+    e === "1" && r.append("muted", "1");
     const o = `https://player.bilibili.com/player.html?${r.toString()}`;
     this.shadowRoot.innerHTML = `
       <style>${h.STYLES}</style>
@@ -65,7 +65,7 @@ const h = class h extends HTMLElement {
     `;
   }
 };
-d(h, "STYLES", `
+l(h, "STYLES", `
     .bilibili-video-wrapper {
       position: relative;
       width: 100%;
@@ -85,12 +85,12 @@ d(h, "STYLES", `
       font-family: Arial, sans-serif;
     }
   `);
-let b = h;
-customElements.define("bilibili-video", b);
-class g extends HTMLElement {
+let p = h;
+customElements.define("bilibili-video", p);
+class f extends HTMLElement {
   constructor() {
     super();
-    d(this, "shadow");
+    l(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -100,15 +100,15 @@ class g extends HTMLElement {
     this.updateContent(), this.bindEvents();
   }
   disconnectedCallback() {
-    const e = this.shadow.querySelector("a");
-    e && (e.removeEventListener("click", this.handleClick), e.removeEventListener("keydown", this.handleKeyPress));
+    const t = this.shadow.querySelector("a");
+    t && (t.removeEventListener("click", this.handleClick), t.removeEventListener("keydown", this.handleKeyPress));
   }
   attributeChangedCallback() {
     this.updateContent();
   }
   render() {
-    const e = document.createElement("style");
-    e.textContent = `
+    const t = document.createElement("style");
+    t.textContent = `
       :host {
         --rl-left-color: #2c3e50;
         --rl-right-color: #3498db;
@@ -159,37 +159,37 @@ class g extends HTMLElement {
         background: var(--rl-right-hover);
       }
     `;
-    const t = document.createElement("a");
-    t.className = "rl-container", t.setAttribute("role", "link"), t.tabIndex = 0;
+    const e = document.createElement("a");
+    e.className = "rl-container", e.setAttribute("role", "link"), e.tabIndex = 0;
     const r = document.createElement("div");
     r.className = "rl-left";
     const o = document.createElement("div");
-    o.className = "rl-right", t.append(r, o), this.shadow.append(e, t);
+    o.className = "rl-right", e.append(r, o), this.shadow.append(t, e);
   }
   updateContent() {
-    var c;
-    const e = this.shadow.querySelector("a"), t = ((c = this.getAttribute("href")) == null ? void 0 : c.trim()) ?? "#", r = this.getAttribute("target") ?? "_self";
-    e.setAttribute("href", t), e.setAttribute("target", r);
-    const o = this.getAttribute("left-text") ?? "", n = this.getAttribute("right-text") ?? "", a = this.shadow.querySelector(".rl-left"), l = this.shadow.querySelector(".rl-right");
-    a.style.display = o.trim() ? "flex" : "none", a.textContent = o, l.style.display = n.trim() ? "flex" : "none", l.textContent = n;
+    var s;
+    const t = this.shadow.querySelector("a"), e = ((s = this.getAttribute("href")) == null ? void 0 : s.trim()) ?? "#", r = this.getAttribute("target") ?? "_self";
+    t.setAttribute("href", e), t.setAttribute("target", r);
+    const o = this.getAttribute("left-text") ?? "", a = this.getAttribute("right-text") ?? "", c = this.shadow.querySelector(".rl-left"), d = this.shadow.querySelector(".rl-right");
+    c.style.display = o.trim() ? "flex" : "none", c.textContent = o, d.style.display = a.trim() ? "flex" : "none", d.textContent = a;
   }
   bindEvents() {
-    const e = this.shadow.querySelector("a");
-    e.addEventListener("click", this.handleClick.bind(this)), e.addEventListener("keydown", this.handleKeyPress.bind(this));
+    const t = this.shadow.querySelector("a");
+    t.addEventListener("click", this.handleClick.bind(this)), t.addEventListener("keydown", this.handleKeyPress.bind(this));
   }
-  handleClick(e) {
-    const t = this.getAttribute("href");
-    (!t || t === "#") && e.preventDefault();
+  handleClick(t) {
+    const e = this.getAttribute("href");
+    (!e || e === "#") && t.preventDefault();
   }
-  handleKeyPress(e) {
-    (e.key === "Enter" || e.key === " ") && (e.preventDefault(), this.dispatchEvent(new MouseEvent("click")));
+  handleKeyPress(t) {
+    (t.key === "Enter" || t.key === " ") && (t.preventDefault(), this.dispatchEvent(new MouseEvent("click")));
   }
 }
-customElements.define("resource-link", g);
-class f extends HTMLElement {
+customElements.define("resource-link", f);
+class m extends HTMLElement {
   constructor() {
     super();
-    d(this, "shadow");
+    l(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -202,8 +202,8 @@ class f extends HTMLElement {
     this.updateContent();
   }
   render() {
-    const e = document.createElement("style");
-    e.textContent = `
+    const t = document.createElement("style");
+    t.textContent = `
       :host {
         --tb-normal-bg: #e7f5ff;
         --tb-normal-text: #1864ab;
@@ -266,16 +266,16 @@ class f extends HTMLElement {
         font-weight: bold;
       }
     `;
-    const t = document.createElement("div");
-    t.className = "tb-text-box", t.setAttribute("role", "alert");
+    const e = document.createElement("div");
+    e.className = "tb-text-box", e.setAttribute("role", "alert");
     const r = document.createElement("span");
     r.className = "tb-icon";
     const o = document.createElement("slot");
-    t.append(r, o), this.shadow.append(e, t);
+    e.append(r, o), this.shadow.append(t, e);
   }
   updateContent() {
-    const e = this.shadow.querySelector(".tb-text-box"), t = this.shadow.querySelector(".tb-icon"), r = this.getAttribute("type") ?? "normal";
-    e.setAttribute("type", r);
+    const t = this.shadow.querySelector(".tb-text-box"), e = this.shadow.querySelector(".tb-icon"), r = this.getAttribute("type") ?? "normal";
+    t.setAttribute("type", r);
     let o = "";
     switch (r) {
       case "warning":
@@ -290,14 +290,14 @@ class f extends HTMLElement {
       default:
         o = "ℹ️";
     }
-    t.textContent = o;
+    e.textContent = o;
   }
 }
-customElements.define("text-box", f);
-class m extends HTMLElement {
+customElements.define("text-box", m);
+class x extends HTMLElement {
   constructor() {
     super();
-    d(this, "shadow");
+    l(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -309,15 +309,15 @@ class m extends HTMLElement {
   attributeChangedCallback() {
     this.updateContent();
   }
-  getDriveIcon(e) {
-    const t = {
+  getDriveIcon(t) {
+    const e = {
       默认图标: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>'
     };
-    return t[e] || t.默认图标;
+    return e[t] || e.默认图标;
   }
   render() {
-    const e = document.createElement("style");
-    e.textContent = `
+    const t = document.createElement("style");
+    t.textContent = `
       :host { display: inline-block; }
       .cd-drive-container {
         display: flex;
@@ -378,41 +378,41 @@ class m extends HTMLElement {
         background-color: #c0392b;
       }
     `;
-    const t = document.createElement("div");
-    t.className = "cd-drive-container", this.shadow.append(e, t);
+    const e = document.createElement("div");
+    e.className = "cd-drive-container", this.shadow.append(t, e);
   }
   updateContent() {
-    const e = this.shadow.querySelector(".cd-drive-container"), t = this.getAttribute("type") || "默认网盘", r = this.getAttribute("url") || "#", o = this.getAttribute("password") || "", n = this.getAttribute("title") || "默认标题";
-    e.innerHTML = `
-      <div class="cd-drive-icon">${this.getDriveIcon(t)}</div>
+    const t = this.shadow.querySelector(".cd-drive-container"), e = this.getAttribute("type") || "默认网盘", r = this.getAttribute("url") || "#", o = this.getAttribute("password") || "", a = this.getAttribute("title") || "默认标题";
+    t.innerHTML = `
+      <div class="cd-drive-icon">${this.getDriveIcon(e)}</div>
       <div class="cd-drive-info">
-        <div class="cd-drive-title" title="${n}">${n}</div>
+        <div class="cd-drive-title" title="${a}">${a}</div>
         <div class="cd-drive-meta">
-          来源: ${t}
+          来源: ${e}
           ${o ? `<span class="cd-drive-password" data-password="${o}" title="点击复制提取码">提取码: ${o}</span>` : ""}
         </div>
       </div>
       <a href="${r}" class="cd-download-btn" target="_blank">下载</a>
     `;
-    const a = e.querySelector(".cd-drive-password");
-    a && a.addEventListener("click", () => {
-      const l = a.dataset.password;
-      l && navigator.clipboard.writeText(l).then(() => {
-        const c = a.textContent;
-        a.textContent = "提取码已复制", setTimeout(() => {
-          a.textContent = c;
+    const c = t.querySelector(".cd-drive-password");
+    c && c.addEventListener("click", () => {
+      const d = c.dataset.password;
+      d && navigator.clipboard.writeText(d).then(() => {
+        const s = c.textContent;
+        c.textContent = "提取码已复制", setTimeout(() => {
+          c.textContent = s;
         }, 2e3);
-      }).catch((c) => {
-        console.error("复制提取码失败:", c);
+      }).catch((s) => {
+        console.error("复制提取码失败:", s);
       });
     });
   }
 }
-customElements.define("cloud-drive", m);
-class x extends HTMLElement {
+customElements.define("cloud-drive", x);
+class v extends HTMLElement {
   constructor() {
     super();
-    d(this, "shadow");
+    l(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -425,8 +425,8 @@ class x extends HTMLElement {
     this.updateProgress();
   }
   render() {
-    const e = document.createElement("style");
-    e.textContent = `
+    const t = document.createElement("style");
+    t.textContent = `
       :host { display: inline-block; width: 100%; }
       .pb-progress-container {
         display: flex;
@@ -460,17 +460,173 @@ class x extends HTMLElement {
         position: relative;
       }
     `;
-    const t = document.createElement("div");
-    t.className = "pb-progress-container", t.innerHTML = `
+    const e = document.createElement("div");
+    e.className = "pb-progress-container", e.innerHTML = `
       <div class="pb-progress-bar-container">
         <div class="pb-progress-bar"></div>
       </div>
       <div class="pb-progress-text"></div>
-    `, this.shadow.append(e, t);
+    `, this.shadow.append(t, e);
   }
   updateProgress() {
-    const e = this.getAttribute("percentage") || "0%", t = this.getAttribute("color") || "#3498db", r = this.shadow.querySelector(".pb-progress-bar"), o = this.shadow.querySelector(".pb-progress-text"), n = e.endsWith("%") ? e : `${e}%`;
-    r.style.width = n, r.style.backgroundColor = t, o.textContent = n;
+    const t = this.getAttribute("percentage") || "0%", e = this.getAttribute("color") || "#3498db", r = this.shadow.querySelector(".pb-progress-bar"), o = this.shadow.querySelector(".pb-progress-text"), a = t.endsWith("%") ? t : `${t}%`;
+    r.style.width = a, r.style.backgroundColor = e, o.textContent = a;
   }
 }
-customElements.define("progress-box", x);
+customElements.define("progress-box", v);
+class w extends HTMLElement {
+  constructor() {
+    super();
+    l(this, "shadow");
+    this.shadow = this.attachShadow({ mode: "open" }), this.render();
+  }
+  connectedCallback() {
+    this.buildTabs(), this.addEventListeners();
+  }
+  render() {
+    const t = document.createElement("style");
+    t.textContent = `
+      .tb-tabs {
+        font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        --primary-color: #4361ee;
+        --hover-color: #3a56d4;
+        --text-color: #2b2d42;
+        --light-text: #8d99ae;
+        --bg-color: #ffffff;
+        --border-color: #edf2f4;
+        --content-bg: #f8f9fa;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        margin: 8px 0;
+      }
+
+      .tb-tabs-header {
+        display: flex;
+        background-color: var(--bg-color);
+        padding: 0 16px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .tb-tab-button {
+        padding: 12px 24px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--light-text);
+        position: relative;
+        transition: var(--transition);
+        outline: none;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .tb-tab-button.active {
+        color: var(--primary-color);
+      }
+
+      .tb-tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60%;
+        height: 3px;
+        background-color: var(--primary-color);
+        border-radius: 3px 3px 0 0;
+        transition: var(--transition);
+      }
+
+      .tb-tab-button:hover:not(.active) {
+        color: var(--text-color);
+      }
+
+      .tb-tabs-content {
+        padding: 24px;
+        background-color: var(--content-bg);
+        transition: var(--transition);
+        height: auto;
+      }
+
+      .tb-tab-panel {
+        display: none;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      .tb-tab-panel.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 600px) {
+        .tb-tabs-header {
+          overflow-x: auto;
+          white-space: nowrap;
+          padding: 0 8px;
+          scrollbar-width: none;
+        }
+        
+        .tb-tabs-header::-webkit-scrollbar {
+          display: none;
+        }
+        
+        .tb-tab-button {
+          display: inline-block;
+          width: auto;
+          text-align: center;
+          padding: 12px 16px;
+        }
+        
+        .tb-tab-button.active::after {
+          width: 60%;
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: 0;
+        }
+      }
+    `;
+    const e = document.createElement("div");
+    e.className = "tb-tabs", e.innerHTML = `
+      <div class="tb-tabs-header"></div>
+      <div class="tb-tabs-content"></div>
+    `, this.shadow.append(t, e);
+  }
+  buildTabs() {
+    const t = Array.from(this.querySelectorAll("[data-tab]")), e = this.shadow.querySelector(".tb-tabs-header"), r = this.shadow.querySelector(".tb-tabs-content");
+    !e || !r || t.forEach((o, a) => {
+      const c = o.getAttribute("label") || `Tab ${a + 1}`, d = o.innerHTML, s = document.createElement("button");
+      s.className = "tb-tab-button", s.textContent = c, s.dataset.tabIndex = a.toString(), a === 0 && s.classList.add("active"), e.appendChild(s);
+      const b = document.createElement("div");
+      b.className = "tb-tab-panel", b.innerHTML = d, b.dataset.tabIndex = a.toString(), a === 0 && b.classList.add("active"), r.appendChild(b);
+    });
+  }
+  addEventListeners() {
+    this.shadow.querySelectorAll(".tb-tab-button").forEach((e) => {
+      e.addEventListener("click", () => this.switchTab(e.dataset.tabIndex));
+    });
+  }
+  switchTab(t) {
+    if (!t)
+      return;
+    this.shadow.querySelectorAll(".tb-tab-button").forEach((o) => o.classList.remove("active")), this.shadow.querySelectorAll(".tb-tab-panel").forEach((o) => o.classList.remove("active"));
+    const e = this.shadow.querySelector(`.tb-tab-button[data-tab-index="${t}"]`), r = this.shadow.querySelector(`.tb-tab-panel[data-tab-index="${t}"]`);
+    e == null || e.classList.add("active"), r == null || r.classList.add("active");
+  }
+}
+customElements.define("tabs-component", w);
