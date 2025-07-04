@@ -1,27 +1,27 @@
 var p = Object.defineProperty;
-var u = (i, n, t) => n in i ? p(i, n, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[n] = t;
-var d = (i, n, t) => (u(i, typeof n != "symbol" ? n + "" : n, t), t);
+var u = (i, s, e) => s in i ? p(i, s, { enumerable: !0, configurable: !0, writable: !0, value: e }) : i[s] = e;
+var d = (i, s, e) => (u(i, typeof s != "symbol" ? s + "" : s, e), e);
 (function() {
-  const n = document.createElement("link").relList;
-  if (n && n.supports && n.supports("modulepreload"))
+  const s = document.createElement("link").relList;
+  if (s && s.supports && s.supports("modulepreload"))
     return;
   for (const r of document.querySelectorAll('link[rel="modulepreload"]'))
-    e(r);
+    t(r);
   new MutationObserver((r) => {
     for (const o of r)
       if (o.type === "childList")
-        for (const s of o.addedNodes)
-          s.tagName === "LINK" && s.rel === "modulepreload" && e(s);
+        for (const n of o.addedNodes)
+          n.tagName === "LINK" && n.rel === "modulepreload" && t(n);
   }).observe(document, { childList: !0, subtree: !0 });
-  function t(r) {
+  function e(r) {
     const o = {};
     return r.integrity && (o.integrity = r.integrity), r.referrerPolicy && (o.referrerPolicy = r.referrerPolicy), r.crossOrigin === "use-credentials" ? o.credentials = "include" : r.crossOrigin === "anonymous" ? o.credentials = "omit" : o.credentials = "same-origin", o;
   }
-  function e(r) {
+  function t(r) {
     if (r.ep)
       return;
     r.ep = !0;
-    const o = t(r);
+    const o = e(r);
     fetch(r.href, o);
   }
 })();
@@ -39,23 +39,23 @@ const h = class h extends HTMLElement {
     this.render();
   }
   disconnectedCallback() {
-    var t;
-    const n = (t = this.shadowRoot) == null ? void 0 : t.querySelector("iframe");
-    n && (n.src = "");
+    var e;
+    const s = (e = this.shadowRoot) == null ? void 0 : e.querySelector("iframe");
+    s && (s.src = "");
   }
   render() {
     if (!this.shadowRoot)
       return;
-    const n = this.getAttribute("bvid");
-    if (!n) {
+    const s = this.getAttribute("bvid");
+    if (!s) {
       this.shadowRoot.innerHTML = `
         <style>${h.STYLES}</style>
         <div class="error-message">错误：缺少 bvid 属性</div>
       `;
       return;
     }
-    const t = this.hasAttribute("autoplay") ? "1" : "0", e = this.hasAttribute("muted") ? "1" : "0", r = new URLSearchParams({ bvid: n, autoplay: t });
-    e === "1" && r.append("muted", "1");
+    const e = this.hasAttribute("autoplay") ? "1" : "0", t = this.hasAttribute("muted") ? "1" : "0", r = new URLSearchParams({ bvid: s, autoplay: e });
+    t === "1" && r.append("muted", "1");
     const o = `https://player.bilibili.com/player.html?${r.toString()}`;
     this.shadowRoot.innerHTML = `
       <style>${h.STYLES}</style>
@@ -87,7 +87,7 @@ d(h, "STYLES", `
   `);
 let b = h;
 customElements.define("bilibili-video", b);
-class f extends HTMLElement {
+class g extends HTMLElement {
   constructor() {
     super();
     d(this, "shadow");
@@ -100,15 +100,15 @@ class f extends HTMLElement {
     this.updateContent(), this.bindEvents();
   }
   disconnectedCallback() {
-    const t = this.shadow.querySelector("a");
-    t && (t.removeEventListener("click", this.handleClick), t.removeEventListener("keydown", this.handleKeyPress));
+    const e = this.shadow.querySelector("a");
+    e && (e.removeEventListener("click", this.handleClick), e.removeEventListener("keydown", this.handleKeyPress));
   }
   attributeChangedCallback() {
     this.updateContent();
   }
   render() {
-    const t = document.createElement("style");
-    t.textContent = `
+    const e = document.createElement("style");
+    e.textContent = `
       :host {
         --rl-left-color: #2c3e50;
         --rl-right-color: #3498db;
@@ -159,34 +159,34 @@ class f extends HTMLElement {
         background: var(--rl-right-hover);
       }
     `;
-    const e = document.createElement("a");
-    e.className = "rl-container", e.setAttribute("role", "link"), e.tabIndex = 0;
+    const t = document.createElement("a");
+    t.className = "rl-container", t.setAttribute("role", "link"), t.tabIndex = 0;
     const r = document.createElement("div");
     r.className = "rl-left";
     const o = document.createElement("div");
-    o.className = "rl-right", e.append(r, o), this.shadow.append(t, e);
+    o.className = "rl-right", t.append(r, o), this.shadow.append(e, t);
   }
   updateContent() {
     var c;
-    const t = this.shadow.querySelector("a"), e = ((c = this.getAttribute("href")) == null ? void 0 : c.trim()) ?? "#", r = this.getAttribute("target") ?? "_self";
-    t.setAttribute("href", e), t.setAttribute("target", r);
-    const o = this.getAttribute("left-text") ?? "", s = this.getAttribute("right-text") ?? "", a = this.shadow.querySelector(".rl-left"), l = this.shadow.querySelector(".rl-right");
-    a.style.display = o.trim() ? "flex" : "none", a.textContent = o, l.style.display = s.trim() ? "flex" : "none", l.textContent = s;
+    const e = this.shadow.querySelector("a"), t = ((c = this.getAttribute("href")) == null ? void 0 : c.trim()) ?? "#", r = this.getAttribute("target") ?? "_self";
+    e.setAttribute("href", t), e.setAttribute("target", r);
+    const o = this.getAttribute("left-text") ?? "", n = this.getAttribute("right-text") ?? "", a = this.shadow.querySelector(".rl-left"), l = this.shadow.querySelector(".rl-right");
+    a.style.display = o.trim() ? "flex" : "none", a.textContent = o, l.style.display = n.trim() ? "flex" : "none", l.textContent = n;
   }
   bindEvents() {
-    const t = this.shadow.querySelector("a");
-    t.addEventListener("click", this.handleClick.bind(this)), t.addEventListener("keydown", this.handleKeyPress.bind(this));
+    const e = this.shadow.querySelector("a");
+    e.addEventListener("click", this.handleClick.bind(this)), e.addEventListener("keydown", this.handleKeyPress.bind(this));
   }
-  handleClick(t) {
-    const e = this.getAttribute("href");
-    (!e || e === "#") && t.preventDefault();
+  handleClick(e) {
+    const t = this.getAttribute("href");
+    (!t || t === "#") && e.preventDefault();
   }
-  handleKeyPress(t) {
-    (t.key === "Enter" || t.key === " ") && (t.preventDefault(), this.dispatchEvent(new MouseEvent("click")));
+  handleKeyPress(e) {
+    (e.key === "Enter" || e.key === " ") && (e.preventDefault(), this.dispatchEvent(new MouseEvent("click")));
   }
 }
-customElements.define("resource-link", f);
-class g extends HTMLElement {
+customElements.define("resource-link", g);
+class f extends HTMLElement {
   constructor() {
     super();
     d(this, "shadow");
@@ -202,8 +202,8 @@ class g extends HTMLElement {
     this.updateContent();
   }
   render() {
-    const t = document.createElement("style");
-    t.textContent = `
+    const e = document.createElement("style");
+    e.textContent = `
       :host {
         --tb-normal-bg: #e7f5ff;
         --tb-normal-text: #1864ab;
@@ -266,16 +266,16 @@ class g extends HTMLElement {
         font-weight: bold;
       }
     `;
-    const e = document.createElement("div");
-    e.className = "tb-text-box", e.setAttribute("role", "alert");
+    const t = document.createElement("div");
+    t.className = "tb-text-box", t.setAttribute("role", "alert");
     const r = document.createElement("span");
     r.className = "tb-icon";
     const o = document.createElement("slot");
-    e.append(r, o), this.shadow.append(t, e);
+    t.append(r, o), this.shadow.append(e, t);
   }
   updateContent() {
-    const t = this.shadow.querySelector(".tb-text-box"), e = this.shadow.querySelector(".tb-icon"), r = this.getAttribute("type") ?? "normal";
-    t.setAttribute("type", r);
+    const e = this.shadow.querySelector(".tb-text-box"), t = this.shadow.querySelector(".tb-icon"), r = this.getAttribute("type") ?? "normal";
+    e.setAttribute("type", r);
     let o = "";
     switch (r) {
       case "warning":
@@ -290,10 +290,10 @@ class g extends HTMLElement {
       default:
         o = "ℹ️";
     }
-    e.textContent = o;
+    t.textContent = o;
   }
 }
-customElements.define("text-box", g);
+customElements.define("text-box", f);
 class m extends HTMLElement {
   constructor() {
     super();
@@ -309,15 +309,15 @@ class m extends HTMLElement {
   attributeChangedCallback() {
     this.updateContent();
   }
-  getDriveIcon(t) {
-    const e = {
+  getDriveIcon(e) {
+    const t = {
       默认图标: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>'
     };
-    return e[t] || e.默认图标;
+    return t[e] || t.默认图标;
   }
   render() {
-    const t = document.createElement("style");
-    t.textContent = `
+    const e = document.createElement("style");
+    e.textContent = `
       :host { display: inline-block; }
       .cd-drive-container {
         display: flex;
@@ -378,23 +378,23 @@ class m extends HTMLElement {
         background-color: #c0392b;
       }
     `;
-    const e = document.createElement("div");
-    e.className = "cd-drive-container", this.shadow.append(t, e);
+    const t = document.createElement("div");
+    t.className = "cd-drive-container", this.shadow.append(e, t);
   }
   updateContent() {
-    const t = this.shadow.querySelector(".cd-drive-container"), e = this.getAttribute("type") || "默认网盘", r = this.getAttribute("url") || "#", o = this.getAttribute("password") || "", s = this.getAttribute("title") || "默认标题";
-    t.innerHTML = `
-      <div class="cd-drive-icon">${this.getDriveIcon(e)}</div>
+    const e = this.shadow.querySelector(".cd-drive-container"), t = this.getAttribute("type") || "默认网盘", r = this.getAttribute("url") || "#", o = this.getAttribute("password") || "", n = this.getAttribute("title") || "默认标题";
+    e.innerHTML = `
+      <div class="cd-drive-icon">${this.getDriveIcon(t)}</div>
       <div class="cd-drive-info">
-        <div class="cd-drive-title" title="${s}">${s}</div>
+        <div class="cd-drive-title" title="${n}">${n}</div>
         <div class="cd-drive-meta">
-          来源: ${e}
+          来源: ${t}
           ${o ? `<span class="cd-drive-password" data-password="${o}" title="点击复制提取码">提取码: ${o}</span>` : ""}
         </div>
       </div>
       <a href="${r}" class="cd-download-btn" target="_blank">下载</a>
     `;
-    const a = t.querySelector(".cd-drive-password");
+    const a = e.querySelector(".cd-drive-password");
     a && a.addEventListener("click", () => {
       const l = a.dataset.password;
       l && navigator.clipboard.writeText(l).then(() => {
@@ -409,3 +409,68 @@ class m extends HTMLElement {
   }
 }
 customElements.define("cloud-drive", m);
+class x extends HTMLElement {
+  constructor() {
+    super();
+    d(this, "shadow");
+    this.shadow = this.attachShadow({ mode: "open" }), this.render();
+  }
+  static get observedAttributes() {
+    return ["percentage", "color"];
+  }
+  connectedCallback() {
+    this.updateProgress();
+  }
+  attributeChangedCallback() {
+    this.updateProgress();
+  }
+  render() {
+    const e = document.createElement("style");
+    e.textContent = `
+      :host { display: inline-block; width: 100%; }
+      .pb-progress-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+      }
+      .pb-progress-bar-container {
+          flex: 1;
+          height: 12px;
+          background-color: #e0e0e0;
+          border-radius: 6px;
+          overflow: hidden;
+        }
+      .pb-progress-bar {
+        height: 100%;
+        background-color: #3498db;
+        position: relative;
+        z-index: 2;
+      }
+      .pb-progress-text {
+        font-size: 0.85rem;
+        color: #666;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      .pb-progress-bar {
+        height: 100%;
+        transition: width 0.3s ease;
+        z-index: 2;
+        position: relative;
+      }
+    `;
+    const t = document.createElement("div");
+    t.className = "pb-progress-container", t.innerHTML = `
+      <div class="pb-progress-bar-container">
+        <div class="pb-progress-bar"></div>
+      </div>
+      <div class="pb-progress-text"></div>
+    `, this.shadow.append(e, t);
+  }
+  updateProgress() {
+    const e = this.getAttribute("percentage") || "0%", t = this.getAttribute("color") || "#3498db", r = this.shadow.querySelector(".pb-progress-bar"), o = this.shadow.querySelector(".pb-progress-text"), n = e.endsWith("%") ? e : `${e}%`;
+    r.style.width = n, r.style.backgroundColor = t, o.textContent = n;
+  }
+}
+customElements.define("progress-box", x);
