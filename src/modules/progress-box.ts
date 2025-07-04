@@ -42,14 +42,9 @@ class ProgressBoxElement extends HTMLElement {
         }
       .pb-progress-bar {
         height: 100%;
-        transition: width 0.3s ease;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        background-size: 200% 100%;
-        animation: shimmer 1.5s infinite;
-      }
-      @keyframes shimmer {
-        0% { background-position: -200% 0; }
-        100% { background-position: 200% 0; }
+        background-color: #3498db;
+        position: relative;
+        z-index: 2;
       }
       .pb-progress-text {
         font-size: 0.85rem;
