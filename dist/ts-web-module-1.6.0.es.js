@@ -1,31 +1,31 @@
 var u = Object.defineProperty;
-var g = (i, n, t) => n in i ? u(i, n, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[n] = t;
-var l = (i, n, t) => (g(i, typeof n != "symbol" ? n + "" : n, t), t);
+var g = (c, a, t) => a in c ? u(c, a, { enumerable: !0, configurable: !0, writable: !0, value: t }) : c[a] = t;
+var d = (c, a, t) => (g(c, typeof a != "symbol" ? a + "" : a, t), t);
 (function() {
-  const n = document.createElement("link").relList;
-  if (n && n.supports && n.supports("modulepreload"))
+  const a = document.createElement("link").relList;
+  if (a && a.supports && a.supports("modulepreload"))
     return;
-  for (const r of document.querySelectorAll('link[rel="modulepreload"]'))
-    e(r);
-  new MutationObserver((r) => {
-    for (const o of r)
-      if (o.type === "childList")
-        for (const a of o.addedNodes)
-          a.tagName === "LINK" && a.rel === "modulepreload" && e(a);
+  for (const o of document.querySelectorAll('link[rel="modulepreload"]'))
+    e(o);
+  new MutationObserver((o) => {
+    for (const r of o)
+      if (r.type === "childList")
+        for (const s of r.addedNodes)
+          s.tagName === "LINK" && s.rel === "modulepreload" && e(s);
   }).observe(document, { childList: !0, subtree: !0 });
-  function t(r) {
-    const o = {};
-    return r.integrity && (o.integrity = r.integrity), r.referrerPolicy && (o.referrerPolicy = r.referrerPolicy), r.crossOrigin === "use-credentials" ? o.credentials = "include" : r.crossOrigin === "anonymous" ? o.credentials = "omit" : o.credentials = "same-origin", o;
+  function t(o) {
+    const r = {};
+    return o.integrity && (r.integrity = o.integrity), o.referrerPolicy && (r.referrerPolicy = o.referrerPolicy), o.crossOrigin === "use-credentials" ? r.credentials = "include" : o.crossOrigin === "anonymous" ? r.credentials = "omit" : r.credentials = "same-origin", r;
   }
-  function e(r) {
-    if (r.ep)
+  function e(o) {
+    if (o.ep)
       return;
-    r.ep = !0;
-    const o = t(r);
-    fetch(r.href, o);
+    o.ep = !0;
+    const r = t(o);
+    fetch(o.href, r);
   }
 })();
-const h = class h extends HTMLElement {
+const p = class p extends HTMLElement {
   static get observedAttributes() {
     return ["bvid", "autoplay", "muted"];
   }
@@ -40,32 +40,32 @@ const h = class h extends HTMLElement {
   }
   disconnectedCallback() {
     var t;
-    const n = (t = this.shadowRoot) == null ? void 0 : t.querySelector("iframe");
-    n && (n.src = "");
+    const a = (t = this.shadowRoot) == null ? void 0 : t.querySelector("iframe");
+    a && (a.src = "");
   }
   render() {
     if (!this.shadowRoot)
       return;
-    const n = this.getAttribute("bvid");
-    if (!n) {
+    const a = this.getAttribute("bvid");
+    if (!a) {
       this.shadowRoot.innerHTML = `
-        <style>${h.STYLES}</style>
+        <style>${p.STYLES}</style>
         <div class="error-message">错误：缺少 bvid 属性</div>
       `;
       return;
     }
-    const t = this.hasAttribute("autoplay") ? "1" : "0", e = this.hasAttribute("muted") ? "1" : "0", r = new URLSearchParams({ bvid: n, autoplay: t });
-    e === "1" && r.append("muted", "1");
-    const o = `https://player.bilibili.com/player.html?${r.toString()}`;
+    const t = this.hasAttribute("autoplay") ? "1" : "0", e = this.hasAttribute("muted") ? "1" : "0", o = new URLSearchParams({ bvid: a, autoplay: t });
+    e === "1" && o.append("muted", "1");
+    const r = `https://player.bilibili.com/player.html?${o.toString()}`;
     this.shadowRoot.innerHTML = `
-      <style>${h.STYLES}</style>
+      <style>${p.STYLES}</style>
       <div class="bilibili-video-wrapper">
-        <iframe src="${o}" frameborder="0" allow="autoplay; fullscreen; encrypted-media"></iframe>
+        <iframe src="${r}" frameborder="0" allow="autoplay; fullscreen; encrypted-media"></iframe>
       </div>
     `;
   }
 };
-l(h, "STYLES", `
+d(p, "STYLES", `
     .bilibili-video-wrapper {
       position: relative;
       width: 100%;
@@ -85,12 +85,12 @@ l(h, "STYLES", `
       font-family: Arial, sans-serif;
     }
   `);
-let p = h;
-customElements.define("bilibili-video", p);
-class f extends HTMLElement {
+let b = p;
+customElements.define("bilibili-video", b);
+class v extends HTMLElement {
   constructor() {
     super();
-    l(this, "shadow");
+    d(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -161,17 +161,17 @@ class f extends HTMLElement {
     `;
     const e = document.createElement("a");
     e.className = "rl-container", e.setAttribute("role", "link"), e.tabIndex = 0;
-    const r = document.createElement("div");
-    r.className = "rl-left";
     const o = document.createElement("div");
-    o.className = "rl-right", e.append(r, o), this.shadow.append(t, e);
+    o.className = "rl-left";
+    const r = document.createElement("div");
+    r.className = "rl-right", e.append(o, r), this.shadow.append(t, e);
   }
   updateContent() {
-    var s;
-    const t = this.shadow.querySelector("a"), e = ((s = this.getAttribute("href")) == null ? void 0 : s.trim()) ?? "#", r = this.getAttribute("target") ?? "_self";
-    t.setAttribute("href", e), t.setAttribute("target", r);
-    const o = this.getAttribute("left-text") ?? "", a = this.getAttribute("right-text") ?? "", c = this.shadow.querySelector(".rl-left"), d = this.shadow.querySelector(".rl-right");
-    c.style.display = o.trim() ? "flex" : "none", c.textContent = o, d.style.display = a.trim() ? "flex" : "none", d.textContent = a;
+    var n;
+    const t = this.shadow.querySelector("a"), e = ((n = this.getAttribute("href")) == null ? void 0 : n.trim()) ?? "#", o = this.getAttribute("target") ?? "_self";
+    t.setAttribute("href", e), t.setAttribute("target", o);
+    const r = this.getAttribute("left-text") ?? "", s = this.getAttribute("right-text") ?? "", i = this.shadow.querySelector(".rl-left"), l = this.shadow.querySelector(".rl-right");
+    i.style.display = r.trim() ? "flex" : "none", i.textContent = r, l.style.display = s.trim() ? "flex" : "none", l.textContent = s;
   }
   bindEvents() {
     const t = this.shadow.querySelector("a");
@@ -185,11 +185,11 @@ class f extends HTMLElement {
     (t.key === "Enter" || t.key === " ") && (t.preventDefault(), this.dispatchEvent(new MouseEvent("click")));
   }
 }
-customElements.define("resource-link", f);
+customElements.define("resource-link", v);
 class m extends HTMLElement {
   constructor() {
     super();
-    l(this, "shadow");
+    d(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -268,36 +268,36 @@ class m extends HTMLElement {
     `;
     const e = document.createElement("div");
     e.className = "tb-text-box", e.setAttribute("role", "alert");
-    const r = document.createElement("span");
-    r.className = "tb-icon";
-    const o = document.createElement("slot");
-    e.append(r, o), this.shadow.append(t, e);
+    const o = document.createElement("span");
+    o.className = "tb-icon";
+    const r = document.createElement("slot");
+    e.append(o, r), this.shadow.append(t, e);
   }
   updateContent() {
-    const t = this.shadow.querySelector(".tb-text-box"), e = this.shadow.querySelector(".tb-icon"), r = this.getAttribute("type") ?? "normal";
-    t.setAttribute("type", r);
-    let o = "";
-    switch (r) {
+    const t = this.shadow.querySelector(".tb-text-box"), e = this.shadow.querySelector(".tb-icon"), o = this.getAttribute("type") ?? "normal";
+    t.setAttribute("type", o);
+    let r = "";
+    switch (o) {
       case "warning":
-        o = "⚠️";
+        r = "⚠️";
         break;
       case "error":
-        o = "❌";
+        r = "❌";
         break;
       case "success":
-        o = "✅";
+        r = "✅";
         break;
       default:
-        o = "ℹ️";
+        r = "ℹ️";
     }
-    e.textContent = o;
+    e.textContent = r;
   }
 }
 customElements.define("text-box", m);
-class x extends HTMLElement {
+class f extends HTMLElement {
   constructor() {
     super();
-    l(this, "shadow");
+    d(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -382,37 +382,37 @@ class x extends HTMLElement {
     e.className = "cd-drive-container", this.shadow.append(t, e);
   }
   updateContent() {
-    const t = this.shadow.querySelector(".cd-drive-container"), e = this.getAttribute("type") || "默认网盘", r = this.getAttribute("url") || "#", o = this.getAttribute("password") || "", a = this.getAttribute("title") || "默认标题";
+    const t = this.shadow.querySelector(".cd-drive-container"), e = this.getAttribute("type") || "默认网盘", o = this.getAttribute("url") || "#", r = this.getAttribute("password") || "", s = this.getAttribute("title") || "默认标题";
     t.innerHTML = `
       <div class="cd-drive-icon">${this.getDriveIcon(e)}</div>
       <div class="cd-drive-info">
-        <div class="cd-drive-title" title="${a}">${a}</div>
+        <div class="cd-drive-title" title="${s}">${s}</div>
         <div class="cd-drive-meta">
           来源: ${e}
-          ${o ? `<span class="cd-drive-password" data-password="${o}" title="点击复制提取码">提取码: ${o}</span>` : ""}
+          ${r ? `<span class="cd-drive-password" data-password="${r}" title="点击复制提取码">提取码: ${r}</span>` : ""}
         </div>
       </div>
-      <a href="${r}" class="cd-download-btn" target="_blank">下载</a>
+      <a href="${o}" class="cd-download-btn" target="_blank">下载</a>
     `;
-    const c = t.querySelector(".cd-drive-password");
-    c && c.addEventListener("click", () => {
-      const d = c.dataset.password;
-      d && navigator.clipboard.writeText(d).then(() => {
-        const s = c.textContent;
-        c.textContent = "提取码已复制", setTimeout(() => {
-          c.textContent = s;
+    const i = t.querySelector(".cd-drive-password");
+    i && i.addEventListener("click", () => {
+      const l = i.dataset.password;
+      l && navigator.clipboard.writeText(l).then(() => {
+        const n = i.textContent;
+        i.textContent = "提取码已复制", setTimeout(() => {
+          i.textContent = n;
         }, 2e3);
-      }).catch((s) => {
-        console.error("复制提取码失败:", s);
+      }).catch((n) => {
+        console.error("复制提取码失败:", n);
       });
     });
   }
 }
-customElements.define("cloud-drive", x);
-class v extends HTMLElement {
+customElements.define("cloud-drive", f);
+class x extends HTMLElement {
   constructor() {
     super();
-    l(this, "shadow");
+    d(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -469,15 +469,15 @@ class v extends HTMLElement {
     `, this.shadow.append(t, e);
   }
   updateProgress() {
-    const t = this.getAttribute("percentage") || "0%", e = this.getAttribute("color") || "#3498db", r = this.shadow.querySelector(".pb-progress-bar"), o = this.shadow.querySelector(".pb-progress-text"), a = t.endsWith("%") ? t : `${t}%`;
-    r.style.width = a, r.style.backgroundColor = e, o.textContent = a;
+    const t = this.getAttribute("percentage") || "0%", e = this.getAttribute("color") || "#3498db", o = this.shadow.querySelector(".pb-progress-bar"), r = this.shadow.querySelector(".pb-progress-text"), s = t.endsWith("%") ? t : `${t}%`;
+    o.style.width = s, o.style.backgroundColor = e, r.textContent = s;
   }
 }
-customElements.define("progress-box", v);
+customElements.define("progress-box", x);
 class w extends HTMLElement {
   constructor() {
     super();
-    l(this, "shadow");
+    d(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   connectedCallback() {
@@ -608,12 +608,12 @@ class w extends HTMLElement {
     `, this.shadow.append(t, e);
   }
   buildTabs() {
-    const t = Array.from(this.querySelectorAll("[data-tab]")), e = this.shadow.querySelector(".tb-tabs-header"), r = this.shadow.querySelector(".tb-tabs-content");
-    !e || !r || t.forEach((o, a) => {
-      const c = o.getAttribute("label") || `Tab ${a + 1}`, d = o.innerHTML, s = document.createElement("button");
-      s.className = "tb-tab-button", s.textContent = c, s.dataset.tabIndex = a.toString(), a === 0 && s.classList.add("active"), e.appendChild(s);
-      const b = document.createElement("div");
-      b.className = "tb-tab-panel", b.innerHTML = d, b.dataset.tabIndex = a.toString(), a === 0 && b.classList.add("active"), r.appendChild(b);
+    const t = Array.from(this.querySelectorAll("[data-tab]")), e = this.shadow.querySelector(".tb-tabs-header"), o = this.shadow.querySelector(".tb-tabs-content");
+    !e || !o || t.forEach((r, s) => {
+      const i = r.getAttribute("label") || `Tab ${s + 1}`, l = r.innerHTML, n = document.createElement("button");
+      n.className = "tb-tab-button", n.textContent = i, n.dataset.tabIndex = s.toString(), s === 0 && n.classList.add("active"), e.appendChild(n);
+      const h = document.createElement("div");
+      h.className = "tb-tab-panel", h.innerHTML = l, h.dataset.tabIndex = s.toString(), s === 0 && h.classList.add("active"), o.appendChild(h);
     });
   }
   addEventListeners() {
@@ -624,9 +624,124 @@ class w extends HTMLElement {
   switchTab(t) {
     if (!t)
       return;
-    this.shadow.querySelectorAll(".tb-tab-button").forEach((o) => o.classList.remove("active")), this.shadow.querySelectorAll(".tb-tab-panel").forEach((o) => o.classList.remove("active"));
-    const e = this.shadow.querySelector(`.tb-tab-button[data-tab-index="${t}"]`), r = this.shadow.querySelector(`.tb-tab-panel[data-tab-index="${t}"]`);
-    e == null || e.classList.add("active"), r == null || r.classList.add("active");
+    this.shadow.querySelectorAll(".tb-tab-button").forEach((r) => r.classList.remove("active")), this.shadow.querySelectorAll(".tb-tab-panel").forEach((r) => r.classList.remove("active"));
+    const e = this.shadow.querySelector(`.tb-tab-button[data-tab-index="${t}"]`), o = this.shadow.querySelector(`.tb-tab-panel[data-tab-index="${t}"]`);
+    e == null || e.classList.add("active"), o == null || o.classList.add("active");
   }
 }
 customElements.define("tabs-component", w);
+class y extends HTMLElement {
+  constructor() {
+    super();
+    d(this, "shadow");
+    d(this, "container");
+    d(this, "image1");
+    d(this, "radius", 30);
+    this.shadow = this.attachShadow({ mode: "open" }), this.render(), this.container = this.shadow.querySelector(".pv-container1"), this.image1 = this.shadow.querySelector(".pv-image1");
+  }
+  static get observedAttributes() {
+    return ["image1", "image2", "radius"];
+  }
+  connectedCallback() {
+    this.addEventListeners(), this.updateImages();
+  }
+  attributeChangedCallback(t, e, o) {
+    if (e !== o)
+      if (t === "radius") {
+        this.radius = parseInt(o, 10);
+        const r = this.shadow.querySelector(".radius-value");
+        r && (r.textContent = `${this.radius}px`);
+      } else
+        this.updateImages();
+  }
+  render() {
+    const t = document.createElement("style");
+    t.textContent = `
+      .pv-container1 {
+        position: relative;
+        height: 40vh;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+      }
+      .pv-image1, .pv-image2 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+      }
+      .pv-image1 {
+        z-index: 2;
+        clip-path: circle(0 at 0 0);
+      }
+      .pv-image2 {
+        z-index: 1;
+      }
+      .pv-control-panel {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 8px 16px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .pv-radius-slider {
+        width: 150px;
+        cursor: pointer;
+      }
+      .pv-radius-value {
+        font-size: 14px;
+        color: #333;
+        min-width: 40px;
+        text-align: center;
+      }
+    `;
+    const e = document.createElement("div");
+    e.className = "pv-container1", e.innerHTML = `
+      <div class="pv-image1"></div>
+      <div class="pv-image2"></div>
+      <div class="pv-control-panel">
+        <span>透视范围:</span>
+        <input type="range" min="20" max="200" value="100" class="pv-radius-slider">
+        <span class="pv-radius-value">100px</span>
+      </div>
+    `, this.shadow.append(t, e);
+  }
+  updateImages() {
+    const t = this.getAttribute("image1"), e = this.getAttribute("image2"), o = this.getAttribute("radius");
+    if (t && (this.image1.style.backgroundImage = `url('${t}')`), e && (this.shadow.querySelector(".pv-image2").style.backgroundImage = `url('${e}')`), o) {
+      this.radius = parseInt(o, 10);
+      const r = this.shadow.querySelector(".pv-radius-slider"), s = this.shadow.querySelector(".pv-radius-value");
+      r && (r.value = this.radius.toString()), s && (s.textContent = `${this.radius}px`);
+    }
+  }
+  addEventListeners() {
+    const t = (r, s) => {
+      const i = this.container.getBoundingClientRect(), l = r - i.left, n = s - i.top;
+      this.image1.style.clipPath = `circle(${this.radius}px at ${l}px ${n}px)`;
+    };
+    this.container.addEventListener("mousemove", (r) => {
+      t(r.clientX, r.clientY);
+    }), this.container.addEventListener("touchmove", (r) => {
+      r.preventDefault();
+      const s = r.touches[0];
+      t(s.clientX, s.clientY);
+    }, { passive: !1 });
+    const e = this.shadow.querySelector(".pv-radius-slider"), o = this.shadow.querySelector(".pv-radius-value");
+    e && o && (e.value = this.radius.toString(), o.textContent = `${this.radius}px`, e.addEventListener("input", (r) => {
+      this.radius = parseInt(r.target.value, 10), o.textContent = `${this.radius}px`, this.setAttribute("radius", this.radius.toString());
+    })), this.container.addEventListener("mouseleave", () => {
+      this.image1.style.clipPath = "circle(0 at 0 0)";
+    }), this.container.addEventListener("touchend", () => {
+      this.image1.style.clipPath = "circle(0 at 0 0)";
+    });
+  }
+}
+customElements.define("perspective-view", y);
