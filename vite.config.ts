@@ -18,18 +18,24 @@ export default defineConfig(({ command }) => ({
             .reduce((entries, file) => {
               entries[`examples/${file.replace('.html', '')}`] = resolve(__dirname, 'examples', file);
               return entries;
+            }, {}),
+        ...fs.readdirSync(resolve(__dirname, 'src/modules'))
+            .filter(file => file.endsWith('.ts'))
+            .reduce((entries, file) => {
+              entries[`modules/${file.replace('.ts', '')}`] = resolve(__dirname, 'src/modules', file);
+              return entries;
             }, {})
       },
       output: [
         {
           format: 'es',
-          entryFileNames: `ts-web-module-${process.env.VERSION}.[format].js`,
+          entryFileNames: `[name]-${process.env.VERSION}.[format].js`,
           inlineDynamicImports: false
         },
         {
           format: 'es',
-          entryFileNames: `ts-web-module-${process.env.VERSION}.[format].min.js`,
-          plugins: [terser()], // 使用 terser 进行压缩
+          entryFileNames: `[name]-${process.env.VERSION}.[format].min.js`,
+          plugins: [terser()],
           inlineDynamicImports: false
         }
       ]
