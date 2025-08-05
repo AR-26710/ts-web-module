@@ -5,3 +5,5 @@ import './modules/cloud-drive';
 import './modules/progress-box';
 import './modules/tabs';
 import './modules/perspective-view';
+import './modules/gallery';
+import './modules/gallery-no-shadow';
