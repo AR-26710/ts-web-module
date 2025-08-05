@@ -1,31 +1,31 @@
-var u = Object.defineProperty;
-var g = (c, a, t) => a in c ? u(c, a, { enumerable: !0, configurable: !0, writable: !0, value: t }) : c[a] = t;
-var d = (c, a, t) => (g(c, typeof a != "symbol" ? a + "" : a, t), t);
+var b = Object.defineProperty;
+var g = (o, a, t) => a in o ? b(o, a, { enumerable: !0, configurable: !0, writable: !0, value: t }) : o[a] = t;
+var i = (o, a, t) => (g(o, typeof a != "symbol" ? a + "" : a, t), t);
 (function() {
   const a = document.createElement("link").relList;
   if (a && a.supports && a.supports("modulepreload"))
     return;
-  for (const o of document.querySelectorAll('link[rel="modulepreload"]'))
-    e(o);
-  new MutationObserver((o) => {
-    for (const r of o)
+  for (const n of document.querySelectorAll('link[rel="modulepreload"]'))
+    e(n);
+  new MutationObserver((n) => {
+    for (const r of n)
       if (r.type === "childList")
         for (const s of r.addedNodes)
           s.tagName === "LINK" && s.rel === "modulepreload" && e(s);
   }).observe(document, { childList: !0, subtree: !0 });
-  function t(o) {
+  function t(n) {
     const r = {};
-    return o.integrity && (r.integrity = o.integrity), o.referrerPolicy && (r.referrerPolicy = o.referrerPolicy), o.crossOrigin === "use-credentials" ? r.credentials = "include" : o.crossOrigin === "anonymous" ? r.credentials = "omit" : r.credentials = "same-origin", r;
+    return n.integrity && (r.integrity = n.integrity), n.referrerPolicy && (r.referrerPolicy = n.referrerPolicy), n.crossOrigin === "use-credentials" ? r.credentials = "include" : n.crossOrigin === "anonymous" ? r.credentials = "omit" : r.credentials = "same-origin", r;
   }
-  function e(o) {
-    if (o.ep)
+  function e(n) {
+    if (n.ep)
       return;
-    o.ep = !0;
-    const r = t(o);
-    fetch(o.href, r);
+    n.ep = !0;
+    const r = t(n);
+    fetch(n.href, r);
   }
 })();
-const p = class p extends HTMLElement {
+const u = class u extends HTMLElement {
   static get observedAttributes() {
     return ["bvid", "autoplay", "muted"];
   }
@@ -49,23 +49,23 @@ const p = class p extends HTMLElement {
     const a = this.getAttribute("bvid");
     if (!a) {
       this.shadowRoot.innerHTML = `
-        <style>${p.STYLES}</style>
+        <style>${u.STYLES}</style>
         <div class="error-message">错误：缺少 bvid 属性</div>
       `;
       return;
     }
-    const t = this.hasAttribute("autoplay") ? "1" : "0", e = this.hasAttribute("muted") ? "1" : "0", o = new URLSearchParams({ bvid: a, autoplay: t });
-    e === "1" && o.append("muted", "1");
-    const r = `https://player.bilibili.com/player.html?${o.toString()}`;
+    const t = this.hasAttribute("autoplay") ? "1" : "0", e = this.hasAttribute("muted") ? "1" : "0", n = new URLSearchParams({ bvid: a, autoplay: t });
+    e === "1" && n.append("muted", "1");
+    const r = `https://player.bilibili.com/player.html?${n.toString()}`;
     this.shadowRoot.innerHTML = `
-      <style>${p.STYLES}</style>
+      <style>${u.STYLES}</style>
       <div class="bilibili-video-wrapper">
         <iframe src="${r}" frameborder="0" allow="autoplay; fullscreen; encrypted-media"></iframe>
       </div>
     `;
   }
 };
-d(p, "STYLES", `
+i(u, "STYLES", `
     .bilibili-video-wrapper {
       position: relative;
       width: 100%;
@@ -85,12 +85,12 @@ d(p, "STYLES", `
       font-family: Arial, sans-serif;
     }
   `);
-let b = p;
-customElements.define("bilibili-video", b);
-class v extends HTMLElement {
+let p = u;
+customElements.define("bilibili-video", p);
+class m extends HTMLElement {
   constructor() {
     super();
-    d(this, "shadow");
+    i(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -161,17 +161,17 @@ class v extends HTMLElement {
     `;
     const e = document.createElement("a");
     e.className = "rl-container", e.setAttribute("role", "link"), e.tabIndex = 0;
-    const o = document.createElement("div");
-    o.className = "rl-left";
+    const n = document.createElement("div");
+    n.className = "rl-left";
     const r = document.createElement("div");
-    r.className = "rl-right", e.append(o, r), this.shadow.append(t, e);
+    r.className = "rl-right", e.append(n, r), this.shadow.append(t, e);
   }
   updateContent() {
-    var n;
-    const t = this.shadow.querySelector("a"), e = ((n = this.getAttribute("href")) == null ? void 0 : n.trim()) ?? "#", o = this.getAttribute("target") ?? "_self";
-    t.setAttribute("href", e), t.setAttribute("target", o);
-    const r = this.getAttribute("left-text") ?? "", s = this.getAttribute("right-text") ?? "", i = this.shadow.querySelector(".rl-left"), l = this.shadow.querySelector(".rl-right");
-    i.style.display = r.trim() ? "flex" : "none", i.textContent = r, l.style.display = s.trim() ? "flex" : "none", l.textContent = s;
+    var c;
+    const t = this.shadow.querySelector("a"), e = ((c = this.getAttribute("href")) == null ? void 0 : c.trim()) ?? "#", n = this.getAttribute("target") ?? "_self";
+    t.setAttribute("href", e), t.setAttribute("target", n);
+    const r = this.getAttribute("left-text") ?? "", s = this.getAttribute("right-text") ?? "", l = this.shadow.querySelector(".rl-left"), d = this.shadow.querySelector(".rl-right");
+    l.style.display = r.trim() ? "flex" : "none", l.textContent = r, d.style.display = s.trim() ? "flex" : "none", d.textContent = s;
   }
   bindEvents() {
     const t = this.shadow.querySelector("a");
@@ -185,11 +185,11 @@ class v extends HTMLElement {
     (t.key === "Enter" || t.key === " ") && (t.preventDefault(), this.dispatchEvent(new MouseEvent("click")));
   }
 }
-customElements.define("resource-link", v);
-class m extends HTMLElement {
+customElements.define("resource-link", m);
+class v extends HTMLElement {
   constructor() {
     super();
-    d(this, "shadow");
+    i(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -268,16 +268,16 @@ class m extends HTMLElement {
     `;
     const e = document.createElement("div");
     e.className = "tb-text-box", e.setAttribute("role", "alert");
-    const o = document.createElement("span");
-    o.className = "tb-icon";
+    const n = document.createElement("span");
+    n.className = "tb-icon";
     const r = document.createElement("slot");
-    e.append(o, r), this.shadow.append(t, e);
+    e.append(n, r), this.shadow.append(t, e);
   }
   updateContent() {
-    const t = this.shadow.querySelector(".tb-text-box"), e = this.shadow.querySelector(".tb-icon"), o = this.getAttribute("type") ?? "normal";
-    t.setAttribute("type", o);
+    const t = this.shadow.querySelector(".tb-text-box"), e = this.shadow.querySelector(".tb-icon"), n = this.getAttribute("type") ?? "normal";
+    t.setAttribute("type", n);
     let r = "";
-    switch (o) {
+    switch (n) {
       case "warning":
         r = "⚠️";
         break;
@@ -293,11 +293,11 @@ class m extends HTMLElement {
     e.textContent = r;
   }
 }
-customElements.define("text-box", m);
-class f extends HTMLElement {
+customElements.define("text-box", v);
+class x extends HTMLElement {
   constructor() {
     super();
-    d(this, "shadow");
+    i(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -382,7 +382,7 @@ class f extends HTMLElement {
     e.className = "cd-drive-container", this.shadow.append(t, e);
   }
   updateContent() {
-    const t = this.shadow.querySelector(".cd-drive-container"), e = this.getAttribute("type") || "默认网盘", o = this.getAttribute("url") || "#", r = this.getAttribute("password") || "", s = this.getAttribute("title") || "默认标题";
+    const t = this.shadow.querySelector(".cd-drive-container"), e = this.getAttribute("type") || "默认网盘", n = this.getAttribute("url") || "#", r = this.getAttribute("password") || "", s = this.getAttribute("title") || "默认标题";
     t.innerHTML = `
       <div class="cd-drive-icon">${this.getDriveIcon(e)}</div>
       <div class="cd-drive-info">
@@ -392,27 +392,27 @@ class f extends HTMLElement {
           ${r ? `<span class="cd-drive-password" data-password="${r}" title="点击复制提取码">提取码: ${r}</span>` : ""}
         </div>
       </div>
-      <a href="${o}" class="cd-download-btn" target="_blank">下载</a>
+      <a href="${n}" class="cd-download-btn" target="_blank">下载</a>
     `;
-    const i = t.querySelector(".cd-drive-password");
-    i && i.addEventListener("click", () => {
-      const l = i.dataset.password;
-      l && navigator.clipboard.writeText(l).then(() => {
-        const n = i.textContent;
-        i.textContent = "提取码已复制", setTimeout(() => {
-          i.textContent = n;
+    const l = t.querySelector(".cd-drive-password");
+    l && l.addEventListener("click", () => {
+      const d = l.dataset.password;
+      d && navigator.clipboard.writeText(d).then(() => {
+        const c = l.textContent;
+        l.textContent = "提取码已复制", setTimeout(() => {
+          l.textContent = c;
         }, 2e3);
-      }).catch((n) => {
-        console.error("复制提取码失败:", n);
+      }).catch((c) => {
+        console.error("复制提取码失败:", c);
       });
     });
   }
 }
-customElements.define("cloud-drive", f);
-class x extends HTMLElement {
+customElements.define("cloud-drive", x);
+class f extends HTMLElement {
   constructor() {
     super();
-    d(this, "shadow");
+    i(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   static get observedAttributes() {
@@ -469,15 +469,15 @@ class x extends HTMLElement {
     `, this.shadow.append(t, e);
   }
   updateProgress() {
-    const t = this.getAttribute("percentage") || "0%", e = this.getAttribute("color") || "#3498db", o = this.shadow.querySelector(".pb-progress-bar"), r = this.shadow.querySelector(".pb-progress-text"), s = t.endsWith("%") ? t : `${t}%`;
-    o.style.width = s, o.style.backgroundColor = e, r.textContent = s;
+    const t = this.getAttribute("percentage") || "0%", e = this.getAttribute("color") || "#3498db", n = this.shadow.querySelector(".pb-progress-bar"), r = this.shadow.querySelector(".pb-progress-text"), s = t.endsWith("%") ? t : `${t}%`;
+    n.style.width = s, n.style.backgroundColor = e, r.textContent = s;
   }
 }
-customElements.define("progress-box", x);
-class w extends HTMLElement {
+customElements.define("progress-box", f);
+class y extends HTMLElement {
   constructor() {
     super();
-    d(this, "shadow");
+    i(this, "shadow");
     this.shadow = this.attachShadow({ mode: "open" }), this.render();
   }
   connectedCallback() {
@@ -608,12 +608,12 @@ class w extends HTMLElement {
     `, this.shadow.append(t, e);
   }
   buildTabs() {
-    const t = Array.from(this.querySelectorAll("[data-tab]")), e = this.shadow.querySelector(".tb-tabs-header"), o = this.shadow.querySelector(".tb-tabs-content");
-    !e || !o || t.forEach((r, s) => {
-      const i = r.getAttribute("label") || `Tab ${s + 1}`, l = r.innerHTML, n = document.createElement("button");
-      n.className = "tb-tab-button", n.textContent = i, n.dataset.tabIndex = s.toString(), s === 0 && n.classList.add("active"), e.appendChild(n);
+    const t = Array.from(this.querySelectorAll("[data-tab]")), e = this.shadow.querySelector(".tb-tabs-header"), n = this.shadow.querySelector(".tb-tabs-content");
+    !e || !n || t.forEach((r, s) => {
+      const l = r.getAttribute("label") || `Tab ${s + 1}`, d = r.innerHTML, c = document.createElement("button");
+      c.className = "tb-tab-button", c.textContent = l, c.dataset.tabIndex = s.toString(), s === 0 && c.classList.add("active"), e.appendChild(c);
       const h = document.createElement("div");
-      h.className = "tb-tab-panel", h.innerHTML = l, h.dataset.tabIndex = s.toString(), s === 0 && h.classList.add("active"), o.appendChild(h);
+      h.className = "tb-tab-panel", h.innerHTML = d, h.dataset.tabIndex = s.toString(), s === 0 && h.classList.add("active"), n.appendChild(h);
     });
   }
   addEventListeners() {
@@ -625,18 +625,18 @@ class w extends HTMLElement {
     if (!t)
       return;
     this.shadow.querySelectorAll(".tb-tab-button").forEach((r) => r.classList.remove("active")), this.shadow.querySelectorAll(".tb-tab-panel").forEach((r) => r.classList.remove("active"));
-    const e = this.shadow.querySelector(`.tb-tab-button[data-tab-index="${t}"]`), o = this.shadow.querySelector(`.tb-tab-panel[data-tab-index="${t}"]`);
-    e == null || e.classList.add("active"), o == null || o.classList.add("active");
+    const e = this.shadow.querySelector(`.tb-tab-button[data-tab-index="${t}"]`), n = this.shadow.querySelector(`.tb-tab-panel[data-tab-index="${t}"]`);
+    e == null || e.classList.add("active"), n == null || n.classList.add("active");
   }
 }
-customElements.define("tabs-component", w);
-class y extends HTMLElement {
+customElements.define("tabs-component", y);
+class w extends HTMLElement {
   constructor() {
     super();
-    d(this, "shadow");
-    d(this, "container");
-    d(this, "image1");
-    d(this, "radius", 30);
+    i(this, "shadow");
+    i(this, "container");
+    i(this, "image1");
+    i(this, "radius", 30);
     this.shadow = this.attachShadow({ mode: "open" }), this.render(), this.container = this.shadow.querySelector(".pv-container1"), this.image1 = this.shadow.querySelector(".pv-image1");
   }
   static get observedAttributes() {
@@ -645,10 +645,10 @@ class y extends HTMLElement {
   connectedCallback() {
     this.addEventListeners(), this.updateImages();
   }
-  attributeChangedCallback(t, e, o) {
-    if (e !== o)
+  attributeChangedCallback(t, e, n) {
+    if (e !== n)
       if (t === "radius") {
-        this.radius = parseInt(o, 10);
+        this.radius = parseInt(n, 10);
         const r = this.shadow.querySelector(".radius-value");
         r && (r.textContent = `${this.radius}px`);
       } else
@@ -715,17 +715,17 @@ class y extends HTMLElement {
     `, this.shadow.append(t, e);
   }
   updateImages() {
-    const t = this.getAttribute("image1"), e = this.getAttribute("image2"), o = this.getAttribute("radius");
-    if (t && (this.image1.style.backgroundImage = `url('${t}')`), e && (this.shadow.querySelector(".pv-image2").style.backgroundImage = `url('${e}')`), o) {
-      this.radius = parseInt(o, 10);
+    const t = this.getAttribute("image1"), e = this.getAttribute("image2"), n = this.getAttribute("radius");
+    if (t && (this.image1.style.backgroundImage = `url('${t}')`), e && (this.shadow.querySelector(".pv-image2").style.backgroundImage = `url('${e}')`), n) {
+      this.radius = parseInt(n, 10);
       const r = this.shadow.querySelector(".pv-radius-slider"), s = this.shadow.querySelector(".pv-radius-value");
       r && (r.value = this.radius.toString()), s && (s.textContent = `${this.radius}px`);
     }
   }
   addEventListeners() {
     const t = (r, s) => {
-      const i = this.container.getBoundingClientRect(), l = r - i.left, n = s - i.top;
-      this.image1.style.clipPath = `circle(${this.radius}px at ${l}px ${n}px)`;
+      const l = this.container.getBoundingClientRect(), d = r - l.left, c = s - l.top;
+      this.image1.style.clipPath = `circle(${this.radius}px at ${d}px ${c}px)`;
     };
     this.container.addEventListener("mousemove", (r) => {
       t(r.clientX, r.clientY);
@@ -734,9 +734,9 @@ class y extends HTMLElement {
       const s = r.touches[0];
       t(s.clientX, s.clientY);
     }, { passive: !1 });
-    const e = this.shadow.querySelector(".pv-radius-slider"), o = this.shadow.querySelector(".pv-radius-value");
-    e && o && (e.value = this.radius.toString(), o.textContent = `${this.radius}px`, e.addEventListener("input", (r) => {
-      this.radius = parseInt(r.target.value, 10), o.textContent = `${this.radius}px`, this.setAttribute("radius", this.radius.toString());
+    const e = this.shadow.querySelector(".pv-radius-slider"), n = this.shadow.querySelector(".pv-radius-value");
+    e && n && (e.value = this.radius.toString(), n.textContent = `${this.radius}px`, e.addEventListener("input", (r) => {
+      this.radius = parseInt(r.target.value, 10), n.textContent = `${this.radius}px`, this.setAttribute("radius", this.radius.toString());
     })), this.container.addEventListener("mouseleave", () => {
       this.image1.style.clipPath = "circle(0 at 0 0)";
     }), this.container.addEventListener("touchend", () => {
@@ -744,4 +744,252 @@ class y extends HTMLElement {
     });
   }
 }
-customElements.define("perspective-view", y);
+customElements.define("perspective-view", w);
+class k extends HTMLElement {
+  constructor() {
+    super();
+    i(this, "shadow");
+    i(this, "currentIndex", 0);
+    i(this, "items", []);
+    this.shadow = this.attachShadow({ mode: "open" }), this.render();
+  }
+  connectedCallback() {
+    this.buildGallery(), this.addEventListeners();
+  }
+  render() {
+    const t = document.createElement("style");
+    t.textContent = `
+      .gb-gallery-container {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .gb-gallery-track {
+        display: flex;
+        transition: transform 0.3s ease;
+      }
+
+      .gb-gallery-item {
+        min-width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .gb-gallery-item img {
+        max-width: 100%;
+        max-height: 600px;
+        object-fit: contain;
+      }
+
+      .gb-gallery-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        font-size: 24px;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+        user-select: none;
+      }
+
+      .gb-gallery-nav:hover {
+        background: rgba(0, 0, 0, 0.8);
+      }
+
+      .gb-gallery-nav.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .gb-gallery-nav.prev {
+        left: 16px;
+      }
+
+      .gb-gallery-nav.next {
+        right: 16px;
+      }
+
+
+
+      .gb-gallery-counter {
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 14px;
+      }
+    `;
+    const e = document.createElement("div");
+    e.className = "gb-gallery-container", e.innerHTML = `
+      <div class="gb-gallery-track"></div>
+      <button class="gb-gallery-nav prev">‹</button>
+      <button class="gb-gallery-nav next">›</button>
+      <div class="gb-gallery-counter"></div>
+    `, this.shadow.append(t, e);
+  }
+  buildGallery() {
+    this.items = Array.from(this.children);
+    const t = this.shadow.querySelector(".gb-gallery-track"), e = this.shadow.querySelector(".gb-gallery-counter");
+    !t || !e || (t.innerHTML = "", this.items.forEach((n, r) => {
+      const s = document.createElement("div");
+      s.className = "gb-gallery-item", s.appendChild(n.cloneNode(!0)), t.appendChild(s);
+    }), this.updateCounter());
+  }
+  addEventListeners() {
+    const t = this.shadow.querySelector(".gb-gallery-nav.prev"), e = this.shadow.querySelector(".gb-gallery-nav.next");
+    t == null || t.addEventListener("click", () => this.prev()), e == null || e.addEventListener("click", () => this.next());
+  }
+  updateGallery() {
+    const t = this.shadow.querySelector(".gb-gallery-track"), e = this.shadow.querySelector(".gb-gallery-counter"), n = this.shadow.querySelector(".gb-gallery-nav.prev"), r = this.shadow.querySelector(".gb-gallery-nav.next");
+    !t || !e || !n || !r || (t.style.transform = `translateX(-${this.currentIndex * 100}%)`, this.currentIndex === 0 ? n.classList.add("disabled") : n.classList.remove("disabled"), this.currentIndex === this.items.length - 1 ? r.classList.add("disabled") : r.classList.remove("disabled"), this.updateCounter());
+  }
+  updateCounter() {
+    const t = this.shadow.querySelector(".gb-gallery-counter");
+    t && this.items.length > 0 && (t.textContent = `${this.currentIndex + 1} / ${this.items.length}`);
+  }
+  prev() {
+    this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length, this.updateGallery();
+  }
+  next() {
+    this.currentIndex = (this.currentIndex + 1) % this.items.length, this.updateGallery();
+  }
+  goTo(t) {
+    t >= 0 && t < this.items.length && (this.currentIndex = t, this.updateGallery());
+  }
+}
+customElements.define("gallery-component", k);
+class E extends HTMLElement {
+  constructor() {
+    super();
+    i(this, "currentIndex", 0);
+    i(this, "items", []);
+    i(this, "container", null);
+    i(this, "track", null);
+    i(this, "counter", null);
+    i(this, "prevButton", null);
+    i(this, "nextButton", null);
+    this.render();
+  }
+  connectedCallback() {
+    this.buildGallery(), this.addEventListeners();
+  }
+  render() {
+    const t = document.createElement("style");
+    t.textContent = `
+      .gb-gallery-container {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .gb-gallery-track {
+        display: flex;
+        transition: transform 0.3s ease;
+      }
+
+      .gb-gallery-item {
+        min-width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .gb-gallery-item img {
+        max-width: 100%;
+        max-height: 600px;
+        object-fit: contain;
+      }
+
+      .gb-gallery-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        font-size: 24px;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+        user-select: none;
+      }
+
+      .gb-gallery-nav:hover {
+        background: rgba(0, 0, 0, 0.8);
+      }
+
+      .gb-gallery-nav.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .gb-gallery-nav.prev {
+        left: 16px;
+      }
+
+      .gb-gallery-nav.next {
+        right: 16px;
+      }
+
+      .gb-gallery-counter {
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 14px;
+      }
+    `, this.container = document.createElement("div"), this.container.className = "gb-gallery-container", this.container.innerHTML = `
+      <div class="gb-gallery-track"></div>
+      <button class="gb-gallery-nav prev">‹</button>
+      <button class="gb-gallery-nav next">›</button>
+      <div class="gb-gallery-counter"></div>
+    `, this.track = this.container.querySelector(".gb-gallery-track"), this.counter = this.container.querySelector(".gb-gallery-counter"), this.prevButton = this.container.querySelector(".gb-gallery-nav.prev"), this.nextButton = this.container.querySelector(".gb-gallery-nav.next"), this.appendChild(t), this.appendChild(this.container);
+  }
+  buildGallery() {
+    !this.track || !this.counter || (this.items = Array.from(this.children).filter(
+      (t) => t !== this.container && t.tagName !== "STYLE"
+    ), this.track.innerHTML = "", this.items.forEach((t) => {
+      const e = document.createElement("div");
+      e.className = "gb-gallery-item", e.appendChild(t), this.track.appendChild(e);
+    }), this.updateCounter());
+  }
+  addEventListeners() {
+    var t, e;
+    (t = this.prevButton) == null || t.addEventListener("click", () => this.prev()), (e = this.nextButton) == null || e.addEventListener("click", () => this.next());
+  }
+  updateGallery() {
+    !this.track || !this.counter || !this.prevButton || !this.nextButton || (this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`, this.currentIndex === 0 ? this.prevButton.classList.add("disabled") : this.prevButton.classList.remove("disabled"), this.currentIndex === this.items.length - 1 ? this.nextButton.classList.add("disabled") : this.nextButton.classList.remove("disabled"), this.updateCounter());
+  }
+  updateCounter() {
+    this.counter && this.items.length > 0 && (this.counter.textContent = `${this.currentIndex + 1} / ${this.items.length}`);
+  }
+  prev() {
+    this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length, this.updateGallery();
+  }
+  next() {
+    this.currentIndex = (this.currentIndex + 1) % this.items.length, this.updateGallery();
+  }
+  goTo(t) {
+    t >= 0 && t < this.items.length && (this.currentIndex = t, this.updateGallery());
+  }
+}
+customElements.define("gallery-no-shadow", E);
