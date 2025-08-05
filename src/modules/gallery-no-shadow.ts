@@ -30,7 +30,7 @@ class GalleryNoShadowElement extends HTMLElement {
     // 创建样式
     const style = document.createElement('style');
     style.textContent = `
-      .gb-gallery-container {
+      .gbns-gallery-container {
         position: relative;
         width: 100%;
         max-width: 800px;
@@ -40,25 +40,25 @@ class GalleryNoShadowElement extends HTMLElement {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
-      .gb-gallery-track {
+      .gbns-gallery-track {
         display: flex;
         transition: transform 0.3s ease;
       }
 
-      .gb-gallery-item {
+      .gbns-gallery-item {
         min-width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
       }
 
-      .gb-gallery-item img {
+      .gbns-gallery-item img {
         max-width: 100%;
         max-height: 600px;
         object-fit: contain;
       }
 
-      .gb-gallery-nav {
+      .gbns-gallery-nav {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
@@ -72,24 +72,24 @@ class GalleryNoShadowElement extends HTMLElement {
         user-select: none;
       }
 
-      .gb-gallery-nav:hover {
+      .gbns-gallery-nav:hover {
         background: rgba(0, 0, 0, 0.8);
       }
 
-      .gb-gallery-nav.disabled {
+      .gbns-gallery-nav.disabled {
         opacity: 0.5;
         cursor: not-allowed;
       }
 
-      .gb-gallery-nav.prev {
+      .gbns-gallery-nav.prev {
         left: 16px;
       }
 
-      .gb-gallery-nav.next {
+      .gbns-gallery-nav.next {
         right: 16px;
       }
 
-      .gb-gallery-counter {
+      .gbns-gallery-counter {
         position: absolute;
         bottom: 16px;
         right: 16px;
@@ -103,19 +103,19 @@ class GalleryNoShadowElement extends HTMLElement {
 
     // 创建容器
     this.container = document.createElement('div');
-    this.container.className = 'gb-gallery-container';
+    this.container.className = 'gbns-gallery-container';
     this.container.innerHTML = `
-      <div class="gb-gallery-track"></div>
-      <button class="gb-gallery-nav prev">‹</button>
-      <button class="gb-gallery-nav next">›</button>
-      <div class="gb-gallery-counter"></div>
+      <div class="gbns-gallery-track"></div>
+      <button class="gbns-gallery-nav prev">‹</button>
+      <button class="gbns-gallery-nav next">›</button>
+      <div class="gbns-gallery-counter"></div>
     `;
 
     // 获取元素引用
-    this.track = this.container.querySelector('.gb-gallery-track');
-    this.counter = this.container.querySelector('.gb-gallery-counter');
-    this.prevButton = this.container.querySelector('.gb-gallery-nav.prev');
-    this.nextButton = this.container.querySelector('.gb-gallery-nav.next');
+    this.track = this.container.querySelector('.gbns-gallery-track');
+    this.counter = this.container.querySelector('.gbns-gallery-counter');
+    this.prevButton = this.container.querySelector('.gbns-gallery-nav.prev');
+    this.nextButton = this.container.querySelector('.gbns-gallery-nav.next');
 
     // 添加到组件
     this.appendChild(style);
@@ -136,7 +136,7 @@ class GalleryNoShadowElement extends HTMLElement {
     // 创建项目并移除原始子元素
     this.items.forEach((item) => {
       const itemElement = document.createElement('div');
-      itemElement.className = 'gb-gallery-item';
+      itemElement.className = 'gbns-gallery-item';
       itemElement.appendChild(item); // 直接移动原始元素，而非克隆
       this.track!.appendChild(itemElement);
     });
