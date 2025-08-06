@@ -11,6 +11,8 @@ class GalleryElement extends HTMLElement {
   private readonly shadow: ShadowRoot;
   private currentIndex: number = 0;
   private items: Element[] = [];
+  private loadedIndices: Set<number> = new Set();
+  private preloadDistance: number = 6; // 预加载前后多少张图片
 
   constructor() {
     super();
@@ -52,6 +54,25 @@ class GalleryElement extends HTMLElement {
         max-width: 100%;
         max-height: 600px;
         object-fit: contain;
+        transition: opacity 0.3s ease;
+      }
+
+      .gb-gallery-item img.loading {
+        opacity: 0.3;
+        background: #f5f5f5;
+      }
+
+      .gb-gallery-item img.loaded {
+        opacity: 1;
+      }
+
+      .gb-gallery-item img.error {
+        opacity: 1;
+        background: #ffebee;
+        color: #b71c1c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .gb-gallery-nav {
@@ -126,12 +147,37 @@ class GalleryElement extends HTMLElement {
       // 创建项目
       const itemElement = document.createElement('div');
       itemElement.className = 'gb-gallery-item';
-      itemElement.appendChild(item.cloneNode(true));
+      itemElement.dataset.index = index.toString();
+
+      // 克隆原始元素
+      const clonedItem = item.cloneNode(true);
+
+      // 存储原始图片信息，但不立即加载
+      if (clonedItem instanceof Element && clonedItem.tagName === 'IMG') {
+        const img = clonedItem as HTMLImageElement;
+        const originalSrc = img.src;
+        img.src = ''; // 清空src以防止立即加载
+        img.dataset.src = originalSrc; // 存储原始src
+
+        // 添加加载状态类
+        img.classList.add('loading');
+      } else if (clonedItem instanceof Element && clonedItem.querySelector('img')) {
+        // 如果项目不是直接的img标签，查找其中的img标签
+        const img = clonedItem.querySelector('img') as HTMLImageElement;
+        const originalSrc = img.src;
+        img.src = '';
+        img.dataset.src = originalSrc;
+        img.classList.add('loading');
+      }
+
+      itemElement.appendChild(clonedItem);
       track.appendChild(itemElement);
     });
 
     // 更新计数器
     this.updateCounter();
+    // 加载初始图片
+    this.loadVisibleImages();
   }
 
   private addEventListeners() {
@@ -140,6 +186,8 @@ class GalleryElement extends HTMLElement {
 
     prevButton?.addEventListener('click', () => this.prev());
     nextButton?.addEventListener('click', () => this.next());
+    window.addEventListener('resize', () => this.loadVisibleImages());
+    window.addEventListener('scroll', () => this.loadVisibleImages());
   }
 
   private updateGallery() {
@@ -168,6 +216,80 @@ class GalleryElement extends HTMLElement {
 
     // 更新计数器
     this.updateCounter();
+
+    // 加载可见和需要预加载的图片
+    this.loadVisibleImages();
+  }
+
+  private loadVisibleImages() {
+    // 加载当前索引的图片以及前后preloadDistance张图片
+    const startIndex = Math.max(0, this.currentIndex - this.preloadDistance);
+    const endIndex = Math.min(this.items.length - 1, this.currentIndex + this.preloadDistance);
+
+    for (let i = startIndex; i <= endIndex; i++) {
+      if (!this.loadedIndices.has(i)) {
+        this.loadImageAtIndex(i);
+      }
+    }
+
+    // 可以选择卸载超出范围的图片以节省内存
+    // 这里注释掉卸载逻辑，因为频繁卸载/加载可能影响用户体验
+    /*
+    this.loadedIndices.forEach(index => {
+      if (index < startIndex || index > endIndex) {
+        this.unloadImageAtIndex(index);
+      }
+    });
+    */
+  }
+
+  private loadImageAtIndex(index: number) {
+    if (index < 0 || index >= this.items.length) return;
+
+    const track = this.shadow.querySelector('.gb-gallery-track');
+    if (!track) return;
+
+    const itemElement = track.children[index] as HTMLElement;
+    if (!itemElement) return;
+
+    const img = itemElement.querySelector('img') as HTMLImageElement;
+    if (!img || !img.dataset.src) return;
+
+    const src = img.dataset.src;
+
+    // 创建新图片对象预加载
+    const newImg = new Image();
+    newImg.onload = () => {
+      img.src = src;
+      img.classList.remove('loading');
+      img.classList.add('loaded');
+      this.loadedIndices.add(index);
+    };
+    newImg.onerror = () => {
+      img.classList.remove('loading');
+      img.classList.add('error');
+      // 占位图
+      // img.src = 'error-placeholder.jpg';
+    };
+    newImg.src = src;
+  }
+
+  private unloadImageAtIndex(index: number) {
+    if (index < 0 || index >= this.items.length) return;
+
+    const track = this.shadow.querySelector('.gb-gallery-track');
+    if (!track) return;
+
+    const itemElement = track.children[index] as HTMLElement;
+    if (!itemElement) return;
+
+    const img = itemElement.querySelector('img') as HTMLImageElement;
+    if (!img || !img.dataset.src) return;
+
+    img.src = ''; // 清空src释放内存
+    img.classList.remove('loaded', 'error');
+    img.classList.add('loading');
+    this.loadedIndices.delete(index);
   }
 
   private updateCounter() {
