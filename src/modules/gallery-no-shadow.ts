@@ -193,18 +193,9 @@ class GalleryNoShadowElement extends HTMLElement {
     // 更新轨道位置
     this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
 
-    // 更新导航按钮状态
-    if (this.currentIndex === 0) {
-      this.prevButton.classList.add('disabled');
-    } else {
-      this.prevButton.classList.remove('disabled');
-    }
-
-    if (this.currentIndex === this.items.length - 1) {
-      this.nextButton.classList.add('disabled');
-    } else {
-      this.nextButton.classList.remove('disabled');
-    }
+    // 更新导航按钮状态 - 在循环模式下始终启用
+    this.prevButton.classList.remove('disabled');
+    this.nextButton.classList.remove('disabled');
 
     // 更新计数器
     this.updateCounter();
@@ -311,19 +302,98 @@ class GalleryNoShadowElement extends HTMLElement {
   }
 
   private prev() {
-    this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
-    this.updateGallery();
+    const newIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+    this.slideToIndex(newIndex, 'prev');
   }
 
   private next() {
-    this.currentIndex = (this.currentIndex + 1) % this.items.length;
-    this.updateGallery();
+    const newIndex = (this.currentIndex + 1) % this.items.length;
+    this.slideToIndex(newIndex, 'next');
+  }
+
+  private slideToIndex(newIndex: number, direction: 'prev' | 'next') {
+    if (!this.track) return;
+
+    // 添加循环动画效果
+    const track = this.track;
+    
+    // 设置过渡动画
+    track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    
+    // 检查是否需要循环效果
+    const isLooping = 
+      (direction === 'next' && newIndex === 0 && this.currentIndex === this.items.length - 1) ||
+      (direction === 'prev' && newIndex === this.items.length - 1 && this.currentIndex === 0);
+
+    if (isLooping) {
+      // 创建平滑的循环过渡
+      this.performLoopTransition(newIndex, direction);
+    } else {
+      // 普通过渡
+      this.currentIndex = newIndex;
+      track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+      
+      // 动画结束后更新状态
+      setTimeout(() => {
+        this.updateCounter();
+        this.loadVisibleImages();
+      }, 500);
+    }
+  }
+
+  private performLoopTransition(newIndex: number, direction: 'prev' | 'next') {
+    if (!this.track) return;
+
+    const track = this.track;
+    
+    // 创建无缝循环效果
+    if (direction === 'next' && newIndex === 0 && this.currentIndex === this.items.length - 1) {
+      // 从最后一张到第一张的循环
+      this.currentIndex = newIndex;
+      
+      // 使用缓动效果
+      track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      track.style.transform = `translateX(-${this.items.length * 100}%)`;
+      
+      // 动画结束后重置到第一张
+      setTimeout(() => {
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(0%)';
+        
+        // 恢复过渡效果
+        setTimeout(() => {
+          track.style.transition = 'transform 0.3s ease';
+          this.updateCounter();
+          this.loadVisibleImages();
+        }, 50);
+      }, 500);
+    } else if (direction === 'prev' && newIndex === this.items.length - 1 && this.currentIndex === 0) {
+      // 从第一张到最后一张的循环
+      this.currentIndex = newIndex;
+      
+      // 先快速移动到"虚拟"位置
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-${this.items.length * 100}%)`;
+      
+      // 然后平滑过渡到最后一张
+      setTimeout(() => {
+        track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        track.style.transform = `translateX(-${(this.items.length - 1) * 100}%)`;
+        
+        // 动画结束后更新状态
+        setTimeout(() => {
+          track.style.transition = 'transform 0.3s ease';
+          this.updateCounter();
+          this.loadVisibleImages();
+        }, 500);
+      }, 50);
+    }
   }
 
   private goTo(index: number) {
-    if (index >= 0 && index < this.items.length) {
-      this.currentIndex = index;
-      this.updateGallery();
+    if (index >= 0 && index < this.items.length && index !== this.currentIndex) {
+      const direction = index > this.currentIndex ? 'next' : 'prev';
+      this.slideToIndex(index, direction);
     }
   }
 }
