@@ -9,12 +9,35 @@ class ModuleLoader {
   // 动态导入自定义元素列表
   private static customElements: string[] | null = null;
   
+  // 配置加载状态
+  private static configLoaded = false;
+  private static configLoadPromise: Promise<void> | null = null;
+  
   // 初始化模块配置
   private static async init() {
-    // 动态导入模块配置
-    const config = await import('./ts-web-module-config');
-    this.moduleMap = config.moduleMap;
-    this.customElements = config.customElements;
+    // 确保只加载一次配置
+    if (this.configLoadPromise) {
+      return this.configLoadPromise;
+    }
+    
+    this.configLoadPromise = this.loadConfig().then(() => {
+      this.configLoaded = true;
+    });
+    
+    return this.configLoadPromise;
+  }
+  
+  // 加载模块配置
+  private static async loadConfig() {
+    try {
+      // 动态导入模块配置
+      const config = await import('./ts-web-module-config');
+      this.moduleMap = config.moduleMap;
+      this.customElements = config.customElements;
+    } catch (error) {
+      console.error('模块配置加载失败:', error);
+      throw error;
+    }
   }
   
   // 获取模块映射表
@@ -45,12 +68,31 @@ class ModuleLoader {
     }
 
     // 确保配置已加载
+    if (!this.configLoaded) {
+      // 等待配置加载完成
+      if (this.configLoadPromise) {
+        await this.configLoadPromise;
+      } else {
+        // 如果配置加载还未开始，先初始化
+        await this.init();
+        if (this.configLoadPromise) {
+          await this.configLoadPromise;
+        }
+      }
+      
+      // 再次检查配置是否加载成功
+      if (!this.moduleMap) {
+        console.warn(`模块配置加载失败`);
+        return;
+      }
+    }
+
+    // 查找对应的模块加载函数
     if (!this.moduleMap) {
       console.warn(`模块配置尚未加载完成`);
       return;
     }
-
-    // 查找对应的模块加载函数
+    
     const moduleLoader = this.moduleMap[tagName];
     if (!moduleLoader) {
       console.warn(`未找到标签 ${tagName} 对应的模块`);
@@ -77,20 +119,36 @@ class ModuleLoader {
   // 扫描 DOM 并加载所需模块
   static async scanAndLoad(): Promise<void> {
     // 确保配置已加载
-    if (!this.customElements) {
-      console.warn('模块配置尚未加载完成');
-      return;
+    if (!this.configLoaded) {
+      // 等待配置加载完成
+      if (this.configLoadPromise) {
+        await this.configLoadPromise;
+      } else {
+        // 如果配置加载还未开始，先初始化
+        await this.init();
+        if (this.configLoadPromise) {
+          await this.configLoadPromise;
+        }
+      }
+      
+      // 再次检查配置是否加载成功
+      if (!this.customElements) {
+        console.warn('模块配置加载失败');
+        return;
+      }
     }
 
     const elementsToLoad: string[] = [];
 
     // 扫描当前 DOM
-    this.customElements.forEach(tagName => {
-      const elements = document.getElementsByTagName(tagName);
-      if (elements.length > 0 && !this.loadedModules.has(tagName)) {
-        elementsToLoad.push(tagName);
-      }
-    });
+    if (this.customElements) {
+      this.customElements.forEach(tagName => {
+        const elements = document.getElementsByTagName(tagName);
+        if (elements.length > 0 && !this.loadedModules.has(tagName)) {
+          elementsToLoad.push(tagName);
+        }
+      });
+    }
 
     // 并行加载所有需要的模块
     if (elementsToLoad.length > 0) {
@@ -109,12 +167,43 @@ const observer = new MutationObserver((mutations) => {
       if (node.nodeType === Node.ELEMENT_NODE) {
         const element = node as Element;
         
-        // 确保配置已加载
+        // 检查配置是否已加载
         const moduleMap = ModuleLoader.getModuleMap();
         const customElements = ModuleLoader.getCustomElements();
         
         if (!moduleMap || !customElements) {
-          console.warn('模块配置尚未加载完成');
+          // 如果配置未加载完成，延迟处理
+          setTimeout(() => {
+            // 重新获取配置
+            const moduleMap = ModuleLoader.getModuleMap();
+            const customElements = ModuleLoader.getCustomElements();
+            
+            if (!moduleMap || !customElements) {
+              console.warn('模块配置尚未加载完成');
+              return;
+            }
+            
+            // 检查元素本身
+            const tagName = element.tagName.toLowerCase();
+            if (moduleMap[tagName]) {
+              newElements.add(tagName);
+            }
+
+            // 检查子元素
+            element.querySelectorAll(
+              customElements.join(',')
+            ).forEach(child => {
+              newElements.add(child.tagName.toLowerCase());
+            });
+            
+            // 加载新发现的组件
+            if (newElements.size > 0) {
+              console.log(`发现 ${newElements.size} 个新组件:`, Array.from(newElements));
+              newElements.forEach(tagName => {
+                ModuleLoader.loadModule(tagName).catch(console.error);
+              });
+            }
+          }, 100);
           return;
         }
         
