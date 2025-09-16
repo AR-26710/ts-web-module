@@ -24,6 +24,9 @@
 <script src="https://your-custom-cdn.com/path/to/main-1.7.10.es.min.js"></script>
 ```
 
+## 使用方法
+查看[vercel](https://web-module.houxiongxiong.icu/)或[博客](https://blog.houxiongxiong.icu/ts-web-module)
+
 ## 项目目录结构
 
 ```
