@@ -23,6 +23,47 @@ class CloudDriveElement extends HTMLElement {
     this.updateContent();
   }
 
+  private fallbackCopyText(text: string, element: Element): void {
+    const originalText = element.textContent;
+    // 创建临时文本区域
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    
+    try {
+      // 选择并复制文本
+      textArea.focus();
+      textArea.select();
+      const successful = document.execCommand('copy');
+      
+      if (successful) {
+        element.textContent = '提取码已复制';
+        setTimeout(() => {
+          element.textContent = originalText;
+        }, 2000);
+      } else {
+        console.warn('复制失败，请手动复制提取码');
+        // 显示提示让用户手动复制
+        element.textContent = '请手动复制';
+        setTimeout(() => {
+          element.textContent = originalText;
+        }, 2000);
+      }
+    } catch (err) {
+      console.error('复制失败:', err);
+      element.textContent = '复制失败';
+      setTimeout(() => {
+        element.textContent = originalText;
+      }, 2000);
+    } finally {
+      // 清理临时元素
+      document.body.removeChild(textArea);
+    }
+  }
+
   private getDriveIcon(type: string): string {
     // 根据网盘类型返回不同的SVG图标
     const icons: Record<string, string> = {
@@ -125,15 +166,22 @@ class CloudDriveElement extends HTMLElement {
       passwordElement.addEventListener('click', () => {
         const password = (passwordElement as HTMLElement).dataset.password;
         if (password) {
-          navigator.clipboard.writeText(password).then(() => {
-            const originalText = passwordElement.textContent;
-            passwordElement.textContent = '提取码已复制';
-            setTimeout(() => {
-              passwordElement.textContent = originalText;
-            }, 2000);
-          }).catch(err => {
-            console.error('复制提取码失败:', err);
-          });
+          // 检查 clipboard API 是否可用
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(password).then(() => {
+              const originalText = passwordElement.textContent;
+              passwordElement.textContent = '提取码已复制';
+              setTimeout(() => {
+                passwordElement.textContent = originalText;
+              }, 2000);
+            }).catch(err => {
+              console.error('复制提取码失败:', err);
+              this.fallbackCopyText(password, passwordElement);
+            });
+          } else {
+            // 使用降级方案
+            this.fallbackCopyText(password, passwordElement);
+          }
         }
       });
     }
