@@ -1,6 +1,5 @@
 {
   "name": "ts-web-module",
-  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "node scripts/generate-modules-config.js && vite",
