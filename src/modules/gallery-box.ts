@@ -478,7 +478,7 @@ class GalleryElement extends HTMLElement {
   }
 }
 
-customElements.define('gallery-component', GalleryElement);
+customElements.define('gallery-box', GalleryElement);
 
 // 导出模块标识
-export const GALLERY_MODULE = 'gallery';
+export const GALLERY_MODULE = 'gallery-box';

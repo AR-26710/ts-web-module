@@ -201,7 +201,7 @@ class TabsElement extends HTMLElement {
   }
 }
 
-customElements.define('tabs-component', TabsElement);
+customElements.define('tabs-box', TabsElement);
 
 // 导出模块标识
-export const TABS_MODULE = 'tabs';
+export const TABS_MODULE = 'tabs-box';

@@ -5,14 +5,14 @@ class ModuleLoader {
 
   // 模块映射表 - 更新路径以匹配新的构建输出结构
   private static moduleMap = {
-    'bilibili-video': () => import('./modules/bilibili-embed'),
+    'bilibili-video': () => import('./modules/bilibili-video'),
     'resource-link': () => import('./modules/resource-link'),
     'text-box': () => import('./modules/text-box'),
     'cloud-drive': () => import('./modules/cloud-drive'),
     'progress-box': () => import('./modules/progress-box'),
-    'tabs-component': () => import('./modules/tabs'),
+    'tabs-box': () => import('./modules/tabs-box'),
     'perspective-view': () => import('./modules/perspective-view'),
-    'gallery-component': () => import('./modules/gallery'),
+    'gallery-box': () => import('./modules/gallery-box'),
     'gallery-no-shadow': () => import('./modules/gallery-no-shadow')
   };
 
@@ -60,9 +60,9 @@ class ModuleLoader {
       'text-box',
       'cloud-drive',
       'progress-box',
-      'tabs-component',
+      'tabs-box',
       'perspective-view',
-      'gallery-component',
+      'gallery-box',
       'gallery-no-shadow'
     ];
 
