@@ -7,21 +7,21 @@
 ### 方法一：使用jsdelivr
 通过jsdelivr CDN直接引入，无需下载文件：
 ```html
-<script src="https://cdn.jsdelivr.net/gh/AR-26710/ts-web-module@1.7.10/dist/ts-web-module-1.7.10.es.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/AR-26710/ts-web-module@1.7.10/dist/main-1.7.10.es.min.js"></script>
 ```
 
 ### 方法二：下载本地引用
 1. 从 [GitHub Releases](https://github.com/AR-26710/ts-web-module/releases) 下载最新版本
-2. 将 `dist/ts-web-module-1.7.10.es.min.js` 文件复制到项目目录
+2. 将 `dist/main-1.7.10.es.min.js` 文件复制到项目目录
 3. 在HTML中引用：
 ```html
-<script src="path/to/ts-web-module-1.7.10.es.min.js"></script>
+<script src="path/to/main-1.7.10.es.min.js"></script>
 ```
 
 ### 方法三：自定义CDN加速
 将文件部署到您的CDN服务，然后引用：
 ```html
-<script src="https://your-custom-cdn.com/path/to/ts-web-module-1.7.10.es.min.js"></script>
+<script src="https://your-custom-cdn.com/path/to/main-1.7.10.es.min.js"></script>
 ```
 
 ## 项目目录结构
