@@ -3,6 +3,7 @@ import { resolve } from 'path';
 import * as fs from 'fs';
 import dotenv from 'dotenv';
 import terser from '@rollup/plugin-terser';
+import copy from 'rollup-plugin-copy';
 
 dotenv.config();
 
@@ -46,7 +47,15 @@ export default defineConfig(({ command, mode }) => ({
           : `[name]-${process.env.VERSION}.[format].js`,
         inlineDynamicImports: false,
         plugins: mode === 'production' ? [terser()] : []
-      }
+      },
+      plugins: [
+        copy({
+          targets: [
+            { src: 'examples/**/*', dest: 'dist/examples' }
+          ],
+          hook: 'closeBundle' // 在构建结束后执行复制操作
+        })
+      ]
     },
     lib: {
       entry: 'src/ts-web-module.ts',
