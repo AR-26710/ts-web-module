@@ -1,10 +1,10 @@
 /**
  * Tabs组件
  * 使用示例:
- * <tabs-component>
+ * <tabs-box>
  *   <div data-tab label="Tab 1">Content 1</div>
  *   <div data-tab label="Tab 2">Content 2</div>
- * </tabs-component>
+ * </tabs-box>
  */
 class TabsElement extends HTMLElement {
   private readonly shadow: ShadowRoot;

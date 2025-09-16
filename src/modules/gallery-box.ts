@@ -1,11 +1,11 @@
 /**
  * Gallery组件 (Shadow DOM版本)
  * 使用示例:
- * <gallery-component pd="4" td="300">
+ * <gallery-box pd="4" td="300">
  *   <img src="image1.jpg" alt="Image 1">
  *   <img src="image2.jpg" alt="Image 2">
  *   <img src="image3.jpg" alt="Image 3">
- * </gallery-component>
+ * </gallery-box>
  */
 class GalleryElement extends HTMLElement {
   private readonly shadow: ShadowRoot;
