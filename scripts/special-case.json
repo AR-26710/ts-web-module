@@ -1,0 +1,13 @@
+{
+  "_comment": "特殊情况配置文件 - 用于配置模块名到文件名和标签名的映射关系",
+  "moduleFileMap": {
+    "tabs-box": "tabs-box",
+    "bilibili-video": "bilibili-video",
+    "gallery-box": "gallery-box"
+  },
+  "tagNameMap": {
+    "tabs-box": "tabs-box",
+    "bilibili-video": "bilibili-video",
+    "gallery-box": "gallery-box"
+  }
+}

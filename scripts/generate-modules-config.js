@@ -2,6 +2,18 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 
+// 读取特殊情况配置文件
+const specialCasePath = path.join(path.dirname(fileURLToPath(import.meta.url)), 'special-case.json');
+let specialCaseConfig = { moduleFileMap: {}, tagNameMap: {} };
+
+try {
+  const specialCaseContent = fs.readFileSync(specialCasePath, 'utf-8');
+  specialCaseConfig = JSON.parse(specialCaseContent);
+  console.log('已加载特殊情况配置:', specialCaseConfig);
+} catch (error) {
+  console.warn('无法加载特殊情况配置文件，使用默认配置:', error.message);
+}
+
 // 获取当前文件的目录路径
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,43 +39,22 @@ const viteModules = moduleNames.map(name => {
 
 // 生成Vite配置中实际的文件名映射
 const viteModuleFiles = moduleNames.map(name => {
-  // 处理特殊情况：tabs-box -> tabs-box
-  if (name === 'tabs-box') return { moduleName: 'tabs-box', fileName: name };
-  // 处理特殊情况：bilibili-video -> bilibili-video
-  if (name === 'bilibili-video') return { moduleName: 'bilibili-video', fileName: name };
-  // 处理特殊情况：gallery-box -> gallery-box
-  if (name === 'gallery-box') return { moduleName: 'gallery-box', fileName: name };
-  // 其他情况直接使用模块名
-  return { moduleName: name, fileName: name };
+  // 从配置文件中获取特殊情况映射，如果没有则使用默认值
+  const fileName = specialCaseConfig.moduleFileMap[name] || name;
+  return { moduleName: name, fileName: fileName };
 });
 
 // 生成ts-web-module中的moduleMap配置
 const moduleMapEntries = moduleNames.map(name => {
-  // 处理映射关系
-  let tagName = name;
-  // tabs-box 映射为 tabs-box
-  if (name === 'tabs-box') tagName = 'tabs-box';
-  // bilibili-video 映射为 bilibili-video
-  else if (name === 'bilibili-video') tagName = 'bilibili-video';
-  // gallery-box 映射为 gallery-box
-  else if (name === 'gallery-box') tagName = 'gallery-box';
-  // 其他情况保持一致
-  
+  // 从配置文件中获取标签名映射，如果没有则使用模块名
+  const tagName = specialCaseConfig.tagNameMap[name] || name;
   return `    '${tagName}': () => import('./modules/${name}')`;
 }).join(',\n');
 
 // 生成ts-web-module中的customElements配置
 const customElementsEntries = moduleNames.map(name => {
-  // 处理映射关系
-  let tagName = name;
-  // tabs-box 映射为 tabs-box
-  if (name === 'tabs-box') tagName = 'tabs-box';
-  // bilibili-video 映射为 bilibili-video
-  else if (name === 'bilibili-video') tagName = 'bilibili-video';
-  // gallery-box 映射为 gallery-box
-  else if (name === 'gallery-box') tagName = 'gallery-box';
-  // 其他情况保持一致
-  
+  // 从配置文件中获取标签名映射，如果没有则使用模块名
+  const tagName = specialCaseConfig.tagNameMap[name] || name;
   return `      '${tagName}'`;
 }).join(',\n');
 
