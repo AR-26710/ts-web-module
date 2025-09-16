@@ -1,6 +1,6 @@
 # Ts-Web-Module
 
-一个基于TypeScript的Web模块集合，提供多种常用功能组件，简化Web开发流程。
+一个基于TypeScript的Web模块集合，提供多种常用功能组件，用于丰富网页内容。
 
 ## 引入方式
 
