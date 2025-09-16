@@ -3,18 +3,34 @@ class ModuleLoader {
   private static loadedModules = new Set<string>();
   private static loadingModules = new Map<string, Promise<void>>();
 
-  // 模块映射表 - 更新路径以匹配新的构建输出结构
-  private static moduleMap = {
-    'bilibili-video': () => import('./modules/bilibili-video'),
-    'resource-link': () => import('./modules/resource-link'),
-    'text-box': () => import('./modules/text-box'),
-    'cloud-drive': () => import('./modules/cloud-drive'),
-    'progress-box': () => import('./modules/progress-box'),
-    'tabs-box': () => import('./modules/tabs-box'),
-    'perspective-view': () => import('./modules/perspective-view'),
-    'gallery-box': () => import('./modules/gallery-box'),
-    'gallery-no-shadow': () => import('./modules/gallery-no-shadow')
-  };
+  // 动态导入模块映射表
+  private static moduleMap: { [key: string]: () => Promise<any> } | null = null;
+  
+  // 动态导入自定义元素列表
+  private static customElements: string[] | null = null;
+  
+  // 初始化模块配置
+  private static async init() {
+    // 动态导入模块配置
+    const config = await import('./ts-web-module-config');
+    this.moduleMap = config.moduleMap;
+    this.customElements = config.customElements;
+  }
+  
+  // 获取模块映射表
+  public static getModuleMap() {
+    return this.moduleMap;
+  }
+  
+  // 获取自定义元素列表
+  public static getCustomElements() {
+    return this.customElements;
+  }
+  
+  // 在类构造时初始化
+  static {
+    this.init();
+  }
 
   // 根据元素标签名加载对应模块
   static async loadModule(tagName: string): Promise<void> {
@@ -28,8 +44,14 @@ class ModuleLoader {
       return this.loadingModules.get(tagName);
     }
 
+    // 确保配置已加载
+    if (!this.moduleMap) {
+      console.warn(`模块配置尚未加载完成`);
+      return;
+    }
+
     // 查找对应的模块加载函数
-    const moduleLoader = this.moduleMap[tagName as keyof typeof this.moduleMap];
+    const moduleLoader = this.moduleMap[tagName];
     if (!moduleLoader) {
       console.warn(`未找到标签 ${tagName} 对应的模块`);
       return;
@@ -54,22 +76,16 @@ class ModuleLoader {
 
   // 扫描 DOM 并加载所需模块
   static async scanAndLoad(): Promise<void> {
-    const customElements = [
-      'bilibili-video',
-      'resource-link', 
-      'text-box',
-      'cloud-drive',
-      'progress-box',
-      'tabs-box',
-      'perspective-view',
-      'gallery-box',
-      'gallery-no-shadow'
-    ];
+    // 确保配置已加载
+    if (!this.customElements) {
+      console.warn('模块配置尚未加载完成');
+      return;
+    }
 
     const elementsToLoad: string[] = [];
 
     // 扫描当前 DOM
-    customElements.forEach(tagName => {
+    this.customElements.forEach(tagName => {
       const elements = document.getElementsByTagName(tagName);
       if (elements.length > 0 && !this.loadedModules.has(tagName)) {
         elementsToLoad.push(tagName);
@@ -93,15 +109,24 @@ const observer = new MutationObserver((mutations) => {
       if (node.nodeType === Node.ELEMENT_NODE) {
         const element = node as Element;
         
+        // 确保配置已加载
+        const moduleMap = ModuleLoader.getModuleMap();
+        const customElements = ModuleLoader.getCustomElements();
+        
+        if (!moduleMap || !customElements) {
+          console.warn('模块配置尚未加载完成');
+          return;
+        }
+        
         // 检查元素本身
         const tagName = element.tagName.toLowerCase();
-        if (ModuleLoader['moduleMap'][tagName as keyof typeof ModuleLoader['moduleMap']]) {
+        if (moduleMap[tagName]) {
           newElements.add(tagName);
         }
 
         // 检查子元素
         element.querySelectorAll(
-          Object.keys(ModuleLoader['moduleMap']).join(',')
+          customElements.join(',')
         ).forEach(child => {
           newElements.add(child.tagName.toLowerCase());
         });

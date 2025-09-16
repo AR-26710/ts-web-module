@@ -6,17 +6,8 @@ import terser from '@rollup/plugin-terser';
 
 dotenv.config();
 
-const modules = [
-  'bilibili-embed',
-  'resource-link',
-  'text-box',
-  'cloud-drive',
-  'progress-box',
-  'tabs',
-  'perspective-view',
-  'gallery',
-  'gallery-no-shadow'
-];
+// 动态导入模块配置
+import { modules, moduleFileMap } from './src/modules-config';
 
 export default defineConfig(({ command, mode }) => ({
   base: './',
@@ -30,7 +21,9 @@ export default defineConfig(({ command, mode }) => ({
         'ts-web-module': resolve(__dirname, 'src/ts-web-module.ts'),
         // 组件模块单独打包到 modules 文件夹
         ...modules.reduce((entries, module) => {
-          entries[`modules/${module}`] = resolve(__dirname, `src/modules/${module}.ts`);
+          // 使用正确的文件名
+          const fileName = moduleFileMap[module] || module;
+          entries[`modules/${module}`] = resolve(__dirname, `src/modules/${fileName}.ts`);
           return entries;
         }, {})
       },

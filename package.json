@@ -3,9 +3,10 @@
   "version": "1.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "dev": "node scripts/generate-modules-config.js && vite",
+    "build": "node scripts/generate-modules-config.js && tsc && vite build",
+    "preview": "vite preview",
+    "gen:config": "node scripts/generate-modules-config.js"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
