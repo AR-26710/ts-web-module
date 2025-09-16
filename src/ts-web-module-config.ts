@@ -1,6 +1,7 @@
 // 此文件由脚本自动生成，请勿手动修改
 export const moduleMap = {
     'bilibili-video': () => import('./modules/bilibili-video'),
+    'black-curtain': () => import('./modules/black-curtain'),
     'cloud-drive': () => import('./modules/cloud-drive'),
     'gallery-box': () => import('./modules/gallery-box'),
     'gallery-no-shadow': () => import('./modules/gallery-no-shadow'),
@@ -13,6 +14,7 @@ export const moduleMap = {
 
 export const customElements = [
       'bilibili-video',
+      'black-curtain',
       'cloud-drive',
       'gallery-box',
       'gallery-no-shadow',

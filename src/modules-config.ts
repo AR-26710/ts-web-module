@@ -1,6 +1,7 @@
 // 此文件由脚本自动生成，请勿手动修改
 export const modules = [
   'bilibili-video',
+  'black-curtain',
   'cloud-drive',
   'gallery-box',
   'gallery-no-shadow',
@@ -14,6 +15,7 @@ export const modules = [
 // 用于Vite构建配置的模块文件映射
 export const moduleFileMap: { [key: string]: string } = {
   'bilibili-video': 'bilibili-video',
+  'black-curtain': 'black-curtain',
   'cloud-drive': 'cloud-drive',
   'gallery-box': 'gallery-box',
   'gallery-no-shadow': 'gallery-no-shadow',
