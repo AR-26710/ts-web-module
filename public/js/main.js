@@ -26,6 +26,12 @@ document.querySelectorAll('.tab-btn').forEach(button => {
                     .then(response => response.text())
                     .then(html => {
                         panel.innerHTML = html;
+                        // 重新应用语法高亮
+                        if (typeof hljs !== 'undefined') {
+                            panel.querySelectorAll('pre code').forEach((block) => {
+                                hljs.highlightElement(block);
+                            });
+                        }
                     })
                     .catch(error => {
                         panel.innerHTML = `<p>加载内容失败: ${error.message}</p>`;
