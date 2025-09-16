@@ -143,3 +143,6 @@ class ResourceLinkElement extends HTMLElement {
 }
 
 customElements.define('resource-link', ResourceLinkElement);
+
+// 导出模块标识
+export const RESOURCE_LINK_MODULE = 'resource-link';

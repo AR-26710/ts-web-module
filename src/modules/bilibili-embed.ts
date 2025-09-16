@@ -80,3 +80,6 @@ class BilibiliEmbed extends HTMLElement {
 }
 
 customElements.define('bilibili-video', BilibiliEmbed);
+
+// 导出模块标识
+export const BILIBILI_EMBED_MODULE = 'bilibili-embed';

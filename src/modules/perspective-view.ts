@@ -167,3 +167,6 @@ class PerspectiveViewElement extends HTMLElement {
 }
 
 customElements.define('perspective-view', PerspectiveViewElement);
+
+// 导出模块标识
+export const PERSPECTIVE_VIEW_MODULE = 'perspective-view';

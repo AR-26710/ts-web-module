@@ -467,3 +467,6 @@ class GalleryNoShadowElement extends HTMLElement {
 }
 
 customElements.define('gallery-no-shadow', GalleryNoShadowElement);
+
+// 导出模块标识
+export const GALLERY_NO_SHADOW_MODULE = 'gallery-no-shadow';

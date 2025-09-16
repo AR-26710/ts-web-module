@@ -87,3 +87,6 @@ class ProgressBoxElement extends HTMLElement {
 }
 
 customElements.define('progress-box', ProgressBoxElement);
+
+// 导出模块标识
+export const PROGRESS_BOX_MODULE = 'progress-box';

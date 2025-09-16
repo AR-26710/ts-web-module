@@ -141,3 +141,6 @@ class CloudDriveElement extends HTMLElement {
 }
 
 customElements.define('cloud-drive', CloudDriveElement);
+
+// 导出模块标识
+export const CLOUD_DRIVE_MODULE = 'cloud-drive';

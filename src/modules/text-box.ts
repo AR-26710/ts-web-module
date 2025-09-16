@@ -136,3 +136,6 @@ class TextBoxElement extends HTMLElement {
 }
 
 customElements.define('text-box', TextBoxElement);
+
+// 导出模块标识
+export const TEXT_BOX_MODULE = 'text-box';

@@ -202,3 +202,6 @@ class TabsElement extends HTMLElement {
 }
 
 customElements.define('tabs-component', TabsElement);
+
+// 导出模块标识
+export const TABS_MODULE = 'tabs';

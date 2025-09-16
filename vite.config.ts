@@ -28,26 +28,28 @@ export default defineConfig(({ command, mode }) => ({
         main: resolve(__dirname, 'index.html'),
         // 主模块打包
         'ts-web-module': resolve(__dirname, 'src/ts-web-module.ts'),
-        // 单独模块打包
+        // 组件模块单独打包到 modules 文件夹
         ...modules.reduce((entries, module) => {
           entries[`modules/${module}`] = resolve(__dirname, `src/modules/${module}.ts`);
           return entries;
-        }, {}),
-        // 示例页面
-        ...fs.readdirSync(resolve(__dirname, 'examples'))
-            .filter(file => file.endsWith('.html'))
-            .reduce((entries, file) => {
-              entries[`examples/${file.replace('.html', '')}`] = resolve(__dirname, 'examples', file);
-              return entries;
-            }, {})
+        }, {})
       },
       output: {
         format: 'es',
-        entryFileNames: mode === 'production' 
-          ? `[name]-${process.env.VERSION}.[format].min.js` 
-          : `[name]-${process.env.VERSION}.[format].js`,
-        chunkFileNames: mode === 'production' 
-          ? `[name]-${process.env.VERSION}.[format].min.js` 
+        entryFileNames: (chunkInfo) => {
+          // 如果 chunk 名称包含 modules/，则放入 modules 文件夹
+          if (chunkInfo.name.includes('modules/')) {
+            return mode === 'production'
+              ? `[name]-${process.env.VERSION}.[format].min.js`
+              : `[name]-${process.env.VERSION}.[format].js`;
+          }
+          // 其他文件保持原命名规则
+          return mode === 'production'
+            ? `[name]-${process.env.VERSION}.[format].min.js`
+            : `[name]-${process.env.VERSION}.[format].js`;
+        },
+        chunkFileNames: mode === 'production'
+          ? `[name]-${process.env.VERSION}.[format].min.js`
           : `[name]-${process.env.VERSION}.[format].js`,
         inlineDynamicImports: false,
         plugins: mode === 'production' ? [terser()] : []
