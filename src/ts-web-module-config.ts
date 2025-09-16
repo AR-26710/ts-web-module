@@ -9,7 +9,7 @@ export const moduleMap = {
     'resource-link': () => import('./modules/resource-link'),
     'tabs-box': () => import('./modules/tabs-box'),
     'text-box': () => import('./modules/text-box')
-  };
+};
 
 export const customElements = [
       'bilibili-video',
@@ -21,4 +21,4 @@ export const customElements = [
       'resource-link',
       'tabs-box',
       'text-box'
-    ];
+];
