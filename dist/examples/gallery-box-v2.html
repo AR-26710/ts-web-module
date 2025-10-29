@@ -1,0 +1,48 @@
+<h2>画廊组件 v2</h2>
+
+<h3>组件介绍</h3>
+<p>用于创建图片画廊的自定义Web组件，支持多张图片展示。</p>
+<p>该版本支持 Shadow DOM，优化了性能加载。</p>
+
+<h3>使用方式</h3>
+<p>在<code>&lt;gallery-box-v2&gt;</code>标签内放置<code>&lt;img&gt;</code>标签即可，支持任意数量的图片。</p>
+
+<h3>API 文档</h3>
+<p><strong>GalleryBoxV2Element - 支持 Shadow DOM 的图片画廊组件</strong></p>
+<p>这是一个现代化的图片画廊 Web Component，支持 Shadow DOM 和 Light DOM 模式切换，具有图片懒加载、无限循环、响应式设计和键盘导航等功能。</p>
+
+<h4>使用示例</h4>
+<p><strong>使用 Shadow DOM 模式：</strong></p>
+<pre><code>&lt;gallery-box-v2 pd="4" td="300" mode="shadow"&gt;
+  &lt;img src="image1.jpg" alt="Image 1"&gt;
+  &lt;img src="image2.jpg" alt="Image 2"&gt;
+  &lt;img src="image3.jpg" alt="Image 3"&gt;
+&lt;/gallery-box-v2&gt;</code></pre>
+
+<p><strong>使用 Light DOM 模式（默认）：</strong></p>
+<pre><code>&lt;gallery-box-v2 pd="3" td="500"&gt;
+  &lt;img src="image1.jpg" alt="Image 1"&gt;
+  &lt;img src="image2.jpg" alt="Image 2"&gt;
+&lt;/gallery-box-v2&gt;</code></pre>
+
+<h4>属性说明</h4>
+<ul>
+  <li><strong>pd</strong> - 预加载距离，控制前后预加载的图片数量（默认：4，最大：4）</li>
+  <li><strong>td</strong> - 过渡动画持续时间，单位毫秒（默认：300）</li>
+  <li><strong>mode</strong> - DOM 模式：'shadow' 使用 Shadow DOM，否则使用 Light DOM</li>
+</ul>
+
+<h3>使用示例</h3>
+
+<h4>画廊展示</h4>
+<gallery-box-v2>
+    <img src="images/1.jpg" alt="Image 1">
+    <img src="images/2.jpg" alt="Image 2">
+</gallery-box-v2>
+
+<h3>HTML代码</h3>
+<pre><code>&lt;gallery-box-v2&gt;
+    &lt;img src="images/1.jpg" alt="Image 1"&gt;
+    &lt;img src="images/2.jpg" alt="Image 2"&gt;
+&lt;/gallery-box-v2&gt;
+</code></pre>
