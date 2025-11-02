@@ -26,8 +26,9 @@ class ModuleLoader {
         customElements: config.customElements,
       };
     } catch (error) {
-      console.error('加载模块配置失败:', error);
-      throw new Error(`模块配置加载失败: ${error}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('[TsWebModule] 配置加载失败:', errorMessage);
+      throw new Error(`[TsWebModule] 配置加载失败: ${errorMessage}`);
     }
   }
 
@@ -51,13 +52,13 @@ class ModuleLoader {
 
     await this.initConfig();
     if (!this.moduleConfig?.moduleMap) {
-      console.warn('模块配置未加载');
+      console.warn('[TsWebModule] 模块配置未加载');
       return;
     }
 
     const moduleLoader = this.moduleConfig.moduleMap[tagName];
     if (!moduleLoader) {
-      console.warn(`未找到模块 ${tagName}`);
+      console.warn(`[TsWebModule] 未找到模块: ${tagName}`);
       return;
     }
 
@@ -65,11 +66,12 @@ class ModuleLoader {
       .then(() => {
         this.loadedModules.add(tagName);
         this.loadingModules.delete(tagName);
-        console.log(`模块 ${tagName} 加载成功`);
+        console.log(`[TsWebModule] ✓ ${tagName}`);
       })
       .catch((error) => {
         this.loadingModules.delete(tagName);
-        console.error(`加载模块 ${tagName} 失败：`, error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error(`[TsWebModule] ✗ ${tagName}:`, errorMessage);
         throw error;
       });
 
@@ -81,7 +83,7 @@ class ModuleLoader {
   public static async scanAndLoad(): Promise<void> {
     await this.initConfig();
     if (!this.moduleConfig?.customElements) {
-      console.warn('未找到自定义元素配置');
+      console.warn('[TsWebModule] 未找到自定义元素配置');
       return;
     }
 
@@ -96,7 +98,7 @@ class ModuleLoader {
     );
 
     if (elementsToLoad.length > 0) {
-      console.log(`找到 ${elementsToLoad.length} 个需要加载的模块：`, elementsToLoad);
+      console.log(`[TsWebModule] 扫描到 ${elementsToLoad.length} 个模块:`, elementsToLoad.join(', '));
       await Promise.all(elementsToLoad.map((tag) => this.loadModule(tag)));
     }
   }
@@ -109,7 +111,7 @@ const observer = new MutationObserver((mutations) => {
   const customElements = ModuleLoader.getCustomElements();
 
   if (!moduleMap || !customElements) {
-    console.warn('模块配置未加载，延迟进行 DOM 扫描');
+    console.warn('[TsWebModule] 配置未就绪，延迟扫描');
     setTimeout(() => ModuleLoader.scanAndLoad().catch(console.error), 100);
     return;
   }
@@ -131,7 +133,7 @@ const observer = new MutationObserver((mutations) => {
   });
 
   if (newElements.size > 0) {
-    console.log(`发现 ${newElements.size} 个新组件:`, Array.from(newElements));
+    console.log(`[TsWebModule] 动态发现 ${newElements.size} 个组件:`, Array.from(newElements).join(', '));
     newElements.forEach((tagName) => {
       ModuleLoader.loadModule(tagName).catch(console.error);
     });
