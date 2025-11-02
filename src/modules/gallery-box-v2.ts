@@ -55,9 +55,18 @@ class GalleryBoxV2Element extends HTMLElement {
   
   /** 过渡动画持续时间（毫秒） */
   private transitionDuration: number = 300;
-  
+
+  /** 缓动函数类型 */
+  private easingFunction: string = 'cubic-bezier(0.4, 0.0, 0.2, 1)';
+
   /** 是否正在执行过渡动画 */
   private isTransitioning: boolean = false;
+
+  /** 当前活动的图片元素 */
+  private activeImage: HTMLImageElement | null = null;
+
+  /** 下一张图片元素 */
+  private nextImage: HTMLImageElement | null = null;
   
   /** IntersectionObserver 实例，用于图片懒加载 */
   private observer: IntersectionObserver | null = null;
@@ -124,7 +133,7 @@ class GalleryBoxV2Element extends HTMLElement {
    * @returns {string[]} 需要监听的属性名称数组
    */
   static get observedAttributes() {
-    return ['pd', 'td', 'mode'];
+    return ['pd', 'td', 'mode', 'easing'];
   }
 
   /**
@@ -152,8 +161,13 @@ class GalleryBoxV2Element extends HTMLElement {
       const duration = parseInt(newValue, 10);
       if (!isNaN(duration) && duration > 0) {
         this.transitionDuration = duration;
-        this.track.style.transition = `transform ${this.transitionDuration}ms ease`;
+        this.track.style.transition = `transform ${this.transitionDuration}ms ${this.easingFunction}`;
       }
+    }
+
+    if (name === 'easing' && newValue) {
+      this.easingFunction = newValue;
+      this.track.style.transition = `transform ${this.transitionDuration}ms ${this.easingFunction}`;
     }
   }
 
@@ -190,26 +204,50 @@ class GalleryBoxV2Element extends HTMLElement {
         max-width: 100%;
         max-height: 600px;
         object-fit: contain;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.5s cubic-bezier(0.4, 0.0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+        will-change: opacity, transform;
       }
 
       .gbv2-gallery-item img.loading {
-        opacity: 0.3;
+        opacity: 0;
+        transform: scale(0.95);
         background: #f5f5f5;
       }
 
       .gbv2-gallery-item img.loaded {
         opacity: 1;
+        transform: scale(1);
       }
 
       .gbv2-gallery-item img.error {
         opacity: 1;
+        transform: scale(1);
         background: #ffebee;
         color: #b71c1c;
         display: flex;
         align-items: center;
         justify-content: center;
         min-height: 200px;
+      }
+
+      .gbv2-gallery-item {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .gbv2-gallery-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%, #f0f0f0),
+                    linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%, #f0f0f0);
+        background-size: 20px 20px;
+        background-position: 0 0, 10px 10px;
+        opacity: 0.3;
+        z-index: -1;
       }
 
       .gbv2-gallery-nav {
@@ -259,7 +297,7 @@ class GalleryBoxV2Element extends HTMLElement {
 
     this.container.className = 'gbv2-gallery-container';
     this.track.className = 'gbv2-gallery-track';
-    this.track.style.transition = `transform ${this.transitionDuration}ms ease`;
+    this.track.style.transition = `transform ${this.transitionDuration}ms ${this.easingFunction}`;
     
     this.prevButton.className = 'gbv2-gallery-nav prev';
     this.prevButton.innerHTML = '‹';
@@ -296,8 +334,14 @@ class GalleryBoxV2Element extends HTMLElement {
       const dur = parseInt(duration, 10);
       if (!isNaN(dur) && dur > 0) {
         this.transitionDuration = dur;
-        this.track.style.transition = `transform ${this.transitionDuration}ms ease`;
+        this.track.style.transition = `transform ${this.transitionDuration}ms ${this.easingFunction}`;
       }
+    }
+
+    const easing = this.getAttribute('easing');
+    if (easing) {
+      this.easingFunction = easing;
+      this.track.style.transition = `transform ${this.transitionDuration}ms ${this.easingFunction}`;
     }
   }
 
@@ -438,14 +482,14 @@ class GalleryBoxV2Element extends HTMLElement {
       this.currentIndex = 0;
       this.track.style.transform = 'translateX(0%)';
       void this.track.offsetWidth;
-      this.track.style.transition = `transform ${this.transitionDuration}ms ease`;
+      this.track.style.transition = `transform ${this.transitionDuration}ms ${this.easingFunction}`;
       this.loopDirection = null;
     } else if (this.loopDirection === 'prev') {
       this.track.style.transition = 'none';
       this.currentIndex = this.items.length - 1;
       this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
       void this.track.offsetWidth;
-      this.track.style.transition = `transform ${this.transitionDuration}ms ease`;
+      this.track.style.transition = `transform ${this.transitionDuration}ms ${this.easingFunction}`;
       this.loopDirection = null;
     }
 
@@ -463,7 +507,7 @@ class GalleryBoxV2Element extends HTMLElement {
     this.track.style.transition = 'none';
     this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
     void this.track.offsetWidth;
-    this.track.style.transition = `transform ${this.transitionDuration}ms ease`;
+    this.track.style.transition = `transform ${this.transitionDuration}ms ${this.easingFunction}`;
     this.loadVisibleImages();
   }
 
@@ -485,12 +529,25 @@ class GalleryBoxV2Element extends HTMLElement {
   /**
    * 更新画廊显示
    * 
-   * 根据当前索引更新轨道位置和计数器。
+   * 根据当前索引更新轨道位置和计数器，添加淡入淡出效果。
    */
   private updateGallery() {
     if (this.isTransitioning) return;
     
     this.isTransitioning = true;
+    
+    // 获取当前和下一个图片元素以实现淡入淡出效果
+    const currentItem = this.track.children[this.currentIndex] as HTMLElement;
+    const currentImg = currentItem?.querySelector('img') as HTMLImageElement;
+    
+    if (currentImg) {
+      // 确保当前图片完全可见
+      currentImg.style.opacity = '1';
+      currentImg.style.transform = 'scale(1)';
+      currentImg.classList.remove('loading');
+      currentImg.classList.add('loaded');
+    }
+    
     this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
     this.updateCounter();
   }
@@ -631,6 +688,18 @@ class GalleryBoxV2Element extends HTMLElement {
       this.handleLoopTransition(direction);
     } else {
       this.currentIndex = newIndex;
+      // 根据方向调整动画效果
+      if (direction === 'next') {
+        this.easingFunction = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'; // easeOutQuad
+      } else {
+        this.easingFunction = 'cubic-bezier(0.55, 0.085, 0.68, 0.53)'; // easeInQuad
+      }
+      // 临时更新轨道过渡效果
+      this.track.style.transition = `transform ${this.transitionDuration}ms ${this.easingFunction}`;
+      // 动画完成后恢复默认缓动函数
+      setTimeout(() => {
+        this.easingFunction = 'cubic-bezier(0.4, 0.0, 0.2, 1)'; // 恢复默认easeOutCubic
+      }, this.transitionDuration);
       this.updateGallery();
     }
   }
@@ -644,6 +713,19 @@ class GalleryBoxV2Element extends HTMLElement {
     if (direction === 'next') {
       const firstItem = this.track.children[0] as HTMLElement;
       this.cloneElement = firstItem.cloneNode(true) as HTMLElement;
+      
+      // 添加淡入效果到克隆元素
+      const cloneImg = this.cloneElement.querySelector('img') as HTMLImageElement;
+      if (cloneImg) {
+        cloneImg.style.opacity = '0';
+        cloneImg.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          cloneImg.style.transition = 'opacity 0.5s cubic-bezier(0.4, 0.0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1)';
+          cloneImg.style.opacity = '1';
+          cloneImg.style.transform = 'scale(1)';
+        }, 50);
+      }
+      
       this.track.appendChild(this.cloneElement);
       this.currentIndex = this.items.length;
       this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
@@ -651,11 +733,24 @@ class GalleryBoxV2Element extends HTMLElement {
     } else {
       const lastItem = this.track.children[this.items.length - 1] as HTMLElement;
       this.cloneElement = lastItem.cloneNode(true) as HTMLElement;
+      
+      // 添加淡入效果到克隆元素
+      const cloneImg = this.cloneElement.querySelector('img') as HTMLImageElement;
+      if (cloneImg) {
+        cloneImg.style.opacity = '0';
+        cloneImg.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          cloneImg.style.transition = 'opacity 0.5s cubic-bezier(0.4, 0.0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1)';
+          cloneImg.style.opacity = '1';
+          cloneImg.style.transform = 'scale(1)';
+        }, 50);
+      }
+      
       this.track.insertBefore(this.cloneElement, this.track.firstChild);
       this.track.style.transition = 'none';
       this.track.style.transform = `translateX(-100%)`;
       void this.track.offsetWidth;
-      this.track.style.transition = `transform ${this.transitionDuration}ms ease`;
+      this.track.style.transition = `transform ${this.transitionDuration}ms ${this.easingFunction}`;
       this.track.style.transform = `translateX(0%)`;
       this.isTransitioning = true;
     }
