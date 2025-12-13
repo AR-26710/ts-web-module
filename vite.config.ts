@@ -1,59 +1,59 @@
-import { defineConfig } from 'vite';
-import { resolve } from 'path';
+import {defineConfig} from 'vite';
+import {resolve} from 'path';
 import dotenv from 'dotenv';
 import copy from 'rollup-plugin-copy';
 
 dotenv.config();
 
 // 动态导入模块配置
-import { modules, moduleFileMap } from './src/modules-config';
+import {modules, moduleFileMap} from './src/modules-config';
 
-export default defineConfig(({ mode }) => {
-  const isProduction = mode === 'production';
-  const version = process.env.VERSION;
+export default defineConfig(({mode}) => {
+    const isProduction = mode === 'production';
+    const version = process.env.VERSION;
 
-  return {
-    base: './',
-    build: {
-      outDir: 'dist',
-      rollupOptions: {
-        input: {
-          // 主入口文件
-          main: resolve(__dirname, 'index.html'),
-          // 主模块打包
-          'ts-web-module': resolve(__dirname, 'src/ts-web-module.ts'),
-          // 组件模块单独打包到 modules 文件夹
-          ...modules.reduce((entries, module) => {
-            const fileName = moduleFileMap[module] || module;
-            entries[`modules/${module}`] = resolve(__dirname, `src/modules/${fileName}.ts`);
-            return entries;
-          }, {})
-        },
-        output: {
-          format: 'es',
-          entryFileNames: (chunkInfo) => {
-            return isProduction
-              ? `${chunkInfo.name}-${version}.[format].min.js`
-              : `${chunkInfo.name}-${version}.[format].js`;
-          },
-          chunkFileNames: isProduction
-            ? `[name]-${version}.[format].min.js`
-            : `[name]-${version}.[format].js`,
-          inlineDynamicImports: false
-        },
-        plugins: [
-          copy({
-            targets: [
-              { src: 'examples/**/*', dest: 'dist/examples' }
-            ],
-            hook: 'closeBundle' // 在构建结束后执行复制操作
-          })
-        ]
-      },
-      // 清除dist目录
-      emptyOutDir: true,
-      // 根据模式决定是否压缩
-      minify: isProduction ? 'terser' : false
-    }
-  };
+    return {
+        base: './',
+        build: {
+            outDir: 'dist',
+            rollupOptions: {
+                input: {
+                    // 主入口文件
+                    main: resolve(__dirname, 'index.html'),
+                    // 主模块打包
+                    'ts-web-module': resolve(__dirname, 'src/ts-web-module.ts'),
+                    // 组件模块单独打包到 modules 文件夹
+                    ...modules.reduce((entries: { [key: string]: string }, module) => {
+                        const fileName = moduleFileMap[module] || module;
+                        entries[`modules/${module}`] = resolve(__dirname, `src/modules/${fileName}/index.ts`);
+                        return entries;
+                    }, {})
+                },
+                output: {
+                    format: 'es',
+                    entryFileNames: (chunkInfo) => {
+                        return isProduction
+                            ? `${chunkInfo.name}-${version}.[format].min.js`
+                            : `${chunkInfo.name}-${version}.[format].js`;
+                    },
+                    chunkFileNames: isProduction
+                        ? `[name]-${version}.[format].min.js`
+                        : `[name]-${version}.[format].js`,
+                    inlineDynamicImports: false
+                },
+                plugins: [
+                    copy({
+                        targets: [
+                            {src: 'examples/**/*', dest: 'dist/examples'}
+                        ],
+                        hook: 'closeBundle' // 在构建结束后执行复制操作
+                    })
+                ]
+            },
+            // 清除dist目录
+            emptyOutDir: true,
+            // 根据模式决定是否压缩
+            minify: isProduction ? 'terser' : false
+        }
+    };
 });

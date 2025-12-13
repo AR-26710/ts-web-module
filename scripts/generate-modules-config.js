@@ -53,13 +53,15 @@ function loadSpecialCaseConfig() {
  */
 function getModuleFiles() {
   try {
-    const files = fs.readdirSync(modulesDir);
-    return files.filter(file => 
-      file.endsWith('.ts') && 
-      file !== 'index.ts' &&
-      !file.includes('.test.') && // 排除测试文件
-      !file.includes('.spec.')    // 排除测试文件
-    );
+    const entries = fs.readdirSync(modulesDir, { withFileTypes: true });
+    return entries
+      .filter(entry => entry.isDirectory()) // 只处理目录
+      .map(dir => dir.name) // 获取目录名
+      .filter(dir => {
+        // 检查目录下是否存在 index.ts 文件
+        const indexPath = path.join(modulesDir, dir, 'index.ts');
+        return fs.existsSync(indexPath);
+      });
   } catch (error) {
     console.error('无法读取模块目录:', error.message);
     process.exit(1);
