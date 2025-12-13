@@ -1,0 +1,36 @@
+<h2>网盘链接组件</h2>
+
+<h3>组件介绍</h3>
+<p>用于展示网盘下载链接的自定义Web组件，支持显示网盘类型、标题、提取码等信息。</p>
+
+<h3>属性说明</h3>
+<ul>
+<li><strong>type</strong> (必需): 网盘类型，如"百度网盘"、"腾讯微云"等</li>
+<li><strong>url</strong> (必需): 网盘链接地址</li>
+<li><strong>title</strong> (必需): 资源标题</li>
+<li><strong>password</strong> (可选): 提取码，点击可自动复制</li>
+</ul>
+
+<h3>使用示例</h3>
+
+<h4>无提取码的网盘链接</h4>
+<cloud-drive type="百度网盘" url="https://pan.baidu.com/s/1MMJxnZRhIJu-Rph_4yTjkQ?pwd=e2rr" title="HaloThemeZipToolGUI"></cloud-drive>
+
+<h4>带提取码的网盘链接</h4>
+<cloud-drive type="百度网盘" url="https://pan.baidu.com/s/1MMJxnZRhIJu-Rph_4yTjkQ?pwd=e2rr" title="HaloThemeZipToolGUI" password="e2rr"></cloud-drive>
+
+<h3>HTML代码</h3>
+<pre><code>&lt;!-- 无提取码的网盘链接 --&gt;
+&lt;cloud-drive type="百度网盘" url="https://pan.baidu.com/s/1MMJxnZRhIJu-Rph_4yTjkQ?pwd=e2rr" title="HaloThemeZipToolGUI"&gt;&lt;/cloud-drive&gt;
+
+&lt;!-- 带提取码的网盘链接 --&gt;
+&lt;cloud-drive type="百度网盘" url="https://pan.baidu.com/s/1MMJxnZRhIJu-Rph_4yTjkQ?pwd=e2rr" title="HaloThemeZipToolGUI" password="e2rr"&gt;&lt;/cloud-drive&gt;
+</code></pre>
+
+<h3>功能特性</h3>
+<ul>
+<li>显示网盘类型图标</li>
+<li>点击提取码可自动复制到剪贴板</li>
+<li>悬停效果增强用户体验</li>
+<li>标题过长时自动省略</li>
+</ul>
