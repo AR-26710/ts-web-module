@@ -1,11 +1,18 @@
 import { defineConfig } from 'vitepress'
 
+const isDev = process.env.NODE_ENV === 'development' || process.env.DEV === 'true'
+
+// 本地开发时使用 Vite 服务地址，生产环境使用 CDN
+const moduleScriptSrc = isDev
+  ? 'http://localhost:5173/src/ts-web-module.ts'
+  : 'https://cdn.jsdelivr.net/gh/AR-26710/ts-web-module@1.10.3/dist/main-1.10.3.es.min.js'
+
 export default defineConfig({
   base: '/',
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico', type: 'image/x-icon' }],
-    // 引入 Web 组件库，使文档中的自定义元素生效（开发时可先 build 后使用 /ts-web-module-xxx.js）
-    ['script', { src: 'https://cdn.jsdelivr.net/gh/AR-26710/ts-web-module@1.10.3/dist/main-1.10.3.es.min.js', type: 'module' }],
+    // 引入 Web 组件库，使文档中的自定义元素生效（开发时使用本地资源，生产使用 CDN）
+    ['script', { src: moduleScriptSrc, type: 'module' }],
   ],
   vue: {
     template: {

@@ -8,11 +8,14 @@
     "gen:config": "node scripts/generate-modules-config.js",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "dev:all": "concurrently \"npm run dev\" \"cross-env DEV=true npm run docs:dev\""
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
     "@types/dotenv": "^8.2.3",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.0.1",
     "rollup-plugin-copy": "^3.5.0",
     "typescript": "^5.2.2",
