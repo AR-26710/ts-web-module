@@ -1,10 +1,60 @@
 ---
-layout: doc
+layout: home
+
+hero:
+  name: Ts-Web-Module
+  text: Web Components Collection
+  tagline: A variety of commonly used functional components to enrich your web content
+  actions:
+    - theme: brand
+      text: Get Started
+      link: /en/guide/introduction
+    - theme: alt
+      text: Browse Components
+      link: /en/components/bilibili-video
+    - theme: alt
+      text: GitHub
+      link: https://github.com/AR-26710/ts-web-module
+
+features:
+  - icon: 🎬
+    title: Bilibili Video
+    details: Easily embed Bilibili videos in web pages with customizable parameters
+    link: /en/components/bilibili-video
+  - icon: 🔗
+    title: Resource Link
+    details: Dual-text resource/download links, beautiful and practical
+    link: /en/components/resource-link
+  - icon: 📦
+    title: Cloud Drive
+    details: Display cloud drive type, title, and extraction code with one-click copy
+    link: /en/components/cloud-drive
+  - icon: 📊
+    title: Progress Box
+    details: Progress bar component with customizable colors and percentages
+    link: /en/components/progress-box
+  - icon: 🗂️
+    title: Tabs Box
+    details: Multi-tab content switching for better information organization
+    link: /en/components/tabs-box
+  - icon: 🖼️
+    title: Gallery
+    details: Image gallery display with multiple style variants
+    link: /en/components/gallery-box
+  - icon: 🎭
+    title: Black Curtain
+    details: Hover/click to reveal hidden content, adding interactive fun
+    link: /en/components/black-curtain
+  - icon: 🔒
+    title: Password Box
+    details: Content revealed after password verification, protecting sensitive info
+    link: /en/components/password-box
+  - icon: 📝
+    title: Text Box
+    details: Normal/warning/error/success message boxes for various states
+    link: /en/components/text-box
+
 ---
-
-# Ts-Web-Module
-
-A **Web Components collection** based on TypeScript, providing various commonly used functional components to enrich web content.
 
 ## Quick Start
 
@@ -16,24 +66,11 @@ Import via CDN and use custom elements directly:
 <!-- Example: Bilibili Video -->
 <bilibili-video bvid="BV1b44y1q7Cb"></bilibili-video>
 ```
+or import individually:
 
-## Component Overview
+```html
+<script src="https://cdn.jsdelivr.net/gh/AR-26710/ts-web-module@1.10.3/dist/modules/bilibili-video-1.10.3.es.min.js" type="module"></script>
 
-| Component | Description |
-|-----------|-------------|
-| [Bilibili Video](/en/components/bilibili-video) | Embed Bilibili videos in web pages |
-| [Resource Link](/en/components/resource-link) | Dual-text resource/download links |
-| [Text Box](/en/components/text-box) | Normal/warning/error/success message boxes |
-| [Cloud Drive](/en/components/cloud-drive) | Cloud drive type, title, and extraction code display |
-| [Progress Box](/en/components/progress-box) | Progress bar with customizable color and percentage |
-| [Tabs Box](/en/components/tabs-box) | Multi-tab content switching |
-| [Perspective View](/en/components/perspective-view) | Dual-image perspective effect |
-| [Gallery](/en/components/gallery-box) | Image gallery (Shadow / No Shadow / v2) |
-| [Black Curtain](/en/components/black-curtain) | Hover/click to reveal hidden content |
-| [Black Text](/en/components/black-text) | Text-only spoiler effect |
-| [Password Box](/en/components/password-box) | Content revealed after password verification |
-
-## Next Steps
-
-- [Introduction & Usage](/en/guide/introduction) — Installation and reference guide
-- [Component Docs](/en/components/bilibili-video) — Component properties and examples
+<!-- Example: Bilibili Video -->
+<bilibili-video bvid="BV1b44y1q7Cb"></bilibili-video>
+```
