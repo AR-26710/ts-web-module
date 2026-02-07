@@ -42,8 +42,16 @@
 ### 画廊展示
 
 <gallery-box-v2>
-    <img src="/images/1.jpg" alt="Image 1">
-    <img src="/images/2.jpg" alt="Image 2">
+    <img src="https://blog-r2.makeinu.cn/cosplay/4/cosplay-4-7rXM.webp" alt="cosplay-4-7rXM.webp">
+    <img src="https://blog-r2.makeinu.cn/cosplay/4/cosplay-4-9S8F.webp" alt="cosplay-4-9S8F.webp">
+    <img src="https://blog-r2.makeinu.cn/cosplay/4/cosplay-4-pRPN.webp" alt="cosplay-4-pRPN.webp">
+    <img src="https://blog-r2.makeinu.cn/cosplay/4/cosplay-4-5B4j.webp" alt="cosplay-4-5B4j.webp">
+    <img src="https://blog-r2.makeinu.cn/cosplay/4/cosplay-4-jGSJ.webp" alt="cosplay-4-jGSJ.webp">
+    <img src="https://blog-r2.makeinu.cn/cosplay/4/cosplay-4-5Zip.webp" alt="cosplay-4-5Zip.webp">
+    <img src="https://blog-r2.makeinu.cn/cosplay/4/cosplay-4-7135.webp" alt="cosplay-4-7135.webp">
+    <img src="https://blog-r2.makeinu.cn/cosplay/4/cosplay-4-Qle2.webp" alt="cosplay-4-Qle2.webp">
+    <img src="https://blog-r2.makeinu.cn/cosplay/4/cosplay-4-4WRY.webp" alt="cosplay-4-4WRY.webp">
+    <img src="https://blog-r2.makeinu.cn/cosplay/4/cosplay-4-DTAK.webp" alt="cosplay-4-DTAK.webp">
 </gallery-box-v2>
 
 ## HTML 代码
