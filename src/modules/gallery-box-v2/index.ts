@@ -298,6 +298,16 @@ class GalleryBoxV2Element extends HTMLElement {
       this.lastClone = lastItem.cloneNode(true) as HTMLElement;
       this.lastClone.dataset.index = String(this.items.length);
       this.lastClone.style.opacity = '0';
+      
+      const firstImg = this.firstClone.querySelector('img') as HTMLImageElement;
+      if (firstImg && firstImg.dataset.src) {
+        firstImg.src = '';
+      }
+      
+      const lastImg = this.lastClone.querySelector('img') as HTMLImageElement;
+      if (lastImg && lastImg.dataset.src) {
+        lastImg.src = '';
+      }
     }
 
     this.updateCounter();
@@ -483,14 +493,20 @@ class GalleryBoxV2Element extends HTMLElement {
   private loadVisibleImages() {
     if (this.items.length === 0) return;
 
-    const startIndex = Math.max(0, this.currentIndex - this.preloadDistance);
-    const endIndex = Math.min(this.items.length - 1, this.currentIndex + this.preloadDistance);
+    const startIndex = this.currentIndex - this.preloadDistance;
+    const endIndex = this.currentIndex + this.preloadDistance;
 
     for (let i = startIndex; i <= endIndex; i++) {
-      if (!this.loadedIndices.has(i)) {
-        this.loadImageAtIndex(i);
+      const normalizedIndex = this.normalizeIndex(i);
+      if (!this.loadedIndices.has(normalizedIndex)) {
+        this.loadImageAtIndex(normalizedIndex);
       }
     }
+  }
+
+  private normalizeIndex(index: number): number {
+    if (this.items.length === 0) return 0;
+    return ((index % this.items.length) + this.items.length) % this.items.length;
   }
 
   /**
@@ -500,11 +516,16 @@ class GalleryBoxV2Element extends HTMLElement {
    */
   private cleanupFarImages() {
     const cleanupDistance = this.preloadDistance * 2;
-    const startIndex = Math.max(0, this.currentIndex - cleanupDistance);
-    const endIndex = Math.min(this.items.length - 1, this.currentIndex + cleanupDistance);
+    const startIndex = this.currentIndex - cleanupDistance;
+    const endIndex = this.currentIndex + cleanupDistance;
+
+    const indicesToKeep = new Set<number>();
+    for (let i = startIndex; i <= endIndex; i++) {
+      indicesToKeep.add(this.normalizeIndex(i));
+    }
 
     this.loadedIndices.forEach(index => {
-      if (index < startIndex || index > endIndex) {
+      if (!indicesToKeep.has(index)) {
         const item = this.items[index];
         const img = this.getImageFromItem(item);
         if (img && img.src) {
@@ -536,7 +557,7 @@ class GalleryBoxV2Element extends HTMLElement {
    * @param {number} index - 图片索引
    */
   private loadImageAtIndex(index: number) {
-    if (index < 0 || index >= this.items.length || this.loadedIndices.has(index)) return;
+    if (this.items.length === 0 || this.loadedIndices.has(index)) return;
 
     const item = this.items[index];
     const img = this.getImageFromItem(item);
@@ -549,6 +570,24 @@ class GalleryBoxV2Element extends HTMLElement {
         img.classList.remove('loading', 'error');
         img.classList.add('loaded');
         this.loadedIndices.add(index);
+        
+        if (this.firstClone && index === 0) {
+          const cloneImg = this.firstClone.querySelector('img') as HTMLImageElement;
+          if (cloneImg && cloneImg.dataset.src) {
+            cloneImg.src = src;
+            cloneImg.classList.remove('loading', 'error');
+            cloneImg.classList.add('loaded');
+          }
+        }
+        
+        if (this.lastClone && index === this.items.length - 1) {
+          const cloneImg = this.lastClone.querySelector('img') as HTMLImageElement;
+          if (cloneImg && cloneImg.dataset.src) {
+            cloneImg.src = src;
+            cloneImg.classList.remove('loading', 'error');
+            cloneImg.classList.add('loaded');
+          }
+        }
       };
       
       preloadImg.onerror = () => {
