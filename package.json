@@ -5,15 +5,25 @@
     "dev": "node scripts/generate-modules-config.js && vite",
     "build": "node scripts/generate-modules-config.js && tsc && vite build",
     "preview": "vite preview",
-    "gen:config": "node scripts/generate-modules-config.js"
+    "gen:config": "node scripts/generate-modules-config.js",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "dev:all": "concurrently \"npm run dev\" \"cross-env DEV=true npm run docs:dev\"",
+    "build:all": "npm run docs:build && cross-env COPY_TO_DOCS=true npm run build",
+    "copy:dist": "cross-env COPY_TO_DOCS=true vite build",
+    "vercel-build": "npm run build:all"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
     "@types/dotenv": "^8.2.3",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.0.1",
     "rollup-plugin-copy": "^3.5.0",
     "typescript": "^5.2.2",
-    "vite": "^4.5.0",
-    "vite-plugin-copy": "^0.1.6"
+    "vite": "^8.0.0-beta.13",
+    "vite-plugin-copy": "^0.1.6",
+    "vitepress": "^2.0.0-alpha.16"
   }
 }

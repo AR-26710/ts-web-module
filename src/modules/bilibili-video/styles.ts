@@ -4,6 +4,7 @@ export const BILIBILI_VIDEO_STYLES = `
     width: 100%;
     height: 0;
     padding-bottom: 56.25%; /* 16:9 宽高比 */
+    margin-top: 16px;
   }
   .bilibili-video-wrapper iframe {
     position: absolute;

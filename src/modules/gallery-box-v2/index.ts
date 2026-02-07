@@ -85,6 +85,12 @@ class GalleryBoxV2Element extends HTMLElement {
   
   /** 用于循环过渡的克隆元素 */
   private cloneElement: HTMLElement | null = null;
+  
+  /** 预克隆的第一张图片元素 */
+  private firstClone: HTMLElement | null = null;
+  
+  /** 预克隆的最后一张图片元素 */
+  private lastClone: HTMLElement | null = null;
 
   /**
    * 构造函数 - 初始化画廊组件
@@ -128,6 +134,16 @@ class GalleryBoxV2Element extends HTMLElement {
   disconnectedCallback() {
     this.removeEventListeners();
     this.cleanupIntersectionObserver();
+    
+    if (this.firstClone && this.firstClone.parentNode) {
+      this.firstClone.parentNode.removeChild(this.firstClone);
+    }
+    if (this.lastClone && this.lastClone.parentNode) {
+      this.lastClone.parentNode.removeChild(this.lastClone);
+    }
+    if (this.cloneElement && this.cloneElement.parentNode) {
+      this.cloneElement.parentNode.removeChild(this.cloneElement);
+    }
   }
 
   /**
@@ -272,6 +288,28 @@ class GalleryBoxV2Element extends HTMLElement {
       this.track.appendChild(itemElement);
     });
 
+    if (this.items.length > 1) {
+      const firstItem = this.track.children[0] as HTMLElement;
+      this.firstClone = firstItem.cloneNode(true) as HTMLElement;
+      this.firstClone.dataset.index = '-1';
+      this.firstClone.style.opacity = '0';
+      
+      const lastItem = this.track.children[this.items.length - 1] as HTMLElement;
+      this.lastClone = lastItem.cloneNode(true) as HTMLElement;
+      this.lastClone.dataset.index = String(this.items.length);
+      this.lastClone.style.opacity = '0';
+      
+      const firstImg = this.firstClone.querySelector('img') as HTMLImageElement;
+      if (firstImg && firstImg.dataset.src) {
+        firstImg.src = '';
+      }
+      
+      const lastImg = this.lastClone.querySelector('img') as HTMLImageElement;
+      if (lastImg && lastImg.dataset.src) {
+        lastImg.src = '';
+      }
+    }
+
     this.updateCounter();
   }
 
@@ -362,8 +400,14 @@ class GalleryBoxV2Element extends HTMLElement {
     this.isTransitioning = false;
 
     if (this.cloneElement) {
-      this.track.removeChild(this.cloneElement);
-      this.cloneElement = null;
+      this.cloneElement.style.opacity = '0';
+      this.cloneElement.style.transition = 'none';
+      setTimeout(() => {
+        if (this.cloneElement && this.cloneElement.parentNode === this.track) {
+          this.track.removeChild(this.cloneElement);
+        }
+        this.cloneElement = null;
+      }, 50);
     }
 
     if (this.loopDirection === 'next') {
@@ -449,14 +493,20 @@ class GalleryBoxV2Element extends HTMLElement {
   private loadVisibleImages() {
     if (this.items.length === 0) return;
 
-    const startIndex = Math.max(0, this.currentIndex - this.preloadDistance);
-    const endIndex = Math.min(this.items.length - 1, this.currentIndex + this.preloadDistance);
+    const startIndex = this.currentIndex - this.preloadDistance;
+    const endIndex = this.currentIndex + this.preloadDistance;
 
     for (let i = startIndex; i <= endIndex; i++) {
-      if (!this.loadedIndices.has(i)) {
-        this.loadImageAtIndex(i);
+      const normalizedIndex = this.normalizeIndex(i);
+      if (!this.loadedIndices.has(normalizedIndex)) {
+        this.loadImageAtIndex(normalizedIndex);
       }
     }
+  }
+
+  private normalizeIndex(index: number): number {
+    if (this.items.length === 0) return 0;
+    return ((index % this.items.length) + this.items.length) % this.items.length;
   }
 
   /**
@@ -466,11 +516,16 @@ class GalleryBoxV2Element extends HTMLElement {
    */
   private cleanupFarImages() {
     const cleanupDistance = this.preloadDistance * 2;
-    const startIndex = Math.max(0, this.currentIndex - cleanupDistance);
-    const endIndex = Math.min(this.items.length - 1, this.currentIndex + cleanupDistance);
+    const startIndex = this.currentIndex - cleanupDistance;
+    const endIndex = this.currentIndex + cleanupDistance;
+
+    const indicesToKeep = new Set<number>();
+    for (let i = startIndex; i <= endIndex; i++) {
+      indicesToKeep.add(this.normalizeIndex(i));
+    }
 
     this.loadedIndices.forEach(index => {
-      if (index < startIndex || index > endIndex) {
+      if (!indicesToKeep.has(index)) {
         const item = this.items[index];
         const img = this.getImageFromItem(item);
         if (img && img.src) {
@@ -502,7 +557,7 @@ class GalleryBoxV2Element extends HTMLElement {
    * @param {number} index - 图片索引
    */
   private loadImageAtIndex(index: number) {
-    if (index < 0 || index >= this.items.length || this.loadedIndices.has(index)) return;
+    if (this.items.length === 0 || this.loadedIndices.has(index)) return;
 
     const item = this.items[index];
     const img = this.getImageFromItem(item);
@@ -515,6 +570,24 @@ class GalleryBoxV2Element extends HTMLElement {
         img.classList.remove('loading', 'error');
         img.classList.add('loaded');
         this.loadedIndices.add(index);
+        
+        if (this.firstClone && index === 0) {
+          const cloneImg = this.firstClone.querySelector('img') as HTMLImageElement;
+          if (cloneImg && cloneImg.dataset.src) {
+            cloneImg.src = src;
+            cloneImg.classList.remove('loading', 'error');
+            cloneImg.classList.add('loaded');
+          }
+        }
+        
+        if (this.lastClone && index === this.items.length - 1) {
+          const cloneImg = this.lastClone.querySelector('img') as HTMLImageElement;
+          if (cloneImg && cloneImg.dataset.src) {
+            cloneImg.src = src;
+            cloneImg.classList.remove('loading', 'error');
+            cloneImg.classList.add('loaded');
+          }
+        }
       };
       
       preloadImg.onerror = () => {
@@ -600,42 +673,22 @@ class GalleryBoxV2Element extends HTMLElement {
    */
   private handleLoopTransition(direction: GallerySlideDirection) {
     if (direction === 'next') {
-      const firstItem = this.track.children[0] as HTMLElement;
-      this.cloneElement = firstItem.cloneNode(true) as HTMLElement;
+      this.cloneElement = this.firstClone;
       
-      // 添加淡入效果到克隆元素
-      const cloneImg = this.cloneElement.querySelector('img') as HTMLImageElement;
-      if (cloneImg) {
-        cloneImg.style.opacity = '0';
-        cloneImg.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-          cloneImg.style.transition = 'opacity 0.5s cubic-bezier(0.4, 0.0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1)';
-          cloneImg.style.opacity = '1';
-          cloneImg.style.transform = 'scale(1)';
-        }, 50);
+      if (this.cloneElement && this.cloneElement.parentNode !== this.track) {
+        this.track.appendChild(this.cloneElement);
       }
       
-      this.track.appendChild(this.cloneElement);
       this.currentIndex = this.items.length;
       this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
       this.isTransitioning = true;
     } else {
-      const lastItem = this.track.children[this.items.length - 1] as HTMLElement;
-      this.cloneElement = lastItem.cloneNode(true) as HTMLElement;
+      this.cloneElement = this.lastClone;
       
-      // 添加淡入效果到克隆元素
-      const cloneImg = this.cloneElement.querySelector('img') as HTMLImageElement;
-      if (cloneImg) {
-        cloneImg.style.opacity = '0';
-        cloneImg.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-          cloneImg.style.transition = 'opacity 0.5s cubic-bezier(0.4, 0.0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1)';
-          cloneImg.style.opacity = '1';
-          cloneImg.style.transform = 'scale(1)';
-        }, 50);
+      if (this.cloneElement && this.cloneElement.parentNode !== this.track) {
+        this.track.insertBefore(this.cloneElement, this.track.firstChild);
       }
       
-      this.track.insertBefore(this.cloneElement, this.track.firstChild);
       this.track.style.transition = 'none';
       this.track.style.transform = `translateX(-100%)`;
       void this.track.offsetWidth;
