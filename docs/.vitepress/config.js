@@ -1,11 +1,16 @@
 import { defineConfig } from 'vitepress'
+import dotenv from 'dotenv'
+
+// 加载环境变量
+dotenv.config()
 
 const isDev = process.env.NODE_ENV === 'development' || process.env.DEV === 'true'
+const version = process.env.VERSION || '1.0.0'
 
 // 本地开发时使用 Vite 服务地址，生产环境使用 CDN
 const moduleScriptSrc = isDev
   ? 'http://localhost:5173/src/ts-web-module.ts'
-  : 'https://cdn.jsdelivr.net/gh/AR-26710/ts-web-module@1.10.3/dist/main-1.10.3.es.min.js'
+  : `/src/main-${version}.esm.min.js`
 
 export default defineConfig({
   base: '/',
