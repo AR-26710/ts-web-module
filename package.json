@@ -10,7 +10,9 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "dev:all": "concurrently \"npm run dev\" \"cross-env DEV=true npm run docs:dev\"",
-    "build:all": "npm run docs:build && cross-env COPY_TO_DOCS=true npm run build"
+    "build:all": "npm run docs:build && cross-env COPY_TO_DOCS=true npm run build",
+    "copy:dist": "cross-env COPY_TO_DOCS=true vite build",
+    "vercel-build": "npm run build:all"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
