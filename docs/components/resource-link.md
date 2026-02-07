@@ -17,7 +17,7 @@
 
 ### 带文件格式的资源链接
 
-<resource-link left-text="文档" right-text="PDF" href="/file.pdf" target="_blank"></resource-link>
+<resource-link left-text="文档" right-text="PDF" href="/file.pdf" target="_blank"></resource-link><br>
 <resource-link left-text="视频" right-text="MP4" href="/video.mp4"></resource-link>
 
 ### 普通链接
