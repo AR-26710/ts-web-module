@@ -18,8 +18,6 @@ export default defineConfig(({mode}) => {
             outDir: 'dist',
             rollupOptions: {
                 input: {
-                    // 主入口文件
-                    main: resolve(__dirname, 'index.html'),
                     // 主模块打包
                     'ts-web-module': resolve(__dirname, 'src/ts-web-module.ts'),
                     // 组件模块单独打包到 modules 文件夹
