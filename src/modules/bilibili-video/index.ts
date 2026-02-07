@@ -3,7 +3,6 @@
  * 使用示例：<bilibili-video bvid="BV1xx411x7xx" autoplay muted></bilibili-video>
  */
 import { BILIBILI_VIDEO_STYLES } from './styles';
-import type { BilibiliVideoOptions } from './types';
 
 class BilibiliEmbed extends HTMLElement {
   static get observedAttributes() {

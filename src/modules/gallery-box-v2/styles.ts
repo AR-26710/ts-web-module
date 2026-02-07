@@ -10,6 +10,7 @@ export const GALLERY_BOX_V2_STYLES = `
 
   .gbv2-gallery-track {
     display: flex;
+    will-change: transform;
   }
 
   .gbv2-gallery-item {
@@ -23,7 +24,7 @@ export const GALLERY_BOX_V2_STYLES = `
     max-width: 100%;
     max-height: 600px;
     object-fit: contain;
-    transition: opacity 0.5s cubic-bezier(0.4, 0.0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
     will-change: opacity, transform;
   }
 
