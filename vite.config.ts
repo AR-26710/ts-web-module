@@ -68,8 +68,7 @@ export default defineConfig(({mode}) => {
                     },
                     chunkFileNames: isProduction
                         ? `[name]-${version}.[format].min.js`
-                        : `[name]-${version}.[format].js`,
-                    inlineDynamicImports: false
+                        : `[name]-${version}.[format].js`
                 },
                 plugins: [
                     copy({
