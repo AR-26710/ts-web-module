@@ -77,6 +77,13 @@ export default defineConfig({
           message: '© 2026 Ts-Web-Module. 保留所有权利。',
           copyright: 'MIT License',
         },
+        outline: {
+          label: '本页目录',
+        },
+        docFooter: {
+          prev: '上一页',
+          next: '下一页',
+        },
       },
     },
     en: {
