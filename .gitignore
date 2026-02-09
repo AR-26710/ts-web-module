@@ -4,4 +4,4 @@
 node_modules/
 dist/
 **/dist/
-.vitepress/cache/
+docs/.vitepress/cache/
