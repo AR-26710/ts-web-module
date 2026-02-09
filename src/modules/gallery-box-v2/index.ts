@@ -92,6 +92,21 @@ class GalleryBoxV2Element extends HTMLElement {
   /** 预克隆的最后一张图片元素 */
   private lastClone: HTMLElement | null = null;
 
+  /** 触摸开始时的 X 坐标 */
+  private touchStartX: number = 0;
+
+  /** 触摸开始时的 Y 坐标 */
+  private touchStartY: number = 0;
+
+  /** 触摸结束时的 X 坐标 */
+  private touchEndX: number = 0;
+
+  /** 触摸结束时的 Y 坐标 */
+  private touchEndY: number = 0;
+
+  /** 最小滑动距离阈值 */
+  private readonly SWIPE_THRESHOLD: number = 50;
+
   /**
    * 构造函数 - 初始化画廊组件
    * 
@@ -123,6 +138,7 @@ class GalleryBoxV2Element extends HTMLElement {
     this.buildGallery();
     this.setupIntersectionObserver();
     this.addEventListeners();
+    this.setupMediaSession();
     this.loadVisibleImages();
   }
 
@@ -134,6 +150,7 @@ class GalleryBoxV2Element extends HTMLElement {
   disconnectedCallback() {
     this.removeEventListeners();
     this.cleanupIntersectionObserver();
+    this.cleanupMediaSession();
     
     if (this.firstClone && this.firstClone.parentNode) {
       this.firstClone.parentNode.removeChild(this.firstClone);
@@ -361,6 +378,10 @@ class GalleryBoxV2Element extends HTMLElement {
     this.track.addEventListener('transitionend', this.handleTransitionEnd.bind(this));
     window.addEventListener('resize', this.throttleResize.bind(this));
     document.addEventListener('keydown', this.handleKeyDown.bind(this));
+    
+    this.container.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
+    this.container.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: true });
+    this.container.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
   }
 
   /**
@@ -374,6 +395,10 @@ class GalleryBoxV2Element extends HTMLElement {
     this.track.removeEventListener('transitionend', this.handleTransitionEnd.bind(this));
     window.removeEventListener('resize', this.throttleResize.bind(this));
     document.removeEventListener('keydown', this.handleKeyDown.bind(this));
+    
+    this.container.removeEventListener('touchstart', this.handleTouchStart.bind(this));
+    this.container.removeEventListener('touchmove', this.handleTouchMove.bind(this));
+    this.container.removeEventListener('touchend', this.handleTouchEnd.bind(this));
   }
 
   /**
@@ -456,6 +481,59 @@ class GalleryBoxV2Element extends HTMLElement {
     } else if (e.key === 'ArrowRight') {
       this.next();
       e.preventDefault();
+    }
+  }
+
+  private handleTouchStart(e: TouchEvent) {
+    this.touchStartX = e.touches[0].clientX;
+    this.touchStartY = e.touches[0].clientY;
+  }
+
+  private handleTouchMove(e: TouchEvent) {
+    this.touchEndX = e.touches[0].clientX;
+    this.touchEndY = e.touches[0].clientY;
+  }
+
+  private handleTouchEnd(e: TouchEvent) {
+    const deltaX = this.touchEndX - this.touchStartX;
+    const deltaY = this.touchEndY - this.touchStartY;
+    
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > this.SWIPE_THRESHOLD) {
+      if (deltaX > 0) {
+        this.prev();
+      } else {
+        this.next();
+      }
+    }
+    
+    this.touchStartX = 0;
+    this.touchStartY = 0;
+    this.touchEndX = 0;
+    this.touchEndY = 0;
+  }
+
+  private setupMediaSession() {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: '图片画廊',
+        artist: 'Gallery Box V2',
+        album: 'Image Gallery'
+      });
+
+      navigator.mediaSession.setActionHandler('previoustrack', () => {
+        this.prev();
+      });
+
+      navigator.mediaSession.setActionHandler('nexttrack', () => {
+        this.next();
+      });
+    }
+  }
+
+  private cleanupMediaSession() {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.setActionHandler('previoustrack', null);
+      navigator.mediaSession.setActionHandler('nexttrack', null);
     }
   }
 
