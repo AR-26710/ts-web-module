@@ -27,6 +27,12 @@ class GalleryElement extends HTMLElement {
   private prevButton: HTMLButtonElement | null = null;
   private nextButton: HTMLButtonElement | null = null;
 
+  private touchStartX: number = 0;
+  private touchStartY: number = 0;
+  private touchEndX: number = 0;
+  private touchEndY: number = 0;
+  private readonly SWIPE_THRESHOLD: number = 50;
+
   constructor() {
     super();
     this.shadow = this.attachShadow({ mode: 'open' });
@@ -39,12 +45,14 @@ class GalleryElement extends HTMLElement {
     this.buildGallery();
     this.setupIntersectionObserver();
     this.addEventListeners();
+    this.setupMediaSession();
     this.loadVisibleImages();
   }
 
   disconnectedCallback() {
     this.removeEventListeners();
     this.cleanupIntersectionObserver();
+    this.cleanupMediaSession();
   }
 
   static get observedAttributes() {
@@ -182,6 +190,10 @@ class GalleryElement extends HTMLElement {
     this.track?.addEventListener('transitionend', this.handleTransitionEnd.bind(this));
     window.addEventListener('resize', this.throttleResize.bind(this));
     document.addEventListener('keydown', this.handleKeyDown.bind(this));
+    
+    this.container?.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
+    this.container?.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: true });
+    this.container?.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
   }
 
   private removeEventListeners() {
@@ -190,6 +202,10 @@ class GalleryElement extends HTMLElement {
     this.track?.removeEventListener('transitionend', this.handleTransitionEnd.bind(this));
     window.removeEventListener('resize', this.throttleResize.bind(this));
     document.removeEventListener('keydown', this.handleKeyDown.bind(this));
+    
+    this.container?.removeEventListener('touchstart', this.handleTouchStart.bind(this));
+    this.container?.removeEventListener('touchmove', this.handleTouchMove.bind(this));
+    this.container?.removeEventListener('touchend', this.handleTouchEnd.bind(this));
   }
 
   private throttleResize() {
@@ -231,6 +247,59 @@ class GalleryElement extends HTMLElement {
     } else if (e.key === 'ArrowRight') {
       this.next();
       e.preventDefault();
+    }
+  }
+
+  private handleTouchStart(e: TouchEvent) {
+    this.touchStartX = e.touches[0].clientX;
+    this.touchStartY = e.touches[0].clientY;
+  }
+
+  private handleTouchMove(e: TouchEvent) {
+    this.touchEndX = e.touches[0].clientX;
+    this.touchEndY = e.touches[0].clientY;
+  }
+
+  private handleTouchEnd(e: TouchEvent) {
+    const deltaX = this.touchEndX - this.touchStartX;
+    const deltaY = this.touchEndY - this.touchStartY;
+    
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > this.SWIPE_THRESHOLD) {
+      if (deltaX > 0) {
+        this.prev();
+      } else {
+        this.next();
+      }
+    }
+    
+    this.touchStartX = 0;
+    this.touchStartY = 0;
+    this.touchEndX = 0;
+    this.touchEndY = 0;
+  }
+
+  private setupMediaSession() {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: '图片画廊',
+        artist: 'Gallery Box',
+        album: 'Image Gallery'
+      });
+
+      navigator.mediaSession.setActionHandler('previoustrack', () => {
+        this.prev();
+      });
+
+      navigator.mediaSession.setActionHandler('nexttrack', () => {
+        this.next();
+      });
+    }
+  }
+
+  private cleanupMediaSession() {
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.setActionHandler('previoustrack', null);
+      navigator.mediaSession.setActionHandler('nexttrack', null);
     }
   }
 
